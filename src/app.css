@@ -1,0 +1,73 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 10px;
+}
+
+
+
+.page {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    top: 0;
+    left: 0;
+    background-color: #f3f3f3;
+    padding: 2% 0;
+}
+
+/* Sorting */
+
+.chart {
+    height: 100%;
+    width: 90%;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    
+}
+
+/* BarChart */
+.bar {
+    width: 10px;
+    background-color: rgb(51, 226, 217);
+    border: 1px solid rgb(35, 139, 139);
+    display: inline-block;
+}
+
+/* ColorMap */
+.color-bar {
+    width: 1px;
+    height: 100%;
+    display: inline-block;
+}
+
+
+
+/* Pathfinding */
+.grid {
+    text-align: center;
+}
+
+.row {
+    height: 2rem;    
+}
+
+.box {
+    height: 2rem;
+    width: 2rem;
+    border: 1px solid #000;
+    display: inline-block;
+}
+
+.node-start {
+    background-color: green;
+}
+
+.node-finish {
+    background-color: red;
+}
+
