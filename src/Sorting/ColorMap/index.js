@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import ColorBar from "./ColorBar";
+import { colorShuffle } from '../utilities';
 
 const ColorMap = () => {
     const [colors, setColors] = useState([])
 
     useEffect(() => {
-        const colorList = [];
-        for (let color = 0; color < 1000; color++) {
-            const hueValue = Math.floor(Math.random() * 359)
-            
-            colorList.push(hueValue)
-        }
-        setColors(colorList)
-
+        setColors(colorShuffle(1000))
     }, [])
 
-    console.log(colors)
     return (
         <div className="chart">
             {colors.map((color, colorIndex) => {

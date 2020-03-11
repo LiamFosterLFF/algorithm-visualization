@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Bar = ({ height, key }) => {
+const Bar = ({ height }) => {
 
     const barHeightinPercent = height/10;
     const barStyle = {
@@ -8,7 +8,7 @@ const Bar = ({ height, key }) => {
     }
     
     return (
-        <div key={key} className="bar" style={barStyle}></div>
+        <div className="bar" style={barStyle}></div>
     )
 }
 

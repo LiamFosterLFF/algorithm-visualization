@@ -45,7 +45,12 @@ html {
     display: inline-block;
 }
 
-
+/* PixelMap */
+.pixel-bar {
+    width: 5px;
+    height: 100%;
+    display: inline-block;
+}
 
 /* Pathfinding */
 .grid {
