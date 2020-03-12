@@ -1,40 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import Chart from "./Chart";
-import { barShuffle } from "../utilities";
+import Bar from "./Bar";
+import { barShuffle, bubbleSort, bubbleSortAnimation } from "../utilities";
 
 const BarChart = () => {
-    const [bars, setBars] = useState([]);
-    const [animations, setAnimations] = useState([]);
+    const [bars, setBars] = useState(barShuffle(100));
+    const [animations, setAnimations] = useState(bubbleSort(bars));
 
-    const bubbleSort = (origArr) => {
-        // Clone the original array so as not to mutate it
-        const arr = [...origArr]
-        // Store the indices of the swaps made in order, to be used in the animations
-        const animations =[]
-        const n = arr.length;
-        for (let i=0; i<n; i++) {
-            for (let j=0; j < n-i-1; j++) {
-                if (arr[j] > arr[j+1]) {
-                    [arr[j], arr[j+1]] = [arr[j+1], arr[j]];
-                    animations.push([j, j+1])
-                }
-            }
-        }
-        return animations
-    }
-
-    useEffect(() => {      
-        const shuffle = barShuffle(100)
-        setBars(shuffle)
-
-        const animations  = bubbleSort(shuffle)
-        setAnimations(animations)
-        
+    useEffect(() => {  
+        bubbleSortAnimation(animations)
     }, [])
 
-
     return (
-        <Chart animations={animations} bars={bars}/>
+        <div className="chart">
+            {bars.map((barHeight, barIndex) => {
+                return (
+                    <Bar key={barIndex} height={barHeight} />
+                )
+            })}
+        </div>
     )
 }
 
