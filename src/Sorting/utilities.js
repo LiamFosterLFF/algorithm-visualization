@@ -221,6 +221,61 @@ export const mergeSortAnimation = (animations, speed) => {
 }
 
 
+// Quick Sort 
+export const quickSort = (origArray) => {
+    const array = [...origArray];
+    const animations = [];
+    const quickSortHelper = (array, left, right, animations) => {
+        if (left >= right) return;
+
+        const pivot = array[Math.floor((left + right) / 2)];
+        const index = partition(array, left, right, pivot);
+
+        quickSortHelper(array, left, index - 1, animations);
+        quickSortHelper(array, index, right, animations);
+    }
+
+    const partition = (array, left, right, pivot) => {
+        while (left <= right) {
+            while (array[left] < pivot) {
+                left++
+            }
+            while (array[right] > pivot) {
+                right--
+            }
+            if (left <= right) {
+                [array[left], array[right]] = [array[right], array[left]]
+                animations.push([left, right])
+                left++
+                right--
+            }
+        }
+        return left;
+    }
+    quickSortHelper(array, 0, array.length - 1)
+    return animations
+}
+
+// Quick Sort Animations 
+export const quickSortAnimation = (animations, speed) => {
+    for (let i = 0; i < animations.length; i++) {
+        const [left, right] = animations[i];
+
+        setTimeout(() => {
+            const parent = document.getElementsByClassName('chart');
+            const child1 = parent[0].childNodes[left];
+            const child2 = parent[0].childNodes[right];
+            child1.style.backgroundColor = "red";
+            child2.style.backgroundColor = "red";
+            setTimeout(() => {
+                [child1.style.height, child2.style.height] = [child2.style.height, child1.style.height]
+                child1.style.backgroundColor = "rgb(51, 226, 217)";
+                child2.style.backgroundColor = "rgb(51, 226, 217)";
+            }, speed);
+        }, i * speed);
+    }
+}
+
 // ***Display Functions***
 
 // BarChart

@@ -1,19 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import Bar from "./Bar";
-import { barShuffle, bubbleSort, bubbleSortAnimation, selectionSort, selectionSortAnimation, insertionSort, insertionSortAnimation, mergeSort, mergeSortAnimation } from "../utilities";
+import { barShuffle, bubbleSort, bubbleSortAnimation, selectionSort, selectionSortAnimation, insertionSort, insertionSortAnimation, mergeSort, mergeSortAnimation, quickSort, quickSortAnimation } from "../utilities";
 
 const BarChart = () => {
     const [bars, setBars] = useState(barShuffle(100));
     // const [animations, setAnimations] = useState(bubbleSort(bars));
     // const [animations, setAnimations] = useState(selectionSort(bars))
-    const [animations, setAnimations] = useState(insertionSort(bars))
+    // const [animations, setAnimations] = useState(insertionSort(bars))
     // const [animations, setAnimations] = useState(mergeSort(bars))
+    // const [animations, setAnimations] = useState(quickSort(bars))
+    // const [animations, setAnimations] = useState(heapSort(bars))
 
+
+    
+    
     useEffect(() => {  
         // bubbleSortAnimation(animations)
         // selectionSortAnimation(animations)
-        insertionSortAnimation(animations)
+        // insertionSortAnimation(animations)
         // mergeSortAnimation(animations, 50)
+        // quickSortAnimation(animations, 100)
+        // heapSortAnimation(animations, 100)
+
+
 
     }, [])
 
