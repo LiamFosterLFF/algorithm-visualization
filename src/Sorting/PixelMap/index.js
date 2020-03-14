@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import PixelBar from "./PixelBar";
-import { shuffle } from '../utilities';
+import { pixelBarShuffle, pixelMapBubbleSort, bubbleSortPixelMapAnimation, selectionSort, selectionSortPixelBarChartAnimation, insertionSort, insertionSortPixelBarChartAnimation, mergeSort, mergeSortPixelBarChartAnimation, quickSort, quickSortPixelBarChartAnimation } from "../utilities";
 
 const PixelMap = () => {
-    const [pixelBars, setPixelBars] = useState([])
 
+    
+
+    const [pixelBars, setPixelBars] = useState(pixelBarShuffle())
+
+
+    
+
+    
+
+    const [animations, setAnimations] = useState(pixelMapBubbleSort(pixelBars))
+    
     useEffect(() => {
-        const pixelBarList = [];
-        const height = 200;
-        for (let pixBar = 0; pixBar < height; pixBar++) {
-            const pixelBarHeights = [height - pixBar - 1, 1, pixBar]
-            pixelBarList.push(pixelBarHeights)
-        }
         
-        setPixelBars(shuffle(pixelBarList));
+        
+        bubbleSortPixelMapAnimation(animations, 0)
     }, [])
 
-    console.log(pixelBars)
     return (
         <div className="chart">
             {pixelBars.map((barHeights, barIndex) => {

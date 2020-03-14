@@ -1,5 +1,4 @@
 // ***Sort Functions***
-
 // Bubble Sort
 export const bubbleSort = (origArr) => {
     // Clone the original array so as not to mutate it
@@ -17,9 +16,8 @@ export const bubbleSort = (origArr) => {
     }
     return animations
 }
-
-// Bubble Sort Animation
-export const bubbleSortAnimation = (animations) => {
+// Bubble Sort Bar Chart Animation
+export const bubbleSortBarChartAnimation = (animations) => {
     for (let i = 0; i < animations.length; i++) {
         const [ind1, ind2] = animations[i]
         setTimeout(() => {
@@ -63,8 +61,8 @@ export const selectionSort = (origArr) => {
     return animations
 }
 
-// Selection Sort Animation
-export const selectionSortAnimation = (animations) => {
+// Selection Sort Bar Chart Animation
+export const selectionSortBarChartAnimation = (animations) => {
     for (let i = 0; i < animations.length; i++) {
         const [baseIndex, checkIndex, minIndex, swap] = animations[i]
         setTimeout(() => {
@@ -111,8 +109,8 @@ export const insertionSort = (origArr) => {
     return animations
 }
 
-// Insertion Sort Animations
-export const insertionSortAnimation = (animations) => {
+// Insertion Sort Bar Chart Animations
+export const insertionSortBarChartAnimation = (animations) => {
     for (let i = 0; i < animations.length; i++) {
         setTimeout(() => {
             // If pass, swap the heights; if swap, enter the key value as the height for selected element 
@@ -199,8 +197,8 @@ const merge = (mainArray, startIdx, midIdx, endIdx, auxArray, animations) => {
     }
 }
 
-// Merge Sort Animation 
-export const mergeSortAnimation = (animations, speed) => {
+// Merge Sort Bar Chart Animation 
+export const mergeSortBarChartAnimation = (animations, speed) => {
     for (let i = 0; i < animations.length; i++) {
         const { comparison, swap, range } = animations[i]
 
@@ -256,8 +254,8 @@ export const quickSort = (origArray) => {
     return animations
 }
 
-// Quick Sort Animations 
-export const quickSortAnimation = (animations, speed) => {
+// Quick Sort Bar Chart Animations 
+export const quickSortBarChartAnimation = (animations, speed) => {
     for (let i = 0; i < animations.length; i++) {
         const [left, right] = animations[i];
 
@@ -275,6 +273,114 @@ export const quickSortAnimation = (animations, speed) => {
         }, i * speed);
     }
 }
+
+// Radix Sort
+
+// Heap Sort
+
+
+// PixelMap Animations 
+
+// Pixel Map Bubble Sort
+export const pixelMapBubbleSort = (origArr) => {
+    // Clone the original array so as not to mutate it
+    const arr = [...origArr]
+    // Store the indices of the swaps made in order, to be used in the animations
+    const animations = []
+    const n = arr.length;
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n - i - 1; j++) {
+            if (arr[j][0] > arr[j + 1][0]) {
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                animations.push([j, j + 1])
+            }
+        }
+    }
+    return animations
+}
+
+// Bubble Sort Pixel Mpa Animation
+export const bubbleSortPixelMapAnimation = (animations, speed) => {
+    for (let i = 0; i < animations.length; i++) {
+        const [ind1, ind2] = animations[i]
+        setTimeout(() => {
+            const parent = document.getElementsByClassName('chart');
+            const child1 = parent[0].childNodes[ind1];
+            const child2 = parent[0].childNodes[ind2];
+            // console.log(child1);
+
+            // child1.style.backgroundColor = "red";
+            // child2.style.backgroundColor = "red";
+            for (let i = 0; i <= 2; i++) {
+                [child1.childNodes[i].style.height, child2.childNodes[i].style.height] = [child2.childNodes[i].style.height, child1.childNodes[i].style.height]
+
+            }
+            setTimeout(() => {
+                // child1.style.backgroundColor = "rgb(51, 226, 217)";
+                // child2.style.backgroundColor = "rgb(51, 226, 217)";
+            }, speed);
+        }, i * speed);
+    }
+}
+
+
+// Radix Bar Sort 
+export const barChartRadixSort = (origArr) => {
+    const arr = [...origArr]
+    const animations = [];
+    const countBuckets = [];
+    for (let i = 0; i < 10; i++) {
+        countBuckets[i] = []
+    }
+
+    let max = 0;
+    const strArray = []
+    for (let j = 0; j < arr.length; j++) {
+        max = (arr[j].toString().length > max) ? arr[j].toString().length : max;
+    }
+
+    for (let l = 0; l < max; l++) {
+
+        while (arr.length) {
+            const stringNum = arr[0].toString()
+            const d = stringNum.length - l - 1
+            const digit = (stringNum[d]) ? stringNum[d] : 0
+            countBuckets[digit].push(arr.shift())
+        }
+        let counter = 0;
+        for (let i = 0; i < 10; i++) {
+            while (countBuckets[i].length) {
+                const num = countBuckets[i].shift()
+
+                arr.push(num)
+                animations.push([num, counter])
+                counter++
+            }
+        }
+
+
+    }
+    return animations
+
+}
+
+
+// Radix Bar Sort Animation 
+export const radixSortBarChartAnimation = (animations, speed) => {
+    for (let i = 0; i < animations.length; i++) {
+        const [ht, ind1] = animations[i]
+        setTimeout(() => {
+            const parent = document.getElementsByClassName('chart');
+            const child1 = parent[0].childNodes[ind1];
+            child1.style.height = `${ht / 10}%`
+            // setTimeout(() => {
+            //     // child1.style.backgroundColor = "rgb(51, 226, 217)";
+            //     // child2.style.backgroundColor = "rgb(51, 226, 217)";
+            // }, speed);
+        }, i * speed);
+    }
+}
+
 
 // ***Display Functions***
 
@@ -302,7 +408,7 @@ export const colorShuffle = (bars) => {
 
 
 // PixelMap
-export const shuffle = (array) => {
+const shuffle = (array) => {
 
     for (let i = array.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
@@ -312,17 +418,44 @@ export const shuffle = (array) => {
 };
 
 
+export const pixelBarShuffle = () => {
+    const pixelBarList = [];
+    const height = 200;
+    for (let pixBar = 0; pixBar < height; pixBar++) {
+        const pixelBarHeights = [height - pixBar - 1, 1, pixBar]
+        pixelBarList.push(pixelBarHeights)
+    }
+    return shuffle(pixelBarList)
+}
+
+
 // PixelPainting
+
+
+
+
 export const scrambleImage = (imageData) => {
 
     const pixellate = (array) => {
         // Breaks the color data up by pixel, to make it easier to shuffle
         const pixArray = [];
+        const indexArray = []
         for (let i = 0; i < array.length; i += 4) {
             const pixel = [array[i], array[i + 1], array[i + 2], array[i + 3]];
             pixArray.push(pixel)
+            indexArray.push(i/4)
         }
-        return pixArray
+        return [pixArray, indexArray]
+    };
+
+    const pixelPaintingShuffle = (array, indexArray) => {
+
+        for (let i = array.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+            [indexArray[i], indexArray[j]] = [indexArray[j], indexArray[i]];
+        }
+        return [array, indexArray]
     };
 
     const dePixellate = (array) => {
@@ -340,12 +473,33 @@ export const scrambleImage = (imageData) => {
     };
 
     // Pixellates, shuffles, depixellates, turns into a Uint8ClampedArray (necessary for ImageData Obj) and returns a new ImageData obj (necessary to load into canvas)
-    const pixData = pixellate(imageData.data);
-    const shuffledPixData = shuffle(pixData);
-    const shuffledData = dePixellate(shuffledPixData);
-    const newUint8ClampedArray = new Uint8ClampedArray(shuffledData)
-    const newImageData = new ImageData(newUint8ClampedArray, imageData.width, imageData.height)
-    return newImageData
+    const [pixData, indexData] = pixellate(imageData.data);
+    const [scrambledPixData, scrambledIndexData] = pixelPaintingShuffle(pixData, indexData);    
+    const scrambledData = dePixellate(scrambledPixData);
+    
+    return [scrambledData, scrambledIndexData]
 }
-;
+
+// Draw the Initial Image to the Screen 
+export const drawInitialImage = (canvas, img, returnScrambledImageCallback, returnScrambledIndexCallback) => {
+    const context = canvas.current.getContext('2d');
+    const image = new Image()
+    image.src = img
+
+
+    image.onload = () => {
+        context.drawImage(image, 0, 0)
+        image.style.display = 'none';
+        const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+        const [scrambledImage, scrambledImageIndices] = scrambleImage(imageData)
+        returnScrambledImageCallback(scrambledImage)
+        returnScrambledIndexCallback(scrambledImageIndices)
+        const scrambledUint8ClampedArray = new Uint8ClampedArray(scrambledImage)
+        const scrambledImageData = new ImageData(scrambledUint8ClampedArray, imageData.width, imageData.height)
+        context.putImageData(scrambledImageData, 0, 0)
+
+    }
+}
+
+
 
