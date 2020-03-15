@@ -4,8 +4,7 @@ import BarChart from './BarChart';
 // import PixelMap from './PixelMap';
 // import PixelPainting from './PixelPainting';
 
-const Sorting = () => {
-    
+const Sorting = () => {    
     return (
         <BarChart/>
     )

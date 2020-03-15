@@ -30,8 +30,8 @@ export const bubbleSortBarChartAnimation = (animations) => {
             setTimeout(() => {
                 child1.style.backgroundColor = "rgb(51, 226, 217)";
                 child2.style.backgroundColor = "rgb(51, 226, 217)";
-            }, 10);
-        }, i * 10);
+            }, 1);
+        }, i * 1);
     }
 }
 
@@ -80,8 +80,8 @@ export const selectionSortBarChartAnimation = (animations) => {
                 // baseChild.style.backgroundColor = "rgb(51, 226, 217)";
                 checkingChild.style.backgroundColor = "rgb(51, 226, 217)";
                 // minChild.style.backgroundColor = "rgb(51, 226, 217)";
-            }, 10);
-        }, i * 10);
+            }, 1);
+        }, i * 1);
     }
 }
 
