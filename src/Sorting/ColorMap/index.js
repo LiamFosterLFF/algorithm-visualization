@@ -1,63 +1,106 @@
 import React, { useState, useEffect } from 'react';
 import ColorBar from "./ColorBar";
-import { colorShuffle } from '../utilities';
+import { colorShuffle, colorMapBubbleSort, colorMapBubbleSortAnimation, selectionSort, colorMapSelectionSortAnimation } from '../utilities/colorBarFunctions';
 
 const ColorMap = () => {
-    const [colors, setColors] = useState(colorShuffle(1000))
-    
-    // ColorMap Animations 
+    const [colors, setColors] = useState(colorShuffle(200))
+    const [sort, setSort] = useState("bubble")
+    const [animations, setAnimations] = useState([])
+    const [sortType, setSortType] = useState({ function: colorMapBubbleSort });
+    const [animationType, setAnimationType] = useState({ function: colorMapBubbleSortAnimation });
 
-    // ColorMap Bubble Sort
-    const colorMapBubbleSort = (origArr) => {
-        // Clone the original array so as not to mutate it
-        const arr = [...origArr]
-        // Store the indices of the swaps made in order, to be used in the animations
-        const animations = []
-        const n = arr.length;
-        for (let i = 0; i < n; i++) {
-            for (let j = 0; j < n - i - 1; j++) {
-                if (arr[j] > arr[j + 1]) {
-                    [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-                    animations.push([j, j + 1])
-                }
-            }
-        }
-        return animations
-    }
-
-    // Bubble Sort Color Map Animation
-    const bubbleSortColorMapAnimation = (animations, speed) => {
-        for (let i = 0; i < animations.length; i++) {
-            const [ind1, ind2] = animations[i]
-            setTimeout(() => {
-                const parent = document.getElementsByClassName('chart');
-                const child1 = parent[0].childNodes[ind1];
-                const child2 = parent[0].childNodes[ind2];
-                // console.log(child1);
-
-                [child1.style.backgroundColor, child2.style.backgroundColor] = [child2.style.backgroundColor, child1.style.backgroundColor]
-
-                setTimeout(() => {
-                    // child1.style.backgroundColor = "rgb(51, 226, 217)";
-                    // child2.style.backgroundColor = "rgb(51, 226, 217)";
-                }, speed);
-            }, i * speed);
-        }
-    }
-    const [animations, setAnimations] = useState(colorMapBubbleSort(colors))
-    
     useEffect(() => {
-        bubbleSortColorMapAnimation(animations, 0)
+        switch (sort) {
+            case "bubble":
+                setSortType({ function: colorMapBubbleSort })
+                setAnimationType({ function: colorMapBubbleSortAnimation })
+                break;
+            case "selection":
+                setSortType({ function: selectionSort })
+                setAnimationType({ function: colorMapSelectionSortAnimation })
+                break;
+            // case "insertion":
+            //     setSortType({ function: insertionSort })
+            //     setAnimationType({ function: insertionSortBarChartAnimation })
+            //     break;
+            // case "merge":
+            //     setSortType({ function: mergeSort })
+            //     setAnimationType({ function: mergeSortBarChartAnimation })
+            //     break;
+            // case "quick":
+            //     setSortType({ function: quickSort })
+            //     setAnimationType({ function: quickSortBarChartAnimation })
+            //     break;
+            // case "radix":
+            //     setSortType({ function: barChartRadixSort })
+            //     setAnimationType({ function: radixSortBarChartAnimation })
+            //     break;
+        }
+    }, [sort])
 
-    }, [])
+    useEffect(() => {
+        resetAnimations(animations)
+        runAnimations(colors)
+    }, [sortType])
+
+    const runAnimations = (colors) => {
+        const colorAnimations = animationType.function(sortType.function(colors))
+        setAnimations(colorAnimations)
+    }
+
+    const playAnimations = (animations) => {
+        animations.map((animation) => {
+            if (animation.playState !== "finished") {
+                animation.play()
+            }
+        })
+    }
+
+    const pauseAnimations = (animations) => {
+        animations.map((animation) => {
+            if (animation.playState !== "finished") {
+                animation.pause();
+            }
+        })
+    }
+
+    const resetAnimations = animations => {
+        animations.map((animation) => {
+            animation.cancel()
+        })
+    }   
+    
 
     return (
         <div className="chart">
+            <div className="top-bar">
+                <li onClick={() => setSort("bubble")}>
+                    bubble
+                </li>
+                <li onClick={() => setSort("selection")}>
+                    selection
+                </li>
+                {/*<li onClick={() => setSort("insertion")}>
+                    insertion
+                </li>
+                <li onClick={() => setSort("merge")}>
+                    merge
+                </li>
+                <li onClick={() => setSort("quick")}>
+                    quick
+                </li>
+                <li onClick={() => setSort("radix")}>
+                    radix
+                </li> */}
+            </div>
             {colors.map((color, colorIndex) => {
                 return (
                     <ColorBar key={colorIndex} color={color} />
                 )
             })}
+            <button onClick={() => resetAnimations(animations)}>Reset</button>
+            <button onClick={() => playAnimations(animations)}>Play</button>
+            <button onClick={() => pauseAnimations(animations)}>Pause</button>
         </div>
     )
 }

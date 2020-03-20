@@ -44,7 +44,7 @@ html {
 
 /* ColorMap */
 .color-bar {
-    width: 1px;
+    width: 5px;
     height: 100%;
     display: inline-block;
 }
