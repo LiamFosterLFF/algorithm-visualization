@@ -8,7 +8,7 @@ import Pathfinding from './Pathfinding'
 const App = () => {
     return (
         <div className="page">
-            <Pathfinding/>
+            <Sorting/>
         </div>
     )
 };

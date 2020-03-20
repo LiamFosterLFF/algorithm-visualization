@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import Chart from './Chart';
-import Bar from "./Bar";
+
+import Bar from './Bar';
+
 import { barShuffle, bubbleSort, bubbleSortBarChartAnimation, selectionSort, selectionSortBarChartAnimation, insertionSort, insertionSortBarChartAnimation, mergeSort, mergeSortBarChartAnimation, quickSort, quickSortBarChartAnimation, barChartRadixSort, radixSortBarChartAnimation } from "../utilities";
 
 const BarChart = () => {
     const [sort, setSort] = useState("bubble")
     const [bars, setBars] = useState(barShuffle(100));
+    const [animations, setAnimations] = useState([])
     const [sortType, setSortType] = useState({function: bubbleSort});
     const [animationType, setAnimationType] = useState({ function: bubbleSortBarChartAnimation });
-    console.log(sort);
     
     useEffect(() => {
         switch (sort) {
@@ -37,37 +38,66 @@ const BarChart = () => {
                 setAnimationType({ function: radixSortBarChartAnimation })
                 break;
             }
-        reset(bars)
-    }, [sort])
+        }, [sort])
 
     useEffect(() => {
-        runAnimation(bars)
-    }, [])
+        resetAnimations(animations)
+        runAnimations(bars)
 
-    const reset = (bars) => {
-        for (let i = 0; i < bars.length; i++) {
-            const parent = document.getElementsByClassName('chart');
-            const child1 = parent[0].childNodes[i];
-            child1.style.height = `${bars[i]/10}%`
-            child1.style.backgroundColor = "rgb(51, 226, 217)";
+    }, [sortType])
 
-        }
+
+
+
+    const runAnimations = (bars) => {
+        const barAnimations = animationType.function(sortType.function(bars))
+        setAnimations(barAnimations)
     }
 
-    const runAnimation = (bars) => {
-        reset(bars)
-        animationType.function(sortType.function(bars))
+    const playAnimations = (animations) => {
+        animations.map((animation) => {
+            if (animation.playState !== "finished") {
+                animation.play()
+            }
+        })
     }
+
+    const pauseAnimations = (animations) => {
+        animations.map((animation) => {
+            if (animation.playState !== "finished") {
+                animation.pause();
+            }
+        })
+    }
+
+    const resetAnimations = animations => {
+        animations.map((animation) => {
+            animation.cancel()
+        })
+    }   
+
 
     return (
         <div className="bar-chart">
             <div className="top-bar">
-                <a onClick={() => setSort("bubble")}>Bubble</a>
-                <a onClick={() => setSort("selection")}>Selection</a>
-                <a onClick={() => setSort("insertion")}>Insertion</a>
-                <a onClick={() => setSort("merge")}>Merge</a>
-                <a onClick={() => setSort("quick")}>Quick</a>
-                <a onClick={() => setSort("radix")}>Radix</a>
+                <li onClick={() => setSort("bubble")}>
+                    bubble
+                </li>
+                <li onClick={() => setSort("selection")}>
+                    selection
+                </li>
+                <li onClick={() => setSort("insertion")}>
+                    insertion
+                </li>
+                <li onClick={() => setSort("merge")}>
+                    merge
+                </li>
+                <li onClick={() => setSort("quick")}>
+                    quick
+                </li>
+                <li onClick={() => setSort("radix")}>
+                    radix
+                </li>
             </div>
             <div className="chart">
                 {bars.map((barHeight, barIndex) => {
@@ -75,9 +105,10 @@ const BarChart = () => {
                         <Bar key={barIndex} height={barHeight} />
                     )
                 })}
+                <button onClick={() => resetAnimations(animations)}>Reset</button>
+                <button onClick={() => playAnimations(animations)}>Play</button>
+                <button onClick={() => pauseAnimations(animations)}>Pause</button>
             </div>
-            <button onClick={() => runAnimation(bars)}>Go</button>
-            <button onClick={() => reset(bars)}>Reset</button>
         </div>
     )
 }
