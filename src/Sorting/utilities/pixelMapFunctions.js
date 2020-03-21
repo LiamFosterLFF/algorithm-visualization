@@ -304,10 +304,10 @@ export const pixelMapQuickSort = (origArray) => {
         // Keep moving pointers towards middle until two pointers cross one another
         while (left <= right) {
             // Find a left side element smaller than pivot, and a right side one larger, and switch them 
-            while (array[left] < array[pivot]) {
+            while (array[left][2] < array[pivot][2]) {
                 left++
             }
-            while (array[right] > array[pivot]) {
+            while (array[right][2] > array[pivot][2]) {
                 right--
             }
             if (left <= right) {
@@ -324,7 +324,7 @@ export const pixelMapQuickSort = (origArray) => {
     }
     // Initial function call 
     quickSortHelper(array, 0, array.length - 1)
-
+    
     return animations
 }
 
@@ -336,16 +336,22 @@ export const pixelMapQuickSortAnimation = (animations) => {
 
     animations.forEach((animation, index) => {
 
-        const leftEl = chart[animation[0][0]];
-        const rightEl = chart[animation[1][0]];
-        const leftColor = animation[0][1];
-        const rightColor = animation[1][1];
+        const leftElTop = chart[animation[0][0]].childNodes[0];
+        const leftElBottom = chart[animation[0][0]].childNodes[2];
+        const rightElTop = chart[animation[1][0]].childNodes[0];
+        const rightElBottom = chart[animation[1][0]].childNodes[2];
+        const leftTopHeight = animation[0][1][0];
+        const leftBottomHeight = animation[0][1][2];
+        const rightTopHeight = animation[1][1][0];
+        const rightBottomHeight = animation[1][1][2];
 
 
         // Highlight two elements being compared in green, and pivot in red, and animate them being swapped
         barAnimations.push(
-            leftEl.animate([{ backgroundColor: `hsl(${rightColor}, 100%, 50%)` }, { backgroundColor: `hsl(${rightColor}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration }),
-            rightEl.animate([{ backgroundColor: `hsl(${leftColor}, 100%, 50%)` }, { backgroundColor: `hsl(${leftColor}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration })
+            leftElTop.animate([{ height: `${3 * rightTopHeight}px` }, { height: `${3 * rightTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            leftElBottom.animate([{ height: `${3 * rightBottomHeight}px` }, { height: `${3 * rightBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            rightElTop.animate([{ height: `${3 * leftTopHeight}px` }, { height: `${3 * leftTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            rightElBottom.animate([{ height: `${3 * leftBottomHeight}px` }, { height: `${3 * leftBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration })
         )
     })
 
@@ -374,7 +380,7 @@ export const pixelMapRadixSort = (origArr) => {
     for (let l = 0; l < max; l++) {
 
         while (arr.length) {
-            const stringNum = arr[0].toString()  // Convert front number in array to string
+            const stringNum = arr[0][0].toString()  // Convert front number in array to string
             const d = stringNum.length - l - 1 // Starting from rightmost digit on first iteration, then moving left on next iteration
             const digit = (stringNum[d]) ? stringNum[d] : 0 // Select either that digit, or (if too short) use 0
             countBuckets[digit].push(arr.shift()) // Remove number from array and place into bucket array corresponding to that digit
@@ -382,13 +388,15 @@ export const pixelMapRadixSort = (origArr) => {
         let counter = 0;
         for (let i = 0; i < 10; i++) { // Cycle through all 10 counter arrays, from lowest to highest
             while (countBuckets[i].length) {  // Cycle through counter array until empty
-                const num = countBuckets[i].shift() // Save number in variable, so it can be added both to old array and to animation
-                arr.push(num)
-                animations.push([num, counter])
+                const numArr = countBuckets[i].shift() // Save number in variable, so it can be added both to old array and to animation
+                arr.push(numArr)
+                animations.push([numArr, counter])
                 counter++
             }
         }
     }
+    console.log(arr);
+    
     return animations
 
 }
@@ -401,13 +409,16 @@ export const pixelMapRadixSortAnimation = (animations) => {
 
     animations.forEach((animation, index) => {
 
-        const element = chart[animation[1]];
-        const color = animation[0];
+        const elementTop = chart[animation[1]].childNodes[0];
+        const elementBottom = chart[animation[1]].childNodes[2];
+        const heightTop = animation[0][2];
+        const heightBottom = animation[0][0];
 
 
         // Highlight two elements being compared in green, and pivot in red, and animate them being swapped
         barAnimations.push(
-            element.animate([{ backgroundColor: `hsl(${color}, 100%, 50%)` }, { backgroundColor: `hsl(${color}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration })
+            elementTop.animate([{ height: `${3 * heightTop}px` }, { height: `${3 * heightTop}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            elementBottom.animate([{ height: `${3 * heightBottom}px` }, { height: `${3 * heightBottom}px` }], { fill: "forwards", duration: duration, delay: index * duration })
         )
     })
 

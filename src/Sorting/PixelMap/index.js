@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PixelBar from "./PixelBar";
-import { pixelBarShuffle, bubbleSort, pixelMapBubbleSortAnimation, pixelMapSelectionSort, pixelMapSelectionSortAnimation, pixelMapInsertionSort, pixelMapInsertionSortAnimation, pixelMapMergeSort, pixelMapMergeSortAnimation } from "../utilities/pixelMapFunctions";
-//, pixelMapQuickSort, pixelMapQuickSortAnimation, pixelMapRadixSort, pixelMapRadixSortAnimation
+import { pixelBarShuffle, bubbleSort, pixelMapBubbleSortAnimation, pixelMapSelectionSort, pixelMapSelectionSortAnimation, pixelMapInsertionSort, pixelMapInsertionSortAnimation, pixelMapMergeSort, pixelMapMergeSortAnimation, pixelMapQuickSort, pixelMapQuickSortAnimation, pixelMapRadixSort, pixelMapRadixSortAnimation } from "../utilities/pixelMapFunctions";
 
 const PixelMap = () => {
     const [sort, setSort] = useState("bubble")
@@ -28,14 +27,14 @@ const PixelMap = () => {
                 setSortType({ function: pixelMapMergeSort })
                 setAnimationType({ function: pixelMapMergeSortAnimation })
                 break;
-            // case "quick":
-            //     setSortType({ function: pixelMapQuickSort })
-            //     setAnimationType({ function: pixelMapQuickSortAnimation })
-            //     break;
-            // case "radix":
-            //     setSortType({ function: pixelMapRadixSort })
-            //     setAnimationType({ function: pixelMapRadixSortAnimation })
-            //     break;
+            case "quick":
+                setSortType({ function: pixelMapQuickSort })
+                setAnimationType({ function: pixelMapQuickSortAnimation })
+                break;
+            case "radix":
+                setSortType({ function: pixelMapRadixSort })
+                setAnimationType({ function: pixelMapRadixSortAnimation })
+                break;
         }
     }, [sort])
 
@@ -100,12 +99,12 @@ const PixelMap = () => {
                 <li onClick={() => setSort("merge")}>
                     merge
                 </li>
-                {/* <li onClick={() => setSort("quick")}>
+                <li onClick={() => setSort("quick")}>
                     quick
                 </li>
                 <li onClick={() => setSort("radix")}>
                     radix
-                </li> */}
+                </li>
             </div>
             {pixelBars.map((barHeights, barIndex) => {
                 return (
