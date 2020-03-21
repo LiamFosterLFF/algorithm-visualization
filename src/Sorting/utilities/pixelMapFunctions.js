@@ -81,7 +81,7 @@ export const pixelMapSelectionSort = (origArr) => {
     for (let i = 0; i < n; i++) {
         let minIndex = i;
         for (let j = i; j < n; j++) {
-            if (arr[j][0] < arr[minIndex]) {
+            if (arr[j][0] < arr[minIndex][0]) {
                 minIndex = j
             }
             // Checks if sort has reached the end of Array, if so, records that there will be a swap between i and min
@@ -94,6 +94,7 @@ export const pixelMapSelectionSort = (origArr) => {
         }
         [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
     }
+    
     return animations
 }
 
@@ -109,19 +110,19 @@ export const pixelMapSelectionSortAnimation = (animations) => {
         const baseChildBottom = chart[animation[0][0]].childNodes[2];
         const minChildTop = chart[animation[2][0]].childNodes[0];
         const minChildBottom = chart[animation[2][0]].childNodes[2];
-        const baseTopHeight = animation[0][1][0];
-        const baseBottomHeight = animation[0][1[2]];
-        const minTopHeight = animation[2][1][0];
-        const minBottomHeight = animation[2][1][2];
+        const baseTopHeight = animation[0][1][2];
+        const baseBottomHeight = animation[0][1][0];
+        const minTopHeight = animation[2][1][2];
+        const minBottomHeight = animation[2][1][0];
         const swap = animation[3];
-
+        
         // if the two elements are to be swapped, perform the swap 
         if (swap === true) {
             barAnimations.push(
                 minChildTop.animate([{ height: `${3 * baseTopHeight}px` }, { height: `${3 * baseTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
                 baseChildTop.animate([{ height: `${3 * minTopHeight}px` }, { height: `${3 * minTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
                 minChildBottom.animate([{ height: `${3 * baseBottomHeight}px` }, { height: `${3 * baseBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
-                baseChildBottom.animate([{ height: `${3 * minBottomHeight}px` }, { height: `${3 * minBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+                baseChildBottom.animate([{ height: `${3 * minBottomHeight}px` }, { height: `${3 * minBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration })
             )
         }
     })
@@ -130,7 +131,7 @@ export const pixelMapSelectionSortAnimation = (animations) => {
 }
 
 // Insertion Sort 
-export const insertionSort = (origArr) => {
+export const pixelMapInsertionSort = (origArr) => {
     // Clone the original array so as not to mutate it
     const arr = [...origArr]
     // Store the indices of the swaps made in order, to be used in the animations
@@ -142,7 +143,7 @@ export const insertionSort = (origArr) => {
     for (let i = 1; i < n; i++) {
         const key = arr[i]
         let j = i - 1;
-        while (j >= 0 && arr[j] > arr[j + 1]) {
+        while (j >= 0 && arr[j][0] > arr[j + 1][0]) {
             animations.push([[j, arr[j]], [j + 1, arr[j + 1]]]);
             [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
             j = j - 1
@@ -153,22 +154,28 @@ export const insertionSort = (origArr) => {
 }
 
 
-export const colorMapInsertionSortAnimation = (animations) => {
+export const pixelMapInsertionSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("pixel-bar");
     const duration = 3;   // The base duration, for easy changing later (duration can also be changed via the API)
     const barAnimations = [];
 
     animations.forEach((animation, index) => {
-        const swapElLt = chart[animation[0][0]];
-        const swapElLtColor = animation[0][1];
-        const swapElRt = chart[animation[1][0]];
-        const swapElRtColor = animation[1][1];
+        const swapElLtTop = chart[animation[0][0]].childNodes[0];
+        const swapElLtBottom = chart[animation[0][0]].childNodes[2];
+        const swapElLtTopHeight = animation[0][1][2];
+        const swapElLtBottomHeight = animation[0][1][0];
+        const swapElRtTop = chart[animation[1][0]].childNodes[0];
+        const swapElRtBottom = chart[animation[1][0]].childNodes[2];
+        const swapElRtTopHeight = animation[1][1][2];
+        const swapElRtBottomHeight = animation[1][1][0];
 
         // Highlight two elements being compared in green, and animate them being swapped
         barAnimations.push(
-            swapElLt.animate([{ backgroundColor: `hsl(${swapElRtColor}, 100%, 50%)` }, { backgroundColor: `hsl(${swapElRtColor}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration }),
-            swapElRt.animate([{ backgroundColor: `hsl(${swapElLtColor}, 100%, 50%)` }, { backgroundColor: `hsl(${swapElLtColor}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration })
+            swapElLtTop.animate([{ height: `${3 * swapElRtTopHeight}px` }, { height: `${3 * swapElRtTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            swapElLtBottom.animate([{ height: `${3 * swapElRtBottomHeight}px` }, { height: `${3 * swapElRtBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            swapElRtTop.animate([{ height: `${3 * swapElLtTopHeight}px` }, { height: `${3 * swapElLtTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            swapElRtBottom.animate([{ height: `${3 * swapElLtBottomHeight}px` }, { height: `${3 * swapElLtBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
         )
     })
 
@@ -177,7 +184,7 @@ export const colorMapInsertionSortAnimation = (animations) => {
 
 
 // Merge Sort 
-export const mergeSort = (origArray) => {
+export const pixelMapMergeSort = (origArray) => {
     // Two separate arrays, one main one and one to hold swapped values until they can be unswapped. Avoids having to create a buffer array during the sorting process
     const mainArray = [...origArray];
     const auxArray = [...mainArray]
@@ -249,7 +256,7 @@ const merge = (mainArray, startIdx, midIdx, endIdx, auxArray, animations) => {
     }
 }
 
-export const colorMapMergeSortAnimation = (animations) => {
+export const pixelMapMergeSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("pixel-bar");
     const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -269,7 +276,7 @@ export const colorMapMergeSortAnimation = (animations) => {
 }
 
 // Quick Sort 
-export const quickSort = (origArray) => {
+export const pixelMapQuickSort = (origArray) => {
     // Copy original array so as not to mutate it 
     const array = [...origArray];
     const animations = [];
@@ -316,7 +323,7 @@ export const quickSort = (origArray) => {
     return animations
 }
 
-export const colorMapQuickSortAnimation = (animations) => {
+export const pixelMapQuickSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("pixel-bar");
     const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -342,7 +349,7 @@ export const colorMapQuickSortAnimation = (animations) => {
 
 
 // Radix Bar Sort 
-export const radixSort = (origArr) => {
+export const pixelMapRadixSort = (origArr) => {
     const arr = [...origArr] // Copy original array so as not to mutate it
     const animations = [];
 
@@ -381,7 +388,7 @@ export const radixSort = (origArr) => {
 
 }
 
-export const colorMapRadixSortAnimation = (animations) => {
+export const pixelMapRadixSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("pixel-bar");
     const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)
