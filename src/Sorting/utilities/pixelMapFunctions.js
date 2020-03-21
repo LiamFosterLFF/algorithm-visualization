@@ -11,7 +11,7 @@ const shuffle = (array) => {
 export const pixelBarShuffle = (height) => {
     const pixelBarList = [];
     for (let pixBar = 0; pixBar < height; pixBar++) {
-        const pixelBarHeights = [height - pixBar - 1, 1, pixBar]
+        const pixelBarHeights = [pixBar, 1, height - pixBar - 1]
         pixelBarList.push(pixelBarHeights)
     }
     return shuffle(pixelBarList)
@@ -72,7 +72,7 @@ export const pixelMapBubbleSortAnimation = (animations) => {
 }
 
 // Selection Sort 
-export const selectionSort = (origArr) => {
+export const pixelMapSelectionSort = (origArr) => {
     // Clone the original array so as not to mutate it
     const arr = [...origArr]
     // Store the indices of the swaps made in order, to be used in the animations
@@ -81,7 +81,7 @@ export const selectionSort = (origArr) => {
     for (let i = 0; i < n; i++) {
         let minIndex = i;
         for (let j = i; j < n; j++) {
-            if (arr[j] < arr[minIndex]) {
+            if (arr[j][0] < arr[minIndex]) {
                 minIndex = j
             }
             // Checks if sort has reached the end of Array, if so, records that there will be a swap between i and min
@@ -98,24 +98,30 @@ export const selectionSort = (origArr) => {
 }
 
 
-export const colorMapSelectionSortAnimation = (animations) => {
+export const pixelMapSelectionSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("pixel-bar");
     const duration = .5;// The base duration, for easy changing later (duration can also be changed via the API)
     const barAnimations = [];
 
     animations.forEach((animation, index) => {
-        const baseChild = chart[animation[0][0]];
-        const minChild = chart[animation[2][0]];
-        const baseColor = animation[0][1]
-        const minColor = animation[2][1]
+        const baseChildTop = chart[animation[0][0]].childNodes[0];
+        const baseChildBottom = chart[animation[0][0]].childNodes[2];
+        const minChildTop = chart[animation[2][0]].childNodes[0];
+        const minChildBottom = chart[animation[2][0]].childNodes[2];
+        const baseTopHeight = animation[0][1][0];
+        const baseBottomHeight = animation[0][1[2]];
+        const minTopHeight = animation[2][1][0];
+        const minBottomHeight = animation[2][1][2];
         const swap = animation[3];
 
         // if the two elements are to be swapped, perform the swap 
         if (swap === true) {
             barAnimations.push(
-                minChild.animate([{ backgroundColor: `hsl(${baseColor}, 100%, 50%)` }, { backgroundColor: `hsl(${baseColor}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration }),
-                baseChild.animate([{ backgroundColor: `hsl(${minColor}, 100%, 50%)` }, { backgroundColor: `hsl(${minColor}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration })
+                minChildTop.animate([{ height: `${3 * baseTopHeight}px` }, { height: `${3 * baseTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+                baseChildTop.animate([{ height: `${3 * minTopHeight}px` }, { height: `${3 * minTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+                minChildBottom.animate([{ height: `${3 * baseBottomHeight}px` }, { height: `${3 * baseBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+                baseChildBottom.animate([{ height: `${3 * minBottomHeight}px` }, { height: `${3 * minBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
             )
         }
     })

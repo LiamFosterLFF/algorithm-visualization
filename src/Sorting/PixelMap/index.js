@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PixelBar from "./PixelBar";
-import { pixelBarShuffle, bubbleSort, pixelMapBubbleSortAnimation } from "../utilities/pixelMapFunctions";
-// , selectionSort, selectionSortPixelBarChartAnimation, insertionSort, insertionSortPixelBarChartAnimation, mergeSort, mergeSortPixelBarChartAnimation, quickSort, quickSortPixelBarChartAnimation
+import { pixelBarShuffle, bubbleSort, pixelMapBubbleSortAnimation, pixelMapselectionSort, pixelMapSelectionSortAnimation } from "../utilities/pixelMapFunctions";
+//pixelMapInsertionSort, pixelMapInsertionSortPixelAnimation, pixelMapMergeSort, pixelMapMergeSortAnimation, pixelMapQuickSort, pixelMapQuickSortAnimation, pixelMapRadixSort, pixelMapRadixSortAnimation
 
 const PixelMap = () => {
     const [sort, setSort] = useState("bubble")
@@ -16,25 +16,25 @@ const PixelMap = () => {
                 setSortType({ function: bubbleSort })
                 setAnimationType({ function: pixelMapBubbleSortAnimation })
                 break;
-            // case "selection":
-            //     setSortType({ function: selectionSort })
-            //     setAnimationType({ function: selectionSortBarChartAnimation })
-            //     break;
+            case "selection":
+                setSortType({ function: pixelMapSelectionSort })
+                setAnimationType({ function: pixelMapSelectionSortAnimation })
+                break;
             // case "insertion":
-            //     setSortType({ function: insertionSort })
-            //     setAnimationType({ function: insertionSortBarChartAnimation })
+            //     setSortType({ function: pixelMapInsertionSort })
+            //     setAnimationType({ function: pixelMapInsertionSortAnimation })
             //     break;
             // case "merge":
-            //     setSortType({ function: mergeSort })
-            //     setAnimationType({ function: mergeSortBarChartAnimation })
+            //     setSortType({ function: pixelMapMergeSort })
+            //     setAnimationType({ function: pixelMapMergeSortAnimation })
             //     break;
             // case "quick":
-            //     setSortType({ function: quickSort })
-            //     setAnimationType({ function: quickSortBarChartAnimation })
+            //     setSortType({ function: pixelMapQuickSort })
+            //     setAnimationType({ function: pixelMapQuickSortAnimation })
             //     break;
             // case "radix":
-            //     setSortType({ function: barChartRadixSort })
-            //     setAnimationType({ function: radixSortBarChartAnimation })
+            //     setSortType({ function: pixelMapRadixSort })
+            //     setAnimationType({ function: pixelMapRadixSortAnimation })
             //     break;
         }
     }, [sort])
@@ -91,10 +91,10 @@ const PixelMap = () => {
                 <li onClick={() => setSort("bubble")}>
                     bubble
                 </li>
-                {/* <li onClick={() => setSort("selection")}>
+                <li onClick={() => setSort("selection")}>
                     selection
                 </li>
-                <li onClick={() => setSort("insertion")}>
+                {/* <li onClick={() => setSort("insertion")}>
                     insertion
                 </li>
                 <li onClick={() => setSort("merge")}>
