@@ -196,7 +196,7 @@ export const pixelMapMergeSort = (origArray) => {
     // Initialize first function call
     mergeSortHelper(mainArray, 0, n - 1, auxArray, animations);
     // console.log("main", mainArray, "aux", auxArray);;
-
+    
     return animations;
 }
 
@@ -226,7 +226,7 @@ const merge = (mainArray, startIdx, midIdx, endIdx, auxArray, animations) => {
         const animation = {};
         animation.comparison = [i, j];
         animation.range = [startIdx, endIdx]
-        if (auxArray[i] >= auxArray[j]) {
+        if (auxArray[i][0] >= auxArray[j][0]) {
             animation.swap = [k, auxArray[j]]
             mainArray[k++] = auxArray[j++]
         } else {
@@ -263,12 +263,17 @@ export const pixelMapMergeSortAnimation = (animations) => {
     const barAnimations = [];
 
     animations.forEach((animation, index) => {
-        const swapEl = chart[animation.swap[0]];
-        const swapColor = animation.swap[1];
+        const swapElTop = chart[animation.swap[0]].childNodes[0];
+        const swapElBottom = chart[animation.swap[0]].childNodes[2];
+
+        const swapTopHeight = animation.swap[1][2];
+        const swapBottomHeight = animation.swap[1][0];
+
 
         // Highlight two elements being compared in green, and animate them being swapped
         barAnimations.push(
-            swapEl.animate([{ backgroundColor: `hsl(${swapColor}, 100%, 50%)` }, { backgroundColor: `hsl(${swapColor}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            swapElTop.animate([{ height: `${3 * swapTopHeight}px` }, { height: `${3 * swapTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            swapElBottom.animate([{ height: `${3 * swapBottomHeight}px` }, { height: `${3 * swapBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
         )
     })
 

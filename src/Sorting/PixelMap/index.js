@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PixelBar from "./PixelBar";
-import { pixelBarShuffle, bubbleSort, pixelMapBubbleSortAnimation, pixelMapSelectionSort, pixelMapSelectionSortAnimation, pixelMapInsertionSort, pixelMapInsertionSortAnimation } from "../utilities/pixelMapFunctions";
-//, pixelMapMergeSort, pixelMapMergeSortAnimation, pixelMapQuickSort, pixelMapQuickSortAnimation, pixelMapRadixSort, pixelMapRadixSortAnimation
+import { pixelBarShuffle, bubbleSort, pixelMapBubbleSortAnimation, pixelMapSelectionSort, pixelMapSelectionSortAnimation, pixelMapInsertionSort, pixelMapInsertionSortAnimation, pixelMapMergeSort, pixelMapMergeSortAnimation } from "../utilities/pixelMapFunctions";
+//, pixelMapQuickSort, pixelMapQuickSortAnimation, pixelMapRadixSort, pixelMapRadixSortAnimation
 
 const PixelMap = () => {
     const [sort, setSort] = useState("bubble")
@@ -24,10 +24,10 @@ const PixelMap = () => {
                 setSortType({ function: pixelMapInsertionSort })
                 setAnimationType({ function: pixelMapInsertionSortAnimation })
                 break;
-            // case "merge":
-            //     setSortType({ function: pixelMapMergeSort })
-            //     setAnimationType({ function: pixelMapMergeSortAnimation })
-            //     break;
+            case "merge":
+                setSortType({ function: pixelMapMergeSort })
+                setAnimationType({ function: pixelMapMergeSortAnimation })
+                break;
             // case "quick":
             //     setSortType({ function: pixelMapQuickSort })
             //     setAnimationType({ function: pixelMapQuickSortAnimation })
@@ -97,10 +97,10 @@ const PixelMap = () => {
                 <li onClick={() => setSort("insertion")}>
                     insertion
                 </li>
-                {/* <li onClick={() => setSort("merge")}>
+                <li onClick={() => setSort("merge")}>
                     merge
                 </li>
-                <li onClick={() => setSort("quick")}>
+                {/* <li onClick={() => setSort("quick")}>
                     quick
                 </li>
                 <li onClick={() => setSort("radix")}>
