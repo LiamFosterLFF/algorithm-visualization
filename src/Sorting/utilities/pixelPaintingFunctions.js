@@ -81,3 +81,44 @@ export const drawInitialImage = (canvas, img, returnScrambledImageCallback, retu
 
     }
 }
+
+
+
+
+// Pixel Painting Bubble Sort
+export const pixelPaintingBubbleSort = (origArr) => {
+    if (origArr !== []) {
+        // Clone the original array so as not to mutate it
+        const arr = [...origArr]
+        // Store the indices of the swaps made in order, to be used in the animations
+        const animations = []
+        const n = arr.length;
+        for (let i = 0; i < n; i++) {
+            for (let j = 0; j < n - i - 1; j++) {
+                console.log(i, j)
+                // if (arr[j] > arr[j + 1]) {
+                //     [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                //     animations.push([j, j + 1])
+                // }
+            }
+        }
+        // return animations
+    }
+}
+// Bubble Sort Pixel Painting Animation
+export const bubbleSortpixelPaintingAnimation = (animations, speed) => {
+    for (let i = 0; i < animations.length; i++) {
+        const [ind1, ind2] = animations[i]
+        setTimeout(() => {
+            const parent = document.getElementsByClassName('chart');
+            const child1 = parent[0].childNodes[ind1];
+            const child2 = parent[0].childNodes[ind2];
+            // console.log(child1);
+            [child1.style.backgroundColor, child2.style.backgroundColor] = [child2.style.backgroundColor, child1.style.groundColor]
+            setTimeout(() => {
+                // child1.style.backgroundColor = "rgb(51, 226, 217)";
+                // child2.style.backgroundColor = "rgb(51, 226, 217)";
+            }, speed);
+        }, i * speed);
+    }
+}

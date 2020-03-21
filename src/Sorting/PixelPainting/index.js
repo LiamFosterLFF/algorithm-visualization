@@ -5,65 +5,12 @@ import { scrambleImage, drawInitialImage } from '../utilities/pixelPaintingFunct
 
 const PixelPainting = () => {
     const canvas = useRef(null);
-
     const canvasDimensions = {
         x: 950,
         y: 761
     }
-
-    // // Pixel Painting Animations 
-
-    // // Pixel Painting Bubble Sort
-    // const pixelPaintingBubbleSort = (origArr) => {
-    //     if (origArr !== []) {
-    //         // Clone the original array so as not to mutate it
-    //         const arr = [...origArr]
-    //         // Store the indices of the swaps made in order, to be used in the animations
-    //         const animations = []
-    //         const n = arr.length;
-    //         for (let i = 0; i < n; i++) {
-    //             for (let j = 0; j < n - i - 1; j++) {
-    //                 console.log(i, j)
-    //                 // if (arr[j] > arr[j + 1]) {
-    //                 //     [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-    //                 //     animations.push([j, j + 1])
-    //                 // }
-    //             }
-    //         }
-    //         // return animations
-    //     }
-    // }
-
-    // // Bubble Sort Pixel Painting Animation
-    // const bubbleSortpixelPaintingAnimation = (animations, speed) => {
-    //     for (let i = 0; i < animations.length; i++) {
-    //         const [ind1, ind2] = animations[i]
-    //         setTimeout(() => {
-    //             const parent = document.getElementsByClassName('chart');
-    //             const child1 = parent[0].childNodes[ind1];
-    //             const child2 = parent[0].childNodes[ind2];
-    //             // console.log(child1);
-
-    //             [child1.style.backgroundColor, child2.style.backgroundColor] = [child2.style.backgroundColor, child1.style.backgroundColor]
-
-    //             setTimeout(() => {
-    //                 // child1.style.backgroundColor = "rgb(51, 226, 217)";
-    //                 // child2.style.backgroundColor = "rgb(51, 226, 217)";
-    //             }, speed);
-    //         }, i * speed);
-    //     }
-    // }
-    
-    // // useEffect(() => {
-    //     //     bubbleSortpixelPaintingAnimation(animations, 0)
-        
-    //     // }, [])
-        
-        
-        
     const [drawingImage, setDrawingImage] = useState(theStarryNight) 
     const [imageIndicesArray, setImageIndicesArray] = useState([]) 
-    // const [animations, setAnimations] = useState(pixelPaintingBubbleSort(imageIndicesArray))
 
     useEffect(() => {
         drawInitialImage(
@@ -75,11 +22,98 @@ const PixelPainting = () => {
         
     },[])
 
+    const [sort, setSort] = useState("bubble")
+    const [animations, setAnimations] = useState([])
+    // const [sortType, setSortType] = useState({ function: colorMapBubbleSort });
+    // const [animationType, setAnimationType] = useState({ function: colorMapBubbleSortAnimation });
+
+    // useEffect(() => {
+    //     switch (sort) {
+    //         case "bubble":
+    //             setSortType({ function: colorMapBubbleSort })
+    //             setAnimationType({ function: colorMapBubbleSortAnimation })
+    //             break;
+    //         case "selection":
+    //             setSortType({ function: selectionSort })
+    //             setAnimationType({ function: colorMapSelectionSortAnimation })
+    //             break;
+    //         case "insertion":
+    //             setSortType({ function: insertionSort })
+    //             setAnimationType({ function: colorMapInsertionSortAnimation })
+    //             break;
+    //         case "merge":
+    //             setSortType({ function: mergeSort })
+    //             setAnimationType({ function: colorMapMergeSortAnimation })
+    //             break;
+    //         case "quick":
+    //             setSortType({ function: quickSort })
+    //             setAnimationType({ function: colorMapQuickSortAnimation })
+    //             break;
+    //         case "radix":
+    //             setSortType({ function: radixSort })
+    //             setAnimationType({ function: colorMapRadixSortAnimation })
+    //             break;
+    //     }
+    // }, [sort])
+
+    // useEffect(() => {
+    //     resetAnimations(animations)
+    //     runAnimations(colors)
+    // }, [sortType])
+
+    const runAnimations = (colors) => {
+        // const colorAnimations = animationType.function(sortType.function(colors))
+        // setAnimations(colorAnimations)
+    }
+
+    const playAnimations = (animations) => {
+        animations.map((animation) => {
+            if (animation.playState !== "finished") {
+                animation.play()
+            }
+        })
+    }
+
+    const pauseAnimations = (animations) => {
+        animations.map((animation) => {
+            if (animation.playState !== "finished") {
+                animation.pause();
+            }
+        })
+    }
+
+    const resetAnimations = animations => {
+        animations.map((animation) => {
+            animation.cancel()
+        })
+    }   
 
     return (
         <div>
-            {/* <div style={ {width: '100px', height:"5px", margin: "30px", backgroundColor: "red"}}></div> */}
+            <div className="top-bar">
+                <li onClick={() => setSort("bubble")}>
+                    bubble
+                </li>
+                <li onClick={() => setSort("selection")}>
+                    selection
+                </li>
+                <li onClick={() => setSort("insertion")}>
+                    insertion
+                </li>
+                <li onClick={() => setSort("merge")}>
+                    merge
+                </li>
+                <li onClick={() => setSort("quick")}>
+                    quick
+                </li>
+                <li onClick={() => setSort("radix")}>
+                    radix
+                </li>
+            </div>
             <canvas ref={canvas} id="image-canvas" width={canvasDimensions.x} height={canvasDimensions.y}></canvas>
+            <button onClick={() => resetAnimations(animations)}>Reset</button>
+            <button onClick={() => playAnimations(animations)}>Play</button>
+            <button onClick={() => pauseAnimations(animations)}>Pause</button>
         </div>
     )
 }
