@@ -8,9 +8,8 @@ const shuffle = (array) => {
     return array
 };
 
-export const pixelBarShuffle = () => {
+export const pixelBarShuffle = (height) => {
     const pixelBarList = [];
-    const height = 200;
     for (let pixBar = 0; pixBar < height; pixBar++) {
         const pixelBarHeights = [height - pixBar - 1, 1, pixBar]
         pixelBarList.push(pixelBarHeights)
@@ -20,7 +19,7 @@ export const pixelBarShuffle = () => {
 
 
 // ColorMap Bubble Sort
-export const colorMapBubbleSort = (origArr) => {
+export const bubbleSort = (origArr) => {
     // Clone the original array so as not to mutate it
     const arr = [...origArr]
     // Store the indices of the swaps made in order, to be used in the animations
@@ -28,36 +27,44 @@ export const colorMapBubbleSort = (origArr) => {
     const n = arr.length;
     for (let i = 0; i < n; i++) {
         for (let j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
+            if (arr[j][0] > arr[j + 1][0]) {
                 animations.push([[j, arr[j]], [j + 1, arr[j + 1]]]);
                 [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
             }
         }
     }
-
+    
     return animations
 }
 
 
 
 // Bubble Sort Color Map Animation
-export const colorMapBubbleSortAnimation = (animations) => {
+export const pixelMapBubbleSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
-    const chart = document.getElementsByClassName("color-bar");
+    const chart = document.getElementsByClassName("pixel-bar");
     const duration = .5;   // The base duration, for easy changing later (duration can also be changed via the API)
     const barAnimations = [];
     animations.forEach((animation, index) => {
-        const compareEl1 = chart[animation[0][0]];
-        const compareEl2 = chart[animation[1][0]];
-        const swapColor1 = animation[0][1];
-        const swapColor2 = animation[1][1];
+        const compareEl1Bottom = chart[animation[0][0]].childNodes[0];
+        const compareEl1Top = chart[animation[0][0]].childNodes[2];
+        const compareEl2Bottom = chart[animation[1][0]].childNodes[0];
+        const compareEl2Top = chart[animation[1][0]].childNodes[2];
 
+        const swapHt1Top = animation[0][1][0];
+        const swapHt1Bottom = animation[0][1][2];
+
+        const swapHt2Top = animation[1][1][0];
+        const swapHt2Bottom = animation[1][1][2];
+
+        
 
         // Exchange the colors of the two elements being selected
         barAnimations.push(
-            compareEl1.animate([{ backgroundColor: `hsl(${swapColor2}, 100%, 50%)` }, { backgroundColor: `hsl(${swapColor2}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration }),
-            compareEl2.animate([{ backgroundColor: `hsl(${swapColor1}, 100%, 50%)` }, { backgroundColor: `hsl(${swapColor1}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration }),
-
+            compareEl1Bottom.animate([{ height: `${3 * swapHt2Bottom}px` }, { height: `${3 * swapHt2Bottom}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            compareEl1Top.animate([{ height: `${3 * swapHt2Top}px` }, { height: `${3 * swapHt2Top}px` }], { fill: "forwards", duration: duration, delay: index * duration }), 
+            compareEl2Bottom.animate([{ height: `${3 * swapHt1Bottom}px` }, { height: `${3 * swapHt1Bottom}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            compareEl2Top.animate([{ height: `${3 * swapHt1Top}px` }, { height: `${3 * swapHt1Top}px` }], { fill: "forwards", duration: duration, delay: index * duration })
         )
 
     })
@@ -93,7 +100,7 @@ export const selectionSort = (origArr) => {
 
 export const colorMapSelectionSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
-    const chart = document.getElementsByClassName("color-bar");
+    const chart = document.getElementsByClassName("pixel-bar");
     const duration = .5;// The base duration, for easy changing later (duration can also be changed via the API)
     const barAnimations = [];
 
@@ -142,7 +149,7 @@ export const insertionSort = (origArr) => {
 
 export const colorMapInsertionSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
-    const chart = document.getElementsByClassName("color-bar");
+    const chart = document.getElementsByClassName("pixel-bar");
     const duration = 3;   // The base duration, for easy changing later (duration can also be changed via the API)
     const barAnimations = [];
 
@@ -238,7 +245,7 @@ const merge = (mainArray, startIdx, midIdx, endIdx, auxArray, animations) => {
 
 export const colorMapMergeSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
-    const chart = document.getElementsByClassName("color-bar");
+    const chart = document.getElementsByClassName("pixel-bar");
     const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)
     const barAnimations = [];
 
@@ -305,7 +312,7 @@ export const quickSort = (origArray) => {
 
 export const colorMapQuickSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
-    const chart = document.getElementsByClassName("color-bar");
+    const chart = document.getElementsByClassName("pixel-bar");
     const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)
     const barAnimations = [];
 
@@ -370,7 +377,7 @@ export const radixSort = (origArr) => {
 
 export const colorMapRadixSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
-    const chart = document.getElementsByClassName("color-bar");
+    const chart = document.getElementsByClassName("pixel-bar");
     const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)
     const barAnimations = [];
 

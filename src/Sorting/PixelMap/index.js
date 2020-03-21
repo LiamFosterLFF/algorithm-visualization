@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import PixelBar from "./PixelBar";
-import { pixelBarShuffle } from "../utilities/pixelMapFunctions";
-// pixelMapBubbleSort, bubbleSortPixelMapAnimation, selectionSort, selectionSortPixelBarChartAnimation, insertionSort, insertionSortPixelBarChartAnimation, mergeSort, mergeSortPixelBarChartAnimation, quickSort, quickSortPixelBarChartAnimation
+import { pixelBarShuffle, bubbleSort, pixelMapBubbleSortAnimation } from "../utilities/pixelMapFunctions";
+// , selectionSort, selectionSortPixelBarChartAnimation, insertionSort, insertionSortPixelBarChartAnimation, mergeSort, mergeSortPixelBarChartAnimation, quickSort, quickSortPixelBarChartAnimation
 
 const PixelMap = () => {
     const [sort, setSort] = useState("bubble")
-    const [pixelBars, setPixelBars] = useState(pixelBarShuffle())
+    const [pixelBars, setPixelBars] = useState(pixelBarShuffle(200))
     const [animations, setAnimations] = useState([])
-    // const [sortType, setSortType] = useState({ function: bubbleSort });
-    // const [animationType, setAnimationType] = useState({ function: bubbleSortBarChartAnimation });
-
-    // useEffect(() => {
-        // switch (sort) {
-        //     case "bubble":
-        //         setSortType({ function: bubbleSort })
-        //         setAnimationType({ function: bubbleSortBarChartAnimation })
-        //         break;
+    const [sortType, setSortType] = useState({ function: bubbleSort });
+    const [animationType, setAnimationType] = useState({ function: pixelMapBubbleSortAnimation });
+    
+    useEffect(() => {
+        switch (sort) {
+            case "bubble":
+                setSortType({ function: bubbleSort })
+                setAnimationType({ function: pixelMapBubbleSortAnimation })
+                break;
             // case "selection":
             //     setSortType({ function: selectionSort })
             //     setAnimationType({ function: selectionSortBarChartAnimation })
@@ -36,22 +36,22 @@ const PixelMap = () => {
             //     setSortType({ function: barChartRadixSort })
             //     setAnimationType({ function: radixSortBarChartAnimation })
             //     break;
-    //     }
-    // }, [sort])
+        }
+    }, [sort])
 
-    // useEffect(() => {
-    //     resetAnimations(animations)
-    //     runAnimations(bars)
+    useEffect(() => {
+        resetAnimations(animations)
+        runAnimations(pixelBars)
 
-    // }, [sortType])
-
-
+    }, [sortType])
 
 
-    // const runAnimations = (bars) => {
-    //     const barAnimations = animationType.function(sortType.function(bars))
-    //     setAnimations(barAnimations)
-    // }
+
+
+    const runAnimations = (pixelBars) => {
+        const barAnimations = animationType.function(sortType.function(pixelBars))
+        setAnimations(barAnimations)
+    }
 
     const playAnimations = (animations) => {
         animations.map((animation) => {
@@ -84,11 +84,6 @@ const PixelMap = () => {
     
 
     
-    useEffect(() => {
-        
-        
-        // bubbleSortPixelMapAnimation(animations, 0)
-    }, [])
 
     return (
         <div className="chart">
@@ -96,7 +91,7 @@ const PixelMap = () => {
                 <li onClick={() => setSort("bubble")}>
                     bubble
                 </li>
-                <li onClick={() => setSort("selection")}>
+                {/* <li onClick={() => setSort("selection")}>
                     selection
                 </li>
                 <li onClick={() => setSort("insertion")}>
@@ -110,7 +105,7 @@ const PixelMap = () => {
                 </li>
                 <li onClick={() => setSort("radix")}>
                     radix
-                </li>
+                </li> */}
             </div>
             {pixelBars.map((barHeights, barIndex) => {
                 return (
