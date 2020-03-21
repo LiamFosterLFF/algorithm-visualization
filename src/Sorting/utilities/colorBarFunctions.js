@@ -227,23 +227,19 @@ const merge = (mainArray, startIdx, midIdx, endIdx, auxArray, animations) => {
     }
 }
 
-export const mergeSortBarChartAnimation = (animations) => {
+export const colorMapMergeSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("color-bar");
-    const duration = 30;   // The base duration, for easy changing later (duration can also be changed via the API)
+    const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)
     const barAnimations = [];
 
     animations.forEach((animation, index) => {
-        const compareEl1 = chart[animation.comparison[0]];
-        const compareEl2 = chart[animation.comparison[1]];
         const swapEl = chart[animation.swap[0]];
-        const swapHt = `${animation.swap[1] / 10}%`;
+        const swapColor = animation.swap[1];
 
         // Highlight two elements being compared in green, and animate them being swapped
         barAnimations.push(
-            compareEl1.animate([{ backgroundColor: 'rgb(51, 226, 217)' }, { backgroundColor: 'green' }], { duration: duration, delay: index * duration }),
-            compareEl2.animate([{ backgroundColor: 'rgb(51, 226, 217)' }, { backgroundColor: 'green' }], { duration: duration, delay: index * duration }),
-            swapEl.animate([{ height: swapHt }, { height: swapHt }], { fill: "forwards", duration: duration, delay: index * duration })
+            swapEl.animate([{ backgroundColor: `hsl(${swapColor}, 100%, 50%)` }, { backgroundColor: `hsl(${swapColor}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration }),
         )
     })
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ColorBar from "./ColorBar";
-import { colorShuffle, colorMapBubbleSort, colorMapBubbleSortAnimation, selectionSort, colorMapSelectionSortAnimation, insertionSort, colorMapInsertionSortAnimation } from '../utilities/colorBarFunctions';
+import { colorShuffle, colorMapBubbleSort, colorMapBubbleSortAnimation, selectionSort, colorMapSelectionSortAnimation, insertionSort, colorMapInsertionSortAnimation, mergeSort, colorMapMergeSortAnimation } from '../utilities/colorBarFunctions';
 
 const ColorMap = () => {
     const [colors, setColors] = useState(colorShuffle(200))
@@ -23,17 +23,17 @@ const ColorMap = () => {
                 setSortType({ function: insertionSort })
                 setAnimationType({ function: colorMapInsertionSortAnimation })
                 break;
-            // case "merge":
-            //     setSortType({ function: mergeSort })
-            //     setAnimationType({ function: mergeSortBarChartAnimation })
-            //     break;
+            case "merge":
+                setSortType({ function: mergeSort })
+                setAnimationType({ function: colorMapMergeSortAnimation })
+                break;
             // case "quick":
             //     setSortType({ function: quickSort })
-            //     setAnimationType({ function: quickSortBarChartAnimation })
+            //     setAnimationType({ function: colorMapQuickSortAnimation })
             //     break;
             // case "radix":
             //     setSortType({ function: barChartRadixSort })
-            //     setAnimationType({ function: radixSortBarChartAnimation })
+            //     setAnimationType({ function: colorMapRadixSortAnimation })
             //     break;
         }
     }, [sort])
@@ -83,10 +83,10 @@ const ColorMap = () => {
                 <li onClick={() => setSort("insertion")}>
                     insertion
                 </li>
-                {/*<li onClick={() => setSort("merge")}>
+                <li onClick={() => setSort("merge")}>
                     merge
                 </li>
-                <li onClick={() => setSort("quick")}>
+                {/*<li onClick={() => setSort("quick")}>
                     quick
                 </li>
                 <li onClick={() => setSort("radix")}>
