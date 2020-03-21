@@ -452,6 +452,8 @@ export const barShuffle = (bars) => {
 
 
 
+
+
 // PixelMap
 const shuffle = (array) => {
 

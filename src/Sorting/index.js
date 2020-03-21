@@ -26,10 +26,10 @@ const Sorting = () => {
                     {/* <BarChart /> */}
                 </Route>
                 <Route path="/colormap">
-                    <ColorMap />
+                    {/* <ColorMap /> */}
                 </Route>
                 <Route path="/pixelmap">
-                    {/* <PixelMap /> */}
+                    <PixelMap />
                 </Route>
                 <Route path="/pixelpainting">
             
