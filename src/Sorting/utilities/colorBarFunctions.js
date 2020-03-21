@@ -297,7 +297,7 @@ export const quickSort = (origArray) => {
 export const colorMapQuickSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("color-bar");
-    const duration = 30;   // The base duration, for easy changing later (duration can also be changed via the API)
+    const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)
     const barAnimations = [];
 
     animations.forEach((animation, index) => {
@@ -320,7 +320,7 @@ export const colorMapQuickSortAnimation = (animations) => {
 
 
 // Radix Bar Sort 
-export const barChartRadixSort = (origArr) => {
+export const radixSort = (origArr) => {
     const arr = [...origArr] // Copy original array so as not to mutate it
     const animations = [];
 
@@ -359,22 +359,21 @@ export const barChartRadixSort = (origArr) => {
 
 }
 
-export const radixSortBarChartAnimation = (animations) => {
+export const colorMapRadixSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("color-bar");
-    const duration = 30;   // The base duration, for easy changing later (duration can also be changed via the API)
+    const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)
     const barAnimations = [];
 
     animations.forEach((animation, index) => {
 
         const element = chart[animation[1]];
-        const height = `${animation[0] / 10}%`;
+        const color = animation[0];
 
 
         // Highlight two elements being compared in green, and pivot in red, and animate them being swapped
         barAnimations.push(
-            element.animate([{ backgroundColor: 'red' }, { backgroundColor: 'red' }], { duration: duration, delay: index * duration }),
-            element.animate([{ height: height }, { height: height }], { fill: "forwards", duration: duration, delay: index * duration })
+            element.animate([{ backgroundColor: `hsl(${color}, 100%, 50%)` }, { backgroundColor: `hsl(${color}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration })
         )
     })
 
