@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ColorBar from "./ColorBar";
-import { colorShuffle, colorMapBubbleSort, colorMapBubbleSortAnimation, selectionSort, colorMapSelectionSortAnimation } from '../utilities/colorBarFunctions';
+import { colorShuffle, colorMapBubbleSort, colorMapBubbleSortAnimation, selectionSort, colorMapSelectionSortAnimation, insertionSort, colorMapInsertionSortAnimation } from '../utilities/colorBarFunctions';
 
 const ColorMap = () => {
     const [colors, setColors] = useState(colorShuffle(200))
@@ -19,10 +19,10 @@ const ColorMap = () => {
                 setSortType({ function: selectionSort })
                 setAnimationType({ function: colorMapSelectionSortAnimation })
                 break;
-            // case "insertion":
-            //     setSortType({ function: insertionSort })
-            //     setAnimationType({ function: insertionSortBarChartAnimation })
-            //     break;
+            case "insertion":
+                setSortType({ function: insertionSort })
+                setAnimationType({ function: colorMapInsertionSortAnimation })
+                break;
             // case "merge":
             //     setSortType({ function: mergeSort })
             //     setAnimationType({ function: mergeSortBarChartAnimation })
@@ -80,10 +80,10 @@ const ColorMap = () => {
                 <li onClick={() => setSort("selection")}>
                     selection
                 </li>
-                {/*<li onClick={() => setSort("insertion")}>
+                <li onClick={() => setSort("insertion")}>
                     insertion
                 </li>
-                <li onClick={() => setSort("merge")}>
+                {/*<li onClick={() => setSort("merge")}>
                     merge
                 </li>
                 <li onClick={() => setSort("quick")}>

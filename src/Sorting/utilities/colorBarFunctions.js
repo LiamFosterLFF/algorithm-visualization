@@ -131,7 +131,7 @@ export const insertionSort = (origArr) => {
 }
 
 
-export const insertionSortBarChartAnimation = (animations) => {
+export const colorMapInsertionSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("color-bar");
     const duration = 3;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -139,16 +139,14 @@ export const insertionSortBarChartAnimation = (animations) => {
 
     animations.forEach((animation, index) => {
         const swapElLt = chart[animation[0][0]];
-        const swapElLtHt = `${animation[0][1] / 10}%`;
+        const swapElLtColor = animation[0][1];
         const swapElRt = chart[animation[1][0]];
-        const swapElRtHt = `${animation[1][1] / 10}%`;
+        const swapElRtColor = animation[1][1];
 
         // Highlight two elements being compared in green, and animate them being swapped
         barAnimations.push(
-            swapElRt.animate([{ backgroundColor: 'rgb(51, 226, 217)' }, { backgroundColor: 'green' }], { duration: duration, delay: index * duration }),
-            swapElRt.animate([{ height: swapElLtHt }, { height: swapElLtHt }], { fill: "forwards", duration: duration, delay: index * duration }),
-            swapElLt.animate([{ backgroundColor: 'rgb(51, 226, 217)' }, { backgroundColor: 'green' }], { duration: duration, delay: index * duration }),
-            swapElLt.animate([{ height: swapElRtHt }, { height: swapElRtHt }], { fill: "forwards", duration: duration, delay: index * duration })
+            swapElLt.animate([{ backgroundColor: `hsl(${swapElRtColor}, 100%, 50%)` }, { backgroundColor: `hsl(${swapElRtColor}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            swapElRt.animate([{ backgroundColor: `hsl(${swapElLtColor}, 100%, 50%)` }, { backgroundColor: `hsl(${swapElLtColor}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration })
         )
     })
 
