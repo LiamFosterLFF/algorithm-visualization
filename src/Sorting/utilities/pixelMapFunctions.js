@@ -395,7 +395,6 @@ export const pixelMapRadixSort = (origArr) => {
             }
         }
     }
-    console.log(arr);
     
     return animations
 

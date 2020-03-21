@@ -29,10 +29,10 @@ const Sorting = () => {
                     {/* <ColorMap /> */}
                 </Route>
                 <Route path="/pixelmap">
-                    <PixelMap />
+                    {/* <PixelMap /> */}
                 </Route>
                 <Route path="/pixelpainting">
-            
+                    <PixelPainting/>
                 </Route>
             </Switch>
         </Router>
