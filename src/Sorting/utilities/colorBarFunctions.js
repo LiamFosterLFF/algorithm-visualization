@@ -294,7 +294,7 @@ export const quickSort = (origArray) => {
     return animations
 }
 
-export const quickSortBarChartAnimation = (animations) => {
+export const colorMapQuickSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("color-bar");
     const duration = 30;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -304,18 +304,14 @@ export const quickSortBarChartAnimation = (animations) => {
 
         const leftEl = chart[animation[0][0]];
         const rightEl = chart[animation[1][0]];
-        const pivot = chart[animation[2][0]];
-        const leftHt = `${animation[0][1] / 10}%`;
-        const rightHt = `${animation[1][1] / 10}%`;
+        const leftColor = animation[0][1];
+        const rightColor = animation[1][1];
 
 
         // Highlight two elements being compared in green, and pivot in red, and animate them being swapped
         barAnimations.push(
-            leftEl.animate([{ backgroundColor: 'rgb(51, 226, 217)' }, { backgroundColor: 'green' }], { duration: duration, delay: index * duration }),
-            leftEl.animate([{ height: leftHt }, { height: rightHt }], { fill: "forwards", duration: duration, delay: index * duration }),
-            rightEl.animate([{ backgroundColor: 'rgb(51, 226, 217)' }, { backgroundColor: 'green' }], { duration: duration, delay: index * duration }),
-            rightEl.animate([{ height: rightHt }, { height: leftHt }], { fill: "forwards", duration: duration, delay: index * duration }),
-            pivot.animate([{ backgroundColor: 'rgb(51, 226, 217)' }, { backgroundColor: 'red' }], { duration: duration, delay: index * duration })
+            leftEl.animate([{ backgroundColor: `hsl(${rightColor}, 100%, 50%)` }, { backgroundColor: `hsl(${rightColor}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            rightEl.animate([{ backgroundColor: `hsl(${leftColor}, 100%, 50%)` }, { backgroundColor: `hsl(${leftColor}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration })
         )
     })
 
