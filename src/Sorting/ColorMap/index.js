@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ColorBar from "./ColorBar";
 import { colorShuffle, colorMapBubbleSort, colorMapBubbleSortAnimation, selectionSort, colorMapSelectionSortAnimation, insertionSort, colorMapInsertionSortAnimation, mergeSort, colorMapMergeSortAnimation, quickSort, colorMapQuickSortAnimation, radixSort, colorMapRadixSortAnimation } from '../utilities/colorBarFunctions';
 
-const ColorMap = () => {
+const ColorMap = ({ sort }) => {
     const [colors, setColors] = useState(colorShuffle(200))
-    const [sort, setSort] = useState("bubble")
     const [animations, setAnimations] = useState([])
     const [sortType, setSortType] = useState({ function: colorMapBubbleSort });
     const [animationType, setAnimationType] = useState({ function: colorMapBubbleSortAnimation });
@@ -72,35 +71,19 @@ const ColorMap = () => {
     
 
     return (
-        <div className="chart">
-            <div className="top-bar">
-                <li onClick={() => setSort("bubble")}>
-                    bubble
-                </li>
-                <li onClick={() => setSort("selection")}>
-                    selection
-                </li>
-                <li onClick={() => setSort("insertion")}>
-                    insertion
-                </li>
-                <li onClick={() => setSort("merge")}>
-                    merge
-                </li>
-                <li onClick={() => setSort("quick")}>
-                    quick
-                </li>
-                <li onClick={() => setSort("radix")}>
-                    radix
-                </li>
+        <div className="color-map">
+            <div className="chart">
+                {colors.map((color, colorIndex) => {
+                    return (
+                        <ColorBar key={colorIndex} color={color} />
+                    )
+                })}
+                <div className="buttons-bar">
+                    <button onClick={() => resetAnimations(animations)}>Reset</button>
+                    <button onClick={() => playAnimations(animations)}>Play</button>
+                    <button onClick={() => pauseAnimations(animations)}>Pause</button>
+                </div>
             </div>
-            {colors.map((color, colorIndex) => {
-                return (
-                    <ColorBar key={colorIndex} color={color} />
-                )
-            })}
-            <button onClick={() => resetAnimations(animations)}>Reset</button>
-            <button onClick={() => playAnimations(animations)}>Play</button>
-            <button onClick={() => pauseAnimations(animations)}>Pause</button>
         </div>
     )
 }

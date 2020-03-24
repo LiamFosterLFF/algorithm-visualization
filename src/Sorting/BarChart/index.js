@@ -4,8 +4,7 @@ import Bar from './Bar';
 
 import { barShuffle, bubbleSort, bubbleSortBarChartAnimation, selectionSort, selectionSortBarChartAnimation, insertionSort, insertionSortBarChartAnimation, mergeSort, mergeSortBarChartAnimation, quickSort, quickSortBarChartAnimation, barChartRadixSort, radixSortBarChartAnimation } from "../utilities";
 
-const BarChart = () => {
-    const [sort, setSort] = useState("bubble")
+const BarChart = ({ sort }) => {
     const [bars, setBars] = useState(barShuffle(100));
     const [animations, setAnimations] = useState([])
     const [sortType, setSortType] = useState({function: bubbleSort});
@@ -78,38 +77,19 @@ const BarChart = () => {
 
 
     return (
-        <div className="bar-chart">
-            <div className="top-bar">
-                <li onClick={() => setSort("bubble")}>
-                    bubble
-                </li>
-                <li onClick={() => setSort("selection")}>
-                    selection
-                </li>
-                <li onClick={() => setSort("insertion")}>
-                    insertion
-                </li>
-                <li onClick={() => setSort("merge")}>
-                    merge
-                </li>
-                <li onClick={() => setSort("quick")}>
-                    quick
-                </li>
-                <li onClick={() => setSort("radix")}>
-                    radix
-                </li>
-            </div>
             <div className="chart">
                 {bars.map((barHeight, barIndex) => {
                     return (
                         <Bar key={barIndex} height={barHeight} />
                     )
                 })}
-                <button onClick={() => resetAnimations(animations)}>Reset</button>
-                <button onClick={() => playAnimations(animations)}>Play</button>
-                <button onClick={() => pauseAnimations(animations)}>Pause</button>
+                <div className="buttons-bar">
+                    <button onClick={() => resetAnimations(animations)}>Reset</button>
+                    <button onClick={() => playAnimations(animations)}>Play</button>
+                    <button onClick={() => pauseAnimations(animations)}>Pause</button>
+                </div>
             </div>
-        </div>
+
     )
 }
 

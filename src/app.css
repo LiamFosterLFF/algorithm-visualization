@@ -6,7 +6,9 @@ html {
     font-size: 10px;
 }
 
-
+body {
+    margin: 0;
+}
 
 .page {
     position: fixed;
@@ -16,22 +18,75 @@ html {
     top: 0;
     left: 0;
     background-color: #f3f3f3;
-    padding: 2% 0;
+    padding: 0;
+    margin: 0;
 }
 
 /* Sorting */
 
+.nav-bar {
+    background-color: #2711a0;
+    height: 10%;
+    width: 100%;
+    position: absolute;
+}
+
+.chart-types {
+    list-style-type: none;
+    margin-block-start: 0;
+
+}
+
+.chart-types li {
+    display: inline-block;
+    margin: 0 1rem;
+    font-size: 2rem;
+    float: left;
+}
+
+.chart-link {
+    color: white;
+}
+
+.sort-types {
+    list-style-type: none;
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.sort-types li {
+    display: inline-block;
+    margin: 0 1rem;
+    font-size: 2rem;
+    float: right;
+    color: white;
+    cursor: pointer;
+}
+
 .bar-chart {
     height: 100%;
 }
-.chart {
+
+.color-map {
     height: 100%;
+}
+
+.pixel-map {
+    height: 100%;
+}
+
+.chart {
+    height: 80%;
     width: 90%;
     justify-content: center;
     align-items: center;
-    margin: 0 auto;
+    margin: 8% auto;
     padding-bottom: 5%;
     
+}
+
+.buttons-bar {
+    display: block;
 }
 
 /* BarChart */

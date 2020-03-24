@@ -8,7 +8,8 @@ const shuffle = (array) => {
     return array
 };
 
-export const pixelBarShuffle = (height) => {
+export const pixelBarShuffle = () => {
+    const height = 200;
     const pixelBarList = [];
     for (let pixBar = 0; pixBar < height; pixBar++) {
         const pixelBarHeights = [pixBar, 1, height - pixBar - 1]

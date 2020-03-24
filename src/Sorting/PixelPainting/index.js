@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import scream from './scream.jpg'
 import theStarryNight from './the-starry-night.jpg'
-import { scrambleImage, drawInitialImage } from '../utilities/pixelPaintingFunctions';
+import { drawInitialImage, pixelPaintingBubbleSort, pixelPaintingBubbleSortAnimation } from '../utilities/pixelPaintingFunctions';
 
 const PixelPainting = () => {
     const canvas = useRef(null);
@@ -15,82 +15,89 @@ const PixelPainting = () => {
     useEffect(() => {
         drawInitialImage(
             canvas,
-             drawingImage,
+            drawingImage,
             (scrambledImageData) => setDrawingImage(scrambledImageData),
             (scrambledImageDataIndices) => setImageIndicesArray(scrambledImageDataIndices)
             );
-        
     },[])
 
-    const [sort, setSort] = useState("bubble")
-    const [animations, setAnimations] = useState([])
-    // const [sortType, setSortType] = useState({ function: colorMapBubbleSort });
-    // const [animationType, setAnimationType] = useState({ function: colorMapBubbleSortAnimation });
+    useEffect(() => {
+        const colorAnimations = pixelPaintingBubbleSort(imageIndicesArray)
+    }, [imageIndicesArray])
+
+
+    // const [sort, setSort] = useState("bubble")
+    // const [animations, setAnimations] = useState([])
+    // const [sortType, setSortType] = useState({ function: pixelPaintingBubbleSort });
+    // const [animationType, setAnimationType] = useState({ function: pixelPaintingBubbleSortAnimation });
 
     // useEffect(() => {
     //     switch (sort) {
     //         case "bubble":
-    //             setSortType({ function: colorMapBubbleSort })
-    //             setAnimationType({ function: colorMapBubbleSortAnimation })
+    //             setSortType({ function: pixelPaintingBubbleSort })
+    //             setAnimationType({ function: pixelPaintingBubbleSortAnimation })
     //             break;
-    //         case "selection":
-    //             setSortType({ function: selectionSort })
-    //             setAnimationType({ function: colorMapSelectionSortAnimation })
-    //             break;
-    //         case "insertion":
-    //             setSortType({ function: insertionSort })
-    //             setAnimationType({ function: colorMapInsertionSortAnimation })
-    //             break;
-    //         case "merge":
-    //             setSortType({ function: mergeSort })
-    //             setAnimationType({ function: colorMapMergeSortAnimation })
-    //             break;
-    //         case "quick":
-    //             setSortType({ function: quickSort })
-    //             setAnimationType({ function: colorMapQuickSortAnimation })
-    //             break;
-    //         case "radix":
-    //             setSortType({ function: radixSort })
-    //             setAnimationType({ function: colorMapRadixSortAnimation })
-    //             break;
+    // //         case "selection":
+    // //             setSortType({ function: selectionSort })
+    // //             setAnimationType({ function: colorMapSelectionSortAnimation })
+    // //             break;
+    // //         case "insertion":
+    // //             setSortType({ function: insertionSort })
+    // //             setAnimationType({ function: colorMapInsertionSortAnimation })
+    // //             break;
+    // //         case "merge":
+    // //             setSortType({ function: mergeSort })
+    // //             setAnimationType({ function: colorMapMergeSortAnimation })
+    // //             break;
+    // //         case "quick":
+    // //             setSortType({ function: quickSort })
+    // //             setAnimationType({ function: colorMapQuickSortAnimation })
+    // //             break;
+    // //         case "radix":
+    // //             setSortType({ function: radixSort })
+    // //             setAnimationType({ function: colorMapRadixSortAnimation })
+    // //             break;
     //     }
     // }, [sort])
 
-    // useEffect(() => {
-    //     resetAnimations(animations)
-    //     runAnimations(colors)
-    // }, [sortType])
+    useEffect(() => {
+        // resetAnimations(animations)
+        runAnimations(imageIndicesArray)
+    }, [])
 
-    const runAnimations = (colors) => {
-        // const colorAnimations = animationType.function(sortType.function(colors))
+    const runAnimations = (imageIndicesArray) => {
+        // const colorAnimations = animationType.function(sortType.function(imageIndicesArray))
+        const colorAnimations = pixelPaintingBubbleSort(imageIndicesArray)
+        console.log(colorAnimations);
+        
         // setAnimations(colorAnimations)
     }
 
-    const playAnimations = (animations) => {
-        animations.map((animation) => {
-            if (animation.playState !== "finished") {
-                animation.play()
-            }
-        })
-    }
+    // const playAnimations = (animations) => {
+    //     animations.map((animation) => {
+    //         if (animation.playState !== "finished") {
+    //             animation.play()
+    //         }
+    //     })
+    // }
 
-    const pauseAnimations = (animations) => {
-        animations.map((animation) => {
-            if (animation.playState !== "finished") {
-                animation.pause();
-            }
-        })
-    }
+    // const pauseAnimations = (animations) => {
+    //     animations.map((animation) => {
+    //         if (animation.playState !== "finished") {
+    //             animation.pause();
+    //         }
+    //     })
+    // }
 
-    const resetAnimations = animations => {
-        animations.map((animation) => {
-            animation.cancel()
-        })
-    }   
+    // const resetAnimations = animations => {
+    //     animations.map((animation) => {
+    //         animation.cancel()
+    //     })
+    // }   
 
     return (
         <div>
-            <div className="top-bar">
+            {/* <div className="top-bar">
                 <li onClick={() => setSort("bubble")}>
                     bubble
                 </li>
@@ -109,11 +116,11 @@ const PixelPainting = () => {
                 <li onClick={() => setSort("radix")}>
                     radix
                 </li>
-            </div>
+            </div> */}
             <canvas ref={canvas} id="image-canvas" width={canvasDimensions.x} height={canvasDimensions.y}></canvas>
-            <button onClick={() => resetAnimations(animations)}>Reset</button>
+            {/* <button onClick={() => resetAnimations(animations)}>Reset</button>
             <button onClick={() => playAnimations(animations)}>Play</button>
-            <button onClick={() => pauseAnimations(animations)}>Pause</button>
+            <button onClick={() => pauseAnimations(animations)}>Pause</button> */}
         </div>
     )
 }
