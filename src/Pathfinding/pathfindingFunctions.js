@@ -114,12 +114,11 @@ const shuffle = (array) => {
 
 // Maze-solving algorithms:
 
-export const solveMaze = (grid) => {
+export const solveMaze = (grid, defaults) => {
     const newGrid = JSON.parse(JSON.stringify(grid)); // Deep copy of grid
-    const [enter, exit, start] = [[0, 1], [grid.length - 1, grid[0].length - 2], [1, 1]]
     const animations = {solvingAnimations: [], backtrackingAnimations: []};
     
-    depthFirstSearchSolvingAlgorithm(start, enter, exit, newGrid, animations)
+    depthFirstSearchSolvingAlgorithm(defaults.start, defaults.enter, defaults.exit, newGrid, animations)
     return animations
 }
 
