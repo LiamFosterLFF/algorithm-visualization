@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { drawGrid, generateMaze, solveMaze, animateMazeDrawing, animateMazeSolving, animateMazeSolvingBacktrack } from './pathfindingFunctions.js';
+import { initializeGrid, generateMaze, solveMaze, animateMazeDrawing, animateMazeSolving, animateMazeSolvingBacktrack, clearCanvas, fillCanvas } from './pathfindingFunctions.js';
 
 const Pathfinding = () => {
     const canvas = useRef(null);
     const [cellSize, setCellSize] = useState(20) // Fix this so that it's set with number of cells, not sizee !!!!
-    const [canvasDimensions, setCanvasDimensions] = useState({width: cellSize*45, height: cellSize*45, x: 0, y: 0}) //FIX SO THAT SET PROGRAMMATICALLY
+    const [canvasDimensions, setCanvasDimensions] = useState({width: cellSize*25, height: cellSize*25, x: 0, y: 0}) //FIX SO THAT SET PROGRAMMATICALLY
     const [grid, setGrid] = useState([])
     const [animations, setAnimations] = useState([])
     const [solvingAnimations, setSolvingAnimations] = useState([])
 
     useEffect(() => {
-        const [grid, x, y] = drawGrid(canvas, cellSize, canvasDimensions)
+        const [initialGrid, x, y] = initializeGrid(canvas, cellSize, canvasDimensions)
         
-        setGrid(grid)
+        setGrid(initialGrid)
         setCanvasDimensions({
             ...canvasDimensions,
             x,
@@ -31,7 +31,8 @@ const Pathfinding = () => {
     useEffect(() => {
         
         if(mazeGenerating) {
-            const [mazeGrid, mazeAnimations, mazeFinished] = generateMaze(grid)
+            const fillGrid = fillCanvas(canvas, cellSize)
+            const [mazeGrid, mazeAnimations, mazeFinished] = generateMaze(fillGrid)
     
             setAnimations(mazeAnimations)
             setGrid(mazeGrid)
@@ -59,7 +60,7 @@ const Pathfinding = () => {
         
     }, [mazeSolving, grid])
 
-    const [drawSpeed, setDrawSpeed] = useState(10)
+    const [drawSpeed, setDrawSpeed] = useState(0)
 
     
 
@@ -135,8 +136,21 @@ const Pathfinding = () => {
             setGrid(newGrid)
         }
     }
+
+    const handleClearCanvas = () => {
+        const clearGrid = clearCanvas(canvas, cellSize)
+        setGrid(clearGrid)
+    }
+
+    const handleFillCanvas = () => {
+        const fillGrid = fillCanvas(canvas, cellSize)
+        setGrid(fillGrid)
+    }
+
     return (
         <div id="canvas">
+            <button onClick={handleClearCanvas}>Clear</button>
+            <button onClick={handleFillCanvas}>Fill</button>
             <canvas onClick={handleOnClick} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseOut={handleMouseOut} onMouseMove={handleMouseMove} ref={canvas}></canvas>
             <button onClick={() => setMazeGenerating(true)}>Generate Maze</button>
             <button onClick={() => setMazeSolving(true)}>Solve Maze</button>
