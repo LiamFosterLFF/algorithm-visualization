@@ -100,8 +100,12 @@ const Pathfinding = () => {
 
 
     const [mouseDown, setMouseDown] = useState(false)
+    const [fillType, setFillType] = useState("wall")
     const handleMouseDown = (e) => {
         setMouseDown(true)
+        console.log(e);
+        const [row, col] = [Math.floor((e.clientY - canvasDimensions.y) / cellSize), Math.floor((e.clientX - canvasDimensions.x + .5) / cellSize)];
+        setFillType((grid[row][col] === "wall") ? "path" : "wall")
     }
 
     const handleMouseUp = (e) => {
@@ -119,18 +123,18 @@ const Pathfinding = () => {
             const newGrid = [...grid];
 
             const ctx = canvas.current.getContext('2d');
-            if (grid[row][col] !== "wall") {
+            if (fillType === "wall") {
                 ctx.fillStyle = "#444";
                 ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                newGrid[row][col] = "wall";
             } else {
                 ctx.clearRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                newGrid[row][col] = "path";
             }
 
-            newGrid[row][col] = (newGrid[row][col] === "wall") ? "wall" : "path"
             setGrid(newGrid)
         }
     }
-
     return (
         <div id="canvas">
             <canvas onClick={handleOnClick} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseOut={handleMouseOut} onMouseMove={handleMouseMove} ref={canvas}></canvas>
