@@ -133,6 +133,119 @@ const recursiveMazeAlgorithm = (startNode, prevNode, mazeGrid, animations) => {
     return [mazeGrid, newAnimations, deadEnd]
 }
 
+export const nodeFinder = (mazeGrid) => {
+    const animations = [];
+    const nodeList = []; // List of nodes with the location and directions of nearest nodes
+
+    // Find the start and the finish
+    for (let i = 0; i < mazeGrid[0].length; i++) {
+        if (mazeGrid[0][i] === "path") {
+            animations.push([0, i])
+            nodeList.push([0, i, [2]])
+        }
+    }
+
+    for (let i = 0; i < mazeGrid[mazeGrid.length - 1].length; i++) {
+        if (mazeGrid[mazeGrid.length - 1][i] === "path") {
+            animations.push([mazeGrid.length - 1, i])
+            nodeList.push([mazeGrid.length - 1, i, [0]])
+        }
+    }
+
+    for (let row = 1; row < mazeGrid.length; row += 2) { // Cycles through rows and columns, searching for nodes in each odd row/col
+        for (let col = 1; col < mazeGrid[0].length; col += 2) {
+            const directions = [];
+            for (let direction = 0; direction < 4; direction++) {
+                switch (direction) {
+                    case 0:
+                        if (mazeGrid[row - 1][col] === "path") { // Up: if potential path column above is path
+                            directions.push(direction)
+                        }
+                        break;
+                    case 1:
+                        if (mazeGrid[row][col + 1] === "path") { // Right: if potential path column right is path
+                            directions.push(direction)
+                        }
+                        break;
+                    case 2:
+                        if (mazeGrid[row + 1][col] === "path") { // Down: if potential path column down is path
+                            directions.push(direction)
+                        }
+                        break;
+                    case 3:
+                        if (mazeGrid[row][col - 1] === "path") { // Left: if potential path column above is path
+                            directions.push(direction)
+                        }
+                        break;
+                }
+            }
+            if (directions.length === 1) { // If dead end, corner, or intersection
+                animations.push([row, col])
+                nodeList.push([row, col, directions])
+            } else if (directions.length === 2 && (directions[0] - directions[1]) % 2 !== 0) {
+                animations.push([row, col])
+                nodeList.push([row, col, directions])
+            } else if (directions.length === 3 || directions.length === 4) {
+                animations.push([row, col])
+                nodeList.push([row, col, directions])
+            }
+
+        }
+    }
+
+    const nodeMazeGrid = JSON.parse(JSON.stringify(mazeGrid))    // Deep copy the maze grid
+    nodeList.forEach(node => nodeMazeGrid[node[0]][node[1]] = "node")
+    console.log(nodeList);
+    
+    const nodeWeights = weightFinder(nodeMazeGrid, nodeList)
+    console.log(nodeWeights);
+    
+    return animations
+}
+
+const weightFinder = (nodeMazeGrid, nodeList) => {
+    const nodeWeights = [];
+    nodeList.forEach(node => {
+        const [row, col] = [node[0], node[1]];
+        const nodeDirections = []
+        const directions = node[2]
+        directions.forEach(direction => {
+            let i = 1;
+            console.log(row, col, direction);
+            
+            
+            switch (direction) {
+                case 0: // Up
+                    while (row - i >= 0 && nodeMazeGrid[row - i][col] !== "node") {
+                        i++
+                    }
+                    nodeDirections.push([direction, i])
+                    break;
+                case 1: // Right
+                    while (col + i < nodeMazeGrid[row].length && nodeMazeGrid[row][col + i] !== "node") {
+                        i++
+                    }
+                    nodeDirections.push([direction, i])
+                    break;
+                case 2: // Down
+                    while (row + i < nodeMazeGrid.length && nodeMazeGrid[row + i][col] !== "node") {
+                        i++
+                    }
+                    nodeDirections.push([direction, i])
+                    break;
+                case 3: // Left
+                    while (col - i >= 0 && nodeMazeGrid[row][col - i] !== "node") {
+                        i++
+                    }
+                    nodeDirections.push([direction, i])
+                    break;
+            }
+        })
+        nodeWeights.push([row, col, nodeDirections])
+    })
+    return nodeWeights;
+}
+
 
 const shuffle = (array) => {
 
@@ -303,17 +416,27 @@ export const breadthFirstSearchSolvingAlgorithm = (startNode, prevNode, endNode,
 
 // Animations
 
-export const animateMazeDrawing = (animations, canvas, cellSize, drawSpeed) => {
+export const animateMazeDrawing = (mazeAnimations, canvas, cellSize, drawSpeed) => {
     const ctx = canvas.current.getContext('2d');
-
-    if (animations !== []) {
-        animations.forEach((animation, index) => {
+    
+    if (mazeAnimations.drawingAnimations.length !== 0) {
+        mazeAnimations.drawingAnimations.forEach((animation, index) => {
             setTimeout(() => {
                 const [row, col] = animation;
                 ctx.clearRect(col * cellSize, row * cellSize, cellSize, cellSize);
             }, drawSpeed * index);
         })
     }
+
+    // if (mazeAnimations.nodeAnimations.length !== 0) {
+    //     mazeAnimations.nodeAnimations.forEach((animation, index) => {
+    //         setTimeout(() => {
+    //             const [row, col] = animation;
+    //             ctx.fillStyle = "#ff0000"
+    //             ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+    //         }, drawSpeed * mazeAnimations.drawingAnimations.length + drawSpeed * index); // Set a delay based on the time to finish the drawing animation, before drawing the nodes
+    //     })
+    // }
 }
 
 export const animateMazeSolving = (solvingAnimations, canvas, cellSize, drawSpeed) => {

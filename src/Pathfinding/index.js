@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { initializeGrid, generateMaze, solveMaze, animateMazeDrawing, animateMazeSolving, animateMazeSolvingBacktrack, clearCanvas, fillCanvas } from './pathfindingFunctions.js';
+import { initializeGrid, generateMaze, solveMaze, nodeFinder, animateMazeDrawing, animateMazeSolving, animateMazeSolvingBacktrack, clearCanvas, fillCanvas } from './pathfindingFunctions.js';
 
 const Pathfinding = () => {
     const canvas = useRef(null);
-    const [cellSize, setCellSize] = useState(20) // Fix this so that it's set with number of cells, not sizee !!!!
-    const [canvasDimensions, setCanvasDimensions] = useState({width: cellSize*25, height: cellSize*25, x: 0, y: 0}) //FIX SO THAT SET PROGRAMMATICALLY
+    const [cellSize, setCellSize] = useState(60) // Fix this so that it's set with number of cells, not sizee !!!!
+    const [canvasDimensions, setCanvasDimensions] = useState({width: cellSize*9, height: cellSize*9, x: 0, y: 0}) //FIX SO THAT SET PROGRAMMATICALLY
     const [grid, setGrid] = useState([])
-    const [animations, setAnimations] = useState([])
+    const [mazeAnimations, setMazeAnimations] = useState({ drawingAnimations: [], nodeAnimations: [] })
     const [solvingAnimations, setSolvingAnimations] = useState([])
+    const [drawSpeed, setDrawSpeed] = useState(80)
 
     useEffect(() => {
         const [initialGrid, x, y] = initializeGrid(canvas, cellSize, canvasDimensions)
@@ -22,7 +23,7 @@ const Pathfinding = () => {
     }, [])
 
     
-
+    
 
     
 
@@ -32,9 +33,14 @@ const Pathfinding = () => {
         
         if(mazeGenerating) {
             const fillGrid = fillCanvas(canvas, cellSize)
-            const [mazeGrid, mazeAnimations, mazeFinished] = generateMaze(fillGrid)
-    
-            setAnimations(mazeAnimations)
+
+            const [mazeGrid, drawingAnimations, mazeFinished] = generateMaze(fillGrid)
+            mazeAnimations.drawinganimations = drawingAnimations
+
+            const nodeAnimations = nodeFinder(mazeGrid)
+            console.log(nodeAnimations);
+            
+            setMazeAnimations({ drawingAnimations: drawingAnimations, nodeAnimations: nodeAnimations })
             setGrid(mazeGrid)
             if (mazeFinished) {
                 setMazeGenerating(false)
@@ -60,13 +66,13 @@ const Pathfinding = () => {
         
     }, [mazeSolving, grid])
 
-    const [drawSpeed, setDrawSpeed] = useState(0)
 
     
 
     useEffect(() => {
-        animateMazeDrawing(animations, canvas, cellSize, drawSpeed)
-    }, [animations]);
+        animateMazeDrawing(mazeAnimations, canvas, cellSize, drawSpeed)
+    }, [mazeAnimations]);
+
 
     
 
