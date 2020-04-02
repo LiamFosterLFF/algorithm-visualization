@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { initializeGrid, generateMaze, solveMaze, nodeFinder, animateMazeDrawing, animateMazeSolving, animateMazeSolvingBacktrack, clearCanvas, fillCanvas } from './pathfindingFunctions.js';
+import { initializeGrid, generateMaze, clearCanvas, fillCanvas } from './PathfindingFunctions/mazeGeneratingFunctions.js';
+import { solveMaze, nodeFinder } from './PathfindingFunctions/mazeSolvingFunctions.js';
+import { animateMazeDrawing, animateMazeSolving, animateMazeSolvingBacktrack } from './PathfindingFunctions/mazeAnimatingFunctions.js';
+
 
 const Pathfinding = () => {
     const canvas = useRef(null);
@@ -36,7 +39,7 @@ const Pathfinding = () => {
             // Pathfinding - best first search
             // Sorting Heap Sort
         // More animations - 
-            //Pathfinding - show red backtrack and removal for backtracking building algo, current node highlighted in green, path in rainbow colors, show nodes of node graph and connnxns, 
+            //Pathfinding - show red backtrack and removal for backtracking building algo, current node highlighted in green, path in rainbow colors, show nodes of node graph and connnxns, make a binary search tree and animate it being built
             // Sorting - 
         // More functionality 
             //Pathfinding - can go forwards and reverse, adjust number of loops, adjust size, adjust speed, reset maze solve or build, make it possible to skip animations, random wall generation, A* draws the optimal path, Dijkstra draws the optimal path?
@@ -51,7 +54,8 @@ const Pathfinding = () => {
             const fillGrid = fillCanvas(canvas, cellSize)
 
             const [mazeGrid, animations, mazeFinished] = generateMaze(fillGrid)
-            
+            console.log("hetre");
+
             setMazeAnimations(animations)
             setGrid(mazeGrid)
             if (mazeFinished) {
