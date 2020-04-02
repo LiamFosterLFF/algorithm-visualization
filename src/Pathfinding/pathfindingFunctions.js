@@ -71,7 +71,7 @@ export const generateMaze = (grid) => {
 
         // Animate drawing the entrance and exit
         const [entrance, exit, start] = [[0, 1], [mazeGrid.length - 1, mazeGrid[0].length - 2], [1, 1]]
-        let mazeAnimations = [entrance, exit];
+        let drawingAnimations = [entrance, exit];
 
         // Add entrance and exit to state, and to grid
         mazeGrid[entrance[0]][entrance[1]] = "path";
@@ -79,7 +79,14 @@ export const generateMaze = (grid) => {
 
         // Calls with start as current and previous node; this is to allow for previous node to be used in recursive call
         let mazeFinished;
-        [mazeGrid, mazeAnimations, mazeFinished] = recursiveMazeAlgorithm(start, start, mazeGrid, mazeAnimations)
+        [mazeGrid, drawingAnimations, mazeFinished] = recursiveMazeAlgorithm(start, start, mazeGrid, drawingAnimations)
+        // Add a set number of loops to the maze
+        const loops = 200;
+        [mazeGrid, drawingAnimations] = loopMaker(mazeGrid, drawingAnimations, loops);
+        console.log(mazeGrid)
+        const [nodeAnimations, trash] = nodeFinder(mazeGrid, entrance, exit)
+
+        const mazeAnimations = { drawingAnimations: drawingAnimations, nodeAnimations: nodeAnimations }
 
         return [mazeGrid, mazeAnimations, mazeFinished]
 }
@@ -99,7 +106,6 @@ const recursiveMazeAlgorithm = (startNode, prevNode, mazeGrid, animations) => {
     let newAnimations = [...animations, prevNode, node] // Add current node to path animation
     const directionArray = shuffle([...Array(4).keys()]); // Create a random array of directions to choose from
     for (let i = 0; i < 4; i++) {  // Choose the next direction to go in, or return dead end
-
         const direction = directionArray[i]
         switch (direction) {
             case 0: // Up: if potential path column above is not edge or filled
@@ -133,85 +139,100 @@ const recursiveMazeAlgorithm = (startNode, prevNode, mazeGrid, animations) => {
     return [mazeGrid, newAnimations, deadEnd]
 }
 
-export const nodeFinder = (mazeGrid) => {
-    const animations = [];
+const loopMaker = (mazeGrid, mazeAnimations, loopsRequired) => {
+    let loopsMade = 0;
+    while (loopsMade < loopsRequired) {
+        // Not selecting the bottom 20 % of the maze makes loops more likely to form
+        // Only selects numbers between 1 and 80% of mazeGrid length
+        const randRow = Math.floor(Math.random() * (mazeGrid.length * .8 - 1)) + 1
+        // Select any column except for first and last
+        const randCol =  Math.floor(Math.random() * (mazeGrid[0].length - 2)) + 1
+        if ( // Forms loops better by only choosing walls sandwiched between two other walls, but not 3 ways corners
+            mazeGrid[randRow][randCol] === "wall" 
+            && (
+                (mazeGrid[randRow + 1][randCol] === "wall" && mazeGrid[randRow - 1][randCol] === "wall" && mazeGrid[randRow][randCol + 1] !== "wall" && mazeGrid[randRow][randCol - 1] !== "wall") ||
+                (mazeGrid[randRow][randCol + 1] === "wall" && mazeGrid[randRow][randCol - 1] === "wall" && mazeGrid[randRow + 1][randCol] !== "wall" && mazeGrid[randRow - 1][randCol] !== "wall" )
+                )
+        ) {
+            mazeGrid[randRow][randCol] = "path"
+            mazeAnimations.push([randRow, randCol])
+            loopsMade++
+        }
+    }
+
+    return [mazeGrid, mazeAnimations]
+} 
+
+export const nodeFinder = (mazeGrid, entrance, exit) => { // Finds nodes, points at which the maze either turns or forks, for use in building graphs
+    const nodeAnimations = [];
     const nodeList = []; // List of nodes with the location and directions of nearest nodes
 
-    // Find the start and the finish
-    for (let i = 0; i < mazeGrid[0].length; i++) {
-        if (mazeGrid[0][i] === "path") {
-            animations.push([0, i])
-            nodeList.push([0, i, [2]])
-        }
-    }
+    // Add the start of the maze to the animations
+    nodeAnimations.push(entrance)
 
-    for (let i = 0; i < mazeGrid[mazeGrid.length - 1].length; i++) {
-        if (mazeGrid[mazeGrid.length - 1][i] === "path") {
-            animations.push([mazeGrid.length - 1, i])
-            nodeList.push([mazeGrid.length - 1, i, [0]])
-        }
-    }
+    nodeList.push([...entrance, [2]])
 
-    for (let row = 1; row < mazeGrid.length; row += 2) { // Cycles through rows and columns, searching for nodes in each odd row/col
-        for (let col = 1; col < mazeGrid[0].length; col += 2) {
+    for (let row = 1; row < mazeGrid.length - 1; row++) { // Cycles through rows and columns, searching for nodes in each odd row/col
+        for (let col = 1; col < mazeGrid[0].length - 1; col++) {
             const directions = [];
             for (let direction = 0; direction < 4; direction++) {
+                
                 switch (direction) {
                     case 0:
-                        if (mazeGrid[row - 1][col] === "path") { // Up: if potential path column above is path
+                        if (mazeGrid[row][col] === "path" && mazeGrid[row - 1][col] === "path") { // Up: if potential path column above is path
                             directions.push(direction)
                         }
                         break;
                     case 1:
-                        if (mazeGrid[row][col + 1] === "path") { // Right: if potential path column right is path
+                        if (mazeGrid[row][col] === "path" && mazeGrid[row][col + 1] === "path") { // Right: if potential path column right is path
                             directions.push(direction)
                         }
                         break;
                     case 2:
-                        if (mazeGrid[row + 1][col] === "path") { // Down: if potential path column down is path
+                        if (mazeGrid[row][col] === "path" && mazeGrid[row + 1][col] === "path") { // Down: if potential path column down is path
                             directions.push(direction)
                         }
                         break;
                     case 3:
-                        if (mazeGrid[row][col - 1] === "path") { // Left: if potential path column above is path
+                        if (mazeGrid[row][col] === "path" && mazeGrid[row][col - 1] === "path") { // Left: if potential path column above is path
                             directions.push(direction)
                         }
                         break;
                 }
             }
             if (directions.length === 1) { // If dead end, corner, or intersection
-                animations.push([row, col])
+                nodeAnimations.push([row, col])
                 nodeList.push([row, col, directions])
             } else if (directions.length === 2 && (directions[0] - directions[1]) % 2 !== 0) {
-                animations.push([row, col])
+                nodeAnimations.push([row, col])
                 nodeList.push([row, col, directions])
             } else if (directions.length === 3 || directions.length === 4) {
-                animations.push([row, col])
+                nodeAnimations.push([row, col])
                 nodeList.push([row, col, directions])
             }
 
         }
     }
+    // Add the end of the maze to the animations
+    nodeAnimations.push(exit)
+    nodeList.push([...exit, [0]])
 
     const nodeMazeGrid = JSON.parse(JSON.stringify(mazeGrid))    // Deep copy the maze grid
     nodeList.forEach(node => nodeMazeGrid[node[0]][node[1]] = "node")
-    console.log(nodeList);
     
     const nodeWeights = weightFinder(nodeMazeGrid, nodeList)
-    console.log(nodeWeights);
     
-    return animations
+    return [nodeAnimations, nodeWeights]
 }
 
 const weightFinder = (nodeMazeGrid, nodeList) => {
-    const nodeWeights = [];
+    const nodeWeights = {};
     nodeList.forEach(node => {
         const [row, col] = [node[0], node[1]];
         const nodeDirections = []
         const directions = node[2]
         directions.forEach(direction => {
             let i = 1;
-            console.log(row, col, direction);
             
             
             switch (direction) {
@@ -241,7 +262,7 @@ const weightFinder = (nodeMazeGrid, nodeList) => {
                     break;
             }
         })
-        nodeWeights.push([row, col, nodeDirections])
+        nodeWeights[`${row},${col}`] = nodeDirections
     })
     return nodeWeights;
 }
@@ -263,7 +284,7 @@ export const solveMaze = (grid, defaults, algorithm) => {
     const newGrid = JSON.parse(JSON.stringify(grid)); // Deep copy of grid
     const animations = {solvingAnimations: [], backtrackingAnimations: []};
 
-    let solvingAlgorithm = breadthFirstSearchSolvingAlgorithm
+    let solvingAlgorithm = aStarSolvingAlgorithm
     switch (algorithm) {
         case "depthFirst":
             solvingAlgorithm = depthFirstSearchSolvingAlgorithm;
@@ -271,13 +292,19 @@ export const solveMaze = (grid, defaults, algorithm) => {
         case "breadthFirst":
             solvingAlgorithm = breadthFirstSearchSolvingAlgorithm
             break;
+        case "dijkstras":
+            solvingAlgorithm = dijkstrasSolvingAlgorithm
+            break;
+        case "aStar":
+            solvingAlgorithm = aStarSolvingAlgorithm
+            break;
     }
 
     solvingAlgorithm(defaults.start, defaults.enter, defaults.exit, newGrid, animations)
     return animations
 }
 
-export const depthFirstSearchSolvingAlgorithm = (startNode, prevNode, endNode, newGrid, animations) => {
+const depthFirstSearchSolvingAlgorithm = (startNode, prevNode, endNode, newGrid, animations) => {
     const node = startNode;
 
     if ((node[0] === endNode[0]) && (node[1] === endNode[1])) {
@@ -339,7 +366,7 @@ export const depthFirstSearchSolvingAlgorithm = (startNode, prevNode, endNode, n
 
 }
 
-export const breadthFirstSearchSolvingAlgorithm = (startNode, prevNode, endNode, newGrid, animations) => {
+const breadthFirstSearchSolvingAlgorithm = (startNode, prevNode, endNode, newGrid, animations) => {
 
     const frontierQueue = [];
     const backtrackDictionary = {};
@@ -410,8 +437,121 @@ export const breadthFirstSearchSolvingAlgorithm = (startNode, prevNode, endNode,
         btNode = backtrackDictionary[dictionaryString]
         animations.backtrackingAnimations.push(btNode);        
     }
-    console.log(animations.backtrackingAnimations);
     
+}
+
+
+const dijkstrasSolvingAlgorithm = (startNode, enterNode, exitNode, mazeGrid, animations, heuristic=false) => {
+    const lowestUnvisitedNode = (distances, visitedNodes) => {
+        let min = [null, Infinity];
+        Object.entries(distances).forEach((distance) => {
+            const currentDistanceStr = distance[0];
+            if (!visitedNodes[currentDistanceStr] && distances[currentDistanceStr] < min[1]) {
+                min = [currentDistanceStr, distance[1]];
+            }
+        })
+
+        return (min[0] === null) ? null: min[0].split(",");
+    }
+    
+    // Initialize distances dictionary for start and end nodes
+    const distances = {};
+    distances[`${enterNode[0]},${enterNode[1]}`] = 0;
+    distances[`${exitNode[0]},${exitNode[1]}`] = Infinity;
+
+    // Initialize parent nodes dictionary
+    const parentNodes = {};
+    parentNodes[`${exitNode[0]},${exitNode[1]}`] = null;
+
+    // Initialize arrays for visited and unvisited nodes
+    const visitedNodes = {};
+    const [trash, unvisitedNodes] = nodeFinder(mazeGrid, enterNode, exitNode);
+
+    let currentNode = enterNode;
+    animations.solvingAnimations.push([enterNode])
+    while (currentNode !== null && (currentNode[0] !== exitNode[0] && currentNode[1] !== exitNode[1])) {
+        
+        const [row, col] = [Number(currentNode[0]), Number(currentNode[1])];
+        animations.solvingAnimations.push([row, col])
+        const currentNodeStr = `${row},${col}`
+        const currentDistance = distances[currentNodeStr];
+        const edges = unvisitedNodes[currentNodeStr]
+        edges.forEach((edge) => {
+            const [direction, edgeDistance] = [edge[0], edge[1]]
+            let childNode, childNodeStr, totalWeight;
+            let hWeight = 0;
+            const distanceFromStart = currentDistance + edgeDistance
+            
+            switch (direction) {
+                case 0: //Up
+                    childNode = [row - edgeDistance, col];
+                    childNodeStr = `${childNode[0]},${childNode[1]}`;
+                    hWeight = (heuristic) ? (exitNode[0] - childNode[0]) + (exitNode[1] - childNode[1]) : 0
+                    totalWeight = distanceFromStart + hWeight
+                    if (distances[childNodeStr] === undefined || distances[childNodeStr] > (totalWeight)) {
+                        distances[childNodeStr] = totalWeight;
+                        parentNodes[childNodeStr] = currentNodeStr
+                    }
+                    break;
+                case 1: //Right
+                    childNode = [row, col + edgeDistance];
+                    childNodeStr = `${childNode[0]},${childNode[1]}`;
+                    hWeight = (heuristic) ? (exitNode[0] - childNode[0]) + (exitNode[1] - childNode[1]) : 0;
+                    totalWeight = distanceFromStart + hWeight;
+                    if (distances[childNodeStr] === undefined || distances[childNodeStr] > (totalWeight)) {
+                        distances[childNodeStr] = totalWeight;
+                        parentNodes[childNodeStr] = currentNodeStr
+                    }
+                    break;
+                case 2: //Down
+                    childNode = [row + edgeDistance, col];
+                    childNodeStr = `${childNode[0]},${childNode[1]}`;
+                    hWeight = (heuristic) ? (exitNode[0] - childNode[0]) + (exitNode[1] - childNode[1]) : 0;
+                    totalWeight = distanceFromStart + hWeight;
+                    if (distances[childNodeStr] === undefined || distances[childNodeStr] > (totalWeight)) {
+                        distances[childNodeStr] = totalWeight;
+                        parentNodes[childNodeStr] = currentNodeStr
+                    }
+                    break;
+                case 3: //Left
+                    childNode = [row, col - edgeDistance];
+                    childNodeStr = `${childNode[0]},${childNode[1]}`;
+                    hWeight = (heuristic) ? (exitNode[0] - childNode[0]) + (exitNode[1] - childNode[1]) : 0;
+                    totalWeight = distanceFromStart + hWeight;
+                    if (distances[childNodeStr] === undefined || distances[childNodeStr] > (totalWeight)) {
+                        distances[childNodeStr] = totalWeight;
+                        parentNodes[childNodeStr] = currentNodeStr
+                    }
+                    break;
+                default:
+                    break;
+            }
+        })
+        
+        visitedNodes[currentNodeStr] = edges;
+        delete unvisitedNodes[currentNodeStr];
+        currentNode = lowestUnvisitedNode(distances, visitedNodes)
+    }
+        
+    if (currentNode === null || (currentNode[0] === exitNode[0] && currentNode[1] === exitNode[1])) {
+        let backtrackNode = exitNode;
+        animations.backtrackingAnimations.push(backtrackNode)
+    
+        while (backtrackNode[0] !== enterNode[0] && backtrackNode[1] !== enterNode[1]) {
+            console.log(`${backtrackNode[0]},${backtrackNode[1]}`);
+            console.log(parentNodes)
+            const newNodeStrArray = parentNodes[`${backtrackNode[0]},${backtrackNode[1]}`].split(",")
+            backtrackNode = [Number(newNodeStrArray[0]), newNodeStrArray[1]]
+            animations.backtrackingAnimations.push(backtrackNode)
+    
+        }
+    }
+    
+    
+}
+
+const aStarSolvingAlgorithm = (startNode, enterNode, exitNode, mazeGrid, animations) => {
+    dijkstrasSolvingAlgorithm(startNode, enterNode, exitNode, mazeGrid, animations, true)
 }
 
 // Animations

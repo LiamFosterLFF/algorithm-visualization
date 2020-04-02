@@ -3,12 +3,12 @@ import { initializeGrid, generateMaze, solveMaze, nodeFinder, animateMazeDrawing
 
 const Pathfinding = () => {
     const canvas = useRef(null);
-    const [cellSize, setCellSize] = useState(60) // Fix this so that it's set with number of cells, not sizee !!!!
-    const [canvasDimensions, setCanvasDimensions] = useState({width: cellSize*9, height: cellSize*9, x: 0, y: 0}) //FIX SO THAT SET PROGRAMMATICALLY
+    const [cellSize, setCellSize] = useState(5) // Fix this so that it's set with number of cells, not sizee !!!!
+    const [canvasDimensions, setCanvasDimensions] = useState({width: cellSize*75, height: cellSize*75, x: 0, y: 0}) //FIX SO THAT SET PROGRAMMATICALLY
     const [grid, setGrid] = useState([])
     const [mazeAnimations, setMazeAnimations] = useState({ drawingAnimations: [], nodeAnimations: [] })
     const [solvingAnimations, setSolvingAnimations] = useState([])
-    const [drawSpeed, setDrawSpeed] = useState(80)
+    const [drawSpeed, setDrawSpeed] = useState(0)
 
     useEffect(() => {
         const [initialGrid, x, y] = initializeGrid(canvas, cellSize, canvasDimensions)
@@ -24,6 +24,22 @@ const Pathfinding = () => {
 
     
     
+    //Implement Dijstrkas with the loop algo
+    //Implement A* based off Dijstkras
+    // Get all algorithms to work on the non-maze board
+    // Once finished, fix up website and prepare for deployment
+
+    // Possible add-ons
+        // Pixelpainting descrambler
+        // Other maze-building algos - Hunt & kill, sidewinder, prims, kruskal, ellers
+        // Other algorithms - 
+            // Pathfinding - best first search
+            // Sorting Heap Sort
+        // More animations - 
+            //Pathfinding - show red backtrack and removal for backtracking building algo, current node highlighted in green, path in rainbow colors, show nodes of node graph and connnxns, 
+            // Sorting - 
+        // More functionality 
+            //Pathfinding - can go forwards and reverse, adjust number of loops, adjust size, adjust speed, reset maze solve or build, make it possible to skip animations, random wall generation, A* draws the optimal path, Dijkstra draws the optimal path?
 
     
 
@@ -34,13 +50,9 @@ const Pathfinding = () => {
         if(mazeGenerating) {
             const fillGrid = fillCanvas(canvas, cellSize)
 
-            const [mazeGrid, drawingAnimations, mazeFinished] = generateMaze(fillGrid)
-            mazeAnimations.drawinganimations = drawingAnimations
-
-            const nodeAnimations = nodeFinder(mazeGrid)
-            console.log(nodeAnimations);
+            const [mazeGrid, animations, mazeFinished] = generateMaze(fillGrid)
             
-            setMazeAnimations({ drawingAnimations: drawingAnimations, nodeAnimations: nodeAnimations })
+            setMazeAnimations(animations)
             setGrid(mazeGrid)
             if (mazeFinished) {
                 setMazeGenerating(false)
