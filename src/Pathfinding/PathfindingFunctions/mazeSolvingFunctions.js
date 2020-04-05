@@ -60,7 +60,7 @@ export const nodeFinder = (mazeGrid, entrance, exit) => { // Finds nodes, points
     return [nodeAnimations, nodeWeights]
 }
 
-const weightFinder = (nodeMazeGrid, nodeList) => {
+const weightFinder = (nodeMazeGrid, nodeList) => { // Finds weights for building an edge graph of the maze
     const nodeWeights = {};
     nodeList.forEach(node => {
         const [row, col] = [node[0], node[1]];
@@ -118,7 +118,7 @@ export const solveMaze = (grid, defaults, algorithm) => {
     const newGrid = JSON.parse(JSON.stringify(grid)); // Deep copy of grid
     const animations = { solvingAnimations: [], backtrackingAnimations: [] };
 
-    let solvingAlgorithm = depthFirstSearchSolvingAlgorithm
+    let solvingAlgorithm = dijkstrasSolvingAlgorithm
     switch (algorithm) {
         case "depthFirst":
             solvingAlgorithm = depthFirstSearchSolvingAlgorithm;
@@ -126,10 +126,10 @@ export const solveMaze = (grid, defaults, algorithm) => {
         case "breadthFirst":
             solvingAlgorithm = breadthFirstSearchSolvingAlgorithm
             break;
-        case "dijkstras":
+        case "dijkstra's":
             solvingAlgorithm = dijkstrasSolvingAlgorithm
             break;
-        case "aStar":
+        case "a-star":
             solvingAlgorithm = aStarSolvingAlgorithm
             break;
     }
@@ -274,6 +274,79 @@ const breadthFirstSearchSolvingAlgorithm = (startNode, prevNode, endNode, newGri
 
 }
 
+const nodeAndWeightFinder = (mazeGrid, baseNode) => { // Finds nodes, points at which the maze either turns or forks, and their corresponding weights to the base node
+    const nodeAndWeightList = []; // List of nodes with the location and directions of nearest nodes 
+    const [row, col] = baseNode;
+    
+    for (let direction = 0; direction < 4; direction++) {
+        
+        let counter = 1;
+        let node;
+        switch (direction) {
+            case 0:
+                if (baseNode[0] - counter >= 0 && mazeGrid[baseNode[0] - counter][baseNode[1]] === "path") {
+                    while (!isANode(mazeGrid, [baseNode[0] - counter, baseNode[1]])) { // Up: if potential path column above is path
+                        counter++
+                    }
+                    nodeAndWeightList.push([direction, counter])
+                }
+                break;
+            case 1:
+                if (baseNode[1] + counter < mazeGrid[0].length && mazeGrid[baseNode[0]][baseNode[1] + counter] === "path") {
+                    while (!isANode(mazeGrid, [baseNode[0], baseNode[1] + counter])) { // Up: if potential path column above is path
+                        counter++
+                    }
+                    nodeAndWeightList.push([direction, counter])
+                }
+                break;
+            case 2:
+                if (baseNode[0] + counter < mazeGrid.length && mazeGrid[baseNode[0] + counter][baseNode[1]] === "path") {
+                    while (!isANode(mazeGrid, [baseNode[0] + counter, baseNode[1]])) { // Up: if potential path column above is path
+                        counter++
+                    }
+                    nodeAndWeightList.push([direction, counter])
+                }
+                break;
+            case 3:
+                if (baseNode[1] - counter >= 0 && mazeGrid[baseNode[0]][baseNode[1] - counter] === "path") {
+                    while (!isANode(mazeGrid, [baseNode[0], baseNode[1] - counter])) { // Up: if potential path column above is path
+                        counter++
+                    }
+                    nodeAndWeightList.push([direction, counter])
+                }
+                break;
+        }
+    }
+    
+    return nodeAndWeightList
+}
+
+const isANode = (mazeGrid, node) => { // Checks if selected location is a node or not
+    // Scans four directions and 
+    const [row, col] = node;
+    
+    const directions = [];
+    if (row > 0 && mazeGrid[row - 1][col] === "path") { // Up
+        directions.push(0)
+    } 
+    if (col < mazeGrid[0].length - 1 && mazeGrid[row][col + 1] === "path") { // Right
+        directions.push(1)
+    } 
+    if (row < mazeGrid.length - 1 && mazeGrid[row + 1][col] === "path") { // Down
+        directions.push(2)
+    } 
+    if (col > 0 && mazeGrid[row][col - 1] === "path") { // Left
+        directions.push(3)
+    }
+    
+    if (directions.length === 1 || directions.length > 2 || (directions[0] - directions[1]) % 2 !== 0) { 
+        // Is either a dead end or a t-junction/4-way or a corner 
+        return true
+    }
+
+    return false
+}
+
 
 const dijkstrasSolvingAlgorithm = (startNode, enterNode, exitNode, mazeGrid, animations, heuristic = false) => {
     const lowestUnvisitedNode = (distances, visitedNodes) => {
@@ -299,62 +372,76 @@ const dijkstrasSolvingAlgorithm = (startNode, enterNode, exitNode, mazeGrid, ani
 
     // Initialize arrays for visited and unvisited nodes
     const visitedNodes = {};
-    const [trash, unvisitedNodes] = nodeFinder(mazeGrid, enterNode, exitNode);
-
+    let unvisitedNodes = nodeAndWeightFinder(mazeGrid, enterNode)
+    
     let currentNode = enterNode;
     animations.solvingAnimations.push([enterNode])
-    while (currentNode !== null && (currentNode[0] !== exitNode[0] && currentNode[1] !== exitNode[1])) {
-
+    while (currentNode !== null && (currentNode[0] !== exitNode[0] && currentNode[1] !== exitNode[1])) { // Exits if out of nodes or at end
+        console.log("loop")
+        // Converts back from string to number
         const [row, col] = [Number(currentNode[0]), Number(currentNode[1])];
         animations.solvingAnimations.push([row, col])
-        const currentNodeStr = `${row},${col}`
-        const currentDistance = distances[currentNodeStr];
-        const edges = unvisitedNodes[currentNodeStr]
-        edges.forEach((edge) => {
-            const [direction, edgeDistance] = [edge[0], edge[1]]
+
+        const currentNodeStr = `${row},${col}` // String for node currently looking at, for lookup in dictionary
+        const currentDistance = distances[currentNodeStr]; // Distance of current node from start
+        unvisitedNodes = nodeAndWeightFinder(mazeGrid, [row, col]) // Find weights of all attached nodes, meaning distances from current node
+        unvisitedNodes.forEach((edge) => { // Cycle through all nearest nodes
+            const [direction, edgeDistance] = [edge[0], edge[1]] // Direction and distance/weight to that direction
             let childNode, childNodeStr, totalWeight;
-            let hWeight = 0;
+            let hWeight = 0; // Additional heuristic weight, for use in A*
             const distanceFromStart = currentDistance + edgeDistance
 
             switch (direction) {
                 case 0: //Up
-                    childNode = [row - edgeDistance, col];
+                    // Make new node and node string
+                    childNode = [row - edgeDistance, col];  
                     childNodeStr = `${childNode[0]},${childNode[1]}`;
-                    hWeight = (heuristic) ? (exitNode[0] - childNode[0]) + (exitNode[1] - childNode[1]) : 0
+                    // Calculate heuristic weight based on Manhattan distance, if using heuristic
+                    hWeight = (heuristic) ? (exitNode[0] - childNode[0]) + (exitNode[1] - childNode[1]) : 0; 
                     totalWeight = distanceFromStart + hWeight
+                    // Update distance if weight is smaller than previously recorded (if recorded at all, else weight == infinity)
                     if (distances[childNodeStr] === undefined || distances[childNodeStr] > (totalWeight)) {
                         distances[childNodeStr] = totalWeight;
-                        parentNodes[childNodeStr] = currentNodeStr
+                        parentNodes[childNodeStr] = currentNodeStr;
                     }
                     break;
                 case 1: //Right
+                    // Make new node and node string
                     childNode = [row, col + edgeDistance];
                     childNodeStr = `${childNode[0]},${childNode[1]}`;
+                    // Calculate heuristic weight based on Manhattan distance, if using heuristic
                     hWeight = (heuristic) ? (exitNode[0] - childNode[0]) + (exitNode[1] - childNode[1]) : 0;
                     totalWeight = distanceFromStart + hWeight;
+                    // Update distance if weight is smaller than previously recorded (if recorded at all, else weight == infinity)
                     if (distances[childNodeStr] === undefined || distances[childNodeStr] > (totalWeight)) {
                         distances[childNodeStr] = totalWeight;
-                        parentNodes[childNodeStr] = currentNodeStr
+                        parentNodes[childNodeStr] = currentNodeStr;
                     }
                     break;
                 case 2: //Down
+                    // Make new node and node string
                     childNode = [row + edgeDistance, col];
                     childNodeStr = `${childNode[0]},${childNode[1]}`;
+                    // Calculate heuristic weight based on Manhattan distance, if using heuristic
                     hWeight = (heuristic) ? (exitNode[0] - childNode[0]) + (exitNode[1] - childNode[1]) : 0;
                     totalWeight = distanceFromStart + hWeight;
+                    // Update distance if weight is smaller than previously recorded (if recorded at all, else weight == infinity)
                     if (distances[childNodeStr] === undefined || distances[childNodeStr] > (totalWeight)) {
                         distances[childNodeStr] = totalWeight;
-                        parentNodes[childNodeStr] = currentNodeStr
+                        parentNodes[childNodeStr] = currentNodeStr;
                     }
                     break;
                 case 3: //Left
+                    // Make new node and node string
                     childNode = [row, col - edgeDistance];
                     childNodeStr = `${childNode[0]},${childNode[1]}`;
+                    // Calculate heuristic weight based on Manhattan distance, if using heuristic
                     hWeight = (heuristic) ? (exitNode[0] - childNode[0]) + (exitNode[1] - childNode[1]) : 0;
                     totalWeight = distanceFromStart + hWeight;
+                    // Update distance if weight is smaller than previously recorded (if recorded at all, else weight == infinity)
                     if (distances[childNodeStr] === undefined || distances[childNodeStr] > (totalWeight)) {
                         distances[childNodeStr] = totalWeight;
-                        parentNodes[childNodeStr] = currentNodeStr
+                        parentNodes[childNodeStr] = currentNodeStr;
                     }
                     break;
                 default:
@@ -362,8 +449,7 @@ const dijkstrasSolvingAlgorithm = (startNode, enterNode, exitNode, mazeGrid, ani
             }
         })
 
-        visitedNodes[currentNodeStr] = edges;
-        delete unvisitedNodes[currentNodeStr];
+        visitedNodes[currentNodeStr] = unvisitedNodes;
         currentNode = lowestUnvisitedNode(distances, visitedNodes)
     }
 
@@ -372,8 +458,6 @@ const dijkstrasSolvingAlgorithm = (startNode, enterNode, exitNode, mazeGrid, ani
         animations.backtrackingAnimations.push(backtrackNode)
 
         while (backtrackNode[0] !== enterNode[0] && backtrackNode[1] !== enterNode[1]) {
-            console.log(`${backtrackNode[0]},${backtrackNode[1]}`);
-            console.log(parentNodes)
             const newNodeStrArray = parentNodes[`${backtrackNode[0]},${backtrackNode[1]}`].split(",")
             backtrackNode = [Number(newNodeStrArray[0]), newNodeStrArray[1]]
             animations.backtrackingAnimations.push(backtrackNode)

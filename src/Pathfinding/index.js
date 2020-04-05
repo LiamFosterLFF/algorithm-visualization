@@ -6,15 +6,18 @@ import { animateMazeDrawing, animateMazeSolving, animateMazeSolvingBacktrack } f
 
 const Pathfinding = () => {
     const canvas = useRef(null);
-    const [cellSize, setCellSize] = useState(5) // Fix this so that it's set with number of cells, not sizee !!!!
-    const [canvasDimensions, setCanvasDimensions] = useState({width: cellSize*75, height: cellSize*75, x: 0, y: 0}) //FIX SO THAT SET PROGRAMMATICALLY
+    const [cellSize, setCellSize] = useState(10) // Fix this so that it's set with number of cells, not sizee !!!!
+    const [canvasDimensions, setCanvasDimensions] = useState({width: cellSize*51, height: cellSize*51, x: 0, y: 0}) //FIX SO THAT SET PROGRAMMATICALLY
     const [grid, setGrid] = useState([])
     const [mazeAnimations, setMazeAnimations] = useState({ drawingAnimations: [], nodeAnimations: [] })
     const [solvingAnimations, setSolvingAnimations] = useState([])
     const [drawSpeed, setDrawSpeed] = useState(0)
+    const [mazeGenAlgo, setMazeGenAlgo] = useState("eller's")
+    const [mazeSolveAlgo, setMazeSolveAlgo] = useState("depthFirst")
 
     useEffect(() => {
         const [initialGrid, x, y] = initializeGrid(canvas, cellSize, canvasDimensions)
+        console.log(window.innerHeight);
         
         setGrid(initialGrid)
         setCanvasDimensions({
@@ -27,8 +30,7 @@ const Pathfinding = () => {
 
     
     
-    //Implement Dijstrkas with the loop algo
-    //Implement A* based off Dijstkras
+
     // Get all algorithms to work on the non-maze board
     // Once finished, fix up website and prepare for deployment
 
@@ -53,8 +55,7 @@ const Pathfinding = () => {
         if(mazeGenerating) {
             const fillGrid = fillCanvas(canvas, cellSize)
 
-            const [mazeGrid, animations, mazeFinished] = generateMaze(fillGrid)
-            console.log("hetre");
+            const [mazeGrid, animations, mazeFinished] = generateMaze(fillGrid, mazeGenAlgo)
 
             setMazeAnimations(animations)
             setGrid(mazeGrid)
@@ -74,7 +75,9 @@ const Pathfinding = () => {
     useEffect(() => {
         if (mazeSolving) {
             const defaults = { enter: [0, 1], exit: [grid.length - 1, grid[0].length - 2], start: [1, 1] };
-            const animations = solveMaze(grid, defaults)
+            const animations = solveMaze(grid, defaults, mazeSolveAlgo)
+            console.log("maze done");
+            
             setSolvingAnimations(animations.solvingAnimations)
             setBacktrackingAnimations(animations.backtrackingAnimations)
             setMazeSolving(false)
@@ -86,7 +89,9 @@ const Pathfinding = () => {
     
 
     useEffect(() => {
-        animateMazeDrawing(mazeAnimations, canvas, cellSize, drawSpeed)
+        const test = animateMazeDrawing(mazeAnimations, canvas, cellSize, drawSpeed);
+        console.log(test);
+        
     }, [mazeAnimations]);
 
 
@@ -169,14 +174,32 @@ const Pathfinding = () => {
         setGrid(fillGrid)
     }
 
+    
     return (
-        <div id="canvas">
-            <button onClick={handleClearCanvas}>Clear</button>
-            <button onClick={handleFillCanvas}>Fill</button>
-            <canvas onClick={handleOnClick} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseOut={handleMouseOut} onMouseMove={handleMouseMove} ref={canvas}></canvas>
-            <button onClick={() => setMazeGenerating(true)}>Generate Maze</button>
-            <button onClick={() => setMazeSolving(true)}>Solve Maze</button>
-
+        <div>
+            <div className="nav-bar">
+                <div className="gen-algo-bar">
+                    <button onClick={() => setMazeGenAlgo("eller's")}>Eller's</button>
+                    <button onClick={() => setMazeGenAlgo("depthFirst")}>Depth First</button>
+                </div>
+                <div className="gen-algo-bar">
+                    <button onClick={() => setMazeSolveAlgo("depthFirst")}>Depth First</button>
+                    <button onClick={() => setMazeSolveAlgo("breadthFirst")}>Breadth First</button>
+                    <button onClick={() => setMazeSolveAlgo("dijkstra's")}>Dijkstra's</button>
+                    <button onClick={() => setMazeSolveAlgo("a-star")}>A-star</button>
+                </div>
+                <div className="sliders-bar">
+                    <input onChange="" type="range" min="1" max="100" value="50" class="slider" id="myRange"></input>
+                </div>
+            </div>
+            <div id="canvas">
+                <button onClick={handleClearCanvas}>Clear</button>
+                <button onClick={handleFillCanvas}>Fill</button>
+                <canvas onClick={handleOnClick} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseOut={handleMouseOut} onMouseMove={handleMouseMove} ref={canvas}></canvas>
+                <button onClick={() => setMazeGenerating(true)}>Generate Maze</button>
+                <button onClick={() => setMazeSolving(true)}>Solve Maze</button>
+                <button onClick ={() => animateMazeDrawing.play()}>Play</button>
+            </div>
         </div>
     )
 }

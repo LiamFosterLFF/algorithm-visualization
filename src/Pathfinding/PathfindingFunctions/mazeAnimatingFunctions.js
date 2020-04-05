@@ -1,16 +1,39 @@
 // Animations
 
-export const animateMazeDrawing = (mazeAnimations, canvas, cellSize, drawSpeed) => {
+export const animateMazeDrawing = (mazeAnimations, canvas, cellSize) => {
     const ctx = canvas.current.getContext('2d');
 
-    if (mazeAnimations.drawingAnimations.length !== 0) {
-        mazeAnimations.drawingAnimations.forEach((animation, index) => {
-            setTimeout(() => {
-                const [row, col] = animation;
-                ctx.clearRect(col * cellSize, row * cellSize, cellSize, cellSize);
-            }, drawSpeed * index);
-        })
+    let counter = 0;
+    let stepId;
+    function drawPath() {
+        if (mazeAnimations.drawingAnimations.length !== 0) {
+
+            for (let i = 0; i < 725; i++) {
+                if (counter < mazeAnimations.drawingAnimations.length) {
+                    const animation = mazeAnimations.drawingAnimations[counter];
+                    const [row, col] = animation;
+                    ctx.clearRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                    counter++
+                }
+            }
+
+            stepId = window.requestAnimationFrame(drawPath);
+            
+
+        }
     }
+    const play = () => {
+        window.requestAnimationFrame(drawPath)
+    }
+
+    const stop = () => {
+        cancelAnimationFrame(stepId)
+        return stepId
+    }
+
+    play()
+
+}
 
     // if (mazeAnimations.nodeAnimations.length !== 0) {
     //     mazeAnimations.nodeAnimations.forEach((animation, index) => {
@@ -21,7 +44,7 @@ export const animateMazeDrawing = (mazeAnimations, canvas, cellSize, drawSpeed) 
     //         }, drawSpeed * mazeAnimations.drawingAnimations.length + drawSpeed * index); // Set a delay based on the time to finish the drawing animation, before drawing the nodes
     //     })
     // }
-}
+
 
 export const animateMazeSolving = (solvingAnimations, canvas, cellSize, drawSpeed) => {
     const ctx = canvas.current.getContext('2d');

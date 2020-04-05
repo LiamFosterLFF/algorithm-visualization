@@ -10,7 +10,7 @@ export const initializeGrid = (canvas, cellSize, canvasDimensions) => {
 
     // Initialize Grid as Clear
     const initialGrid = clearCanvas(canvas, cellSize)
-
+    
     // Find x and y coordinates of canvas
     const [xCoordinate, yCoordinate] = [canvas.current.getBoundingClientRect().x, canvas.current.getBoundingClientRect().y]
 
@@ -23,12 +23,13 @@ export const initializeGrid = (canvas, cellSize, canvasDimensions) => {
 export const clearCanvas = (canvas, cellSize) => {
     const ctx = canvas.current.getContext('2d');
     const [width, height] = [ctx.canvas.width, ctx.canvas.height]
-
+    
     // Clear Background
     ctx.clearRect(0, 0, width, height);
 
     // Construct Grid of Cells
-    const [rows, cols] = [width / cellSize, height / cellSize]
+    const [cols, rows] = [width / cellSize, height / cellSize];
+    
     const clearGrid = [];
     // Builds a rows*cols nested array full of walls
     for (let row = 0; row < rows; row++) {
@@ -49,7 +50,7 @@ export const fillCanvas = (canvas, cellSize) => {
     ctx.fillRect(0, 0, width, height);
 
     // Construct Grid of Cells
-    const [rows, cols] = [width / cellSize, height / cellSize]
+    const [cols, rows] = [width / cellSize, height / cellSize]
     const fillGrid = [];
     // Builds a rows*cols nested array full of walls
     for (let row = 0; row < rows; row++) {
@@ -82,7 +83,7 @@ export const generateMaze = (grid, algorithm) => {
 
     let mazeAlgorithm = ellersMazeAlgorithm
     switch (algorithm) {
-        case "ellers":
+        case "eller's":
             mazeAlgorithm = ellersMazeAlgorithm
             break;
         case "depthFirst":
@@ -116,7 +117,6 @@ const ellersMazeAlgorithm = (startNode, prevNode, origMazeGrid, animations) => {
 
     const mazeGrid = JSON.parse(JSON.stringify(origMazeGrid)) // Deep copy so as not to mutate original array
 
-
     let setNoCounter = 1; // To keep track of set names, so there's no repeats
     for (let i = 1; i < mazeGrid[1].length - 1; i += 2) {
         mazeGrid[1][i] = setNoCounter; // Initialize the cells of the first row to each exist in their own set.
@@ -146,7 +146,7 @@ const ellersMazeAlgorithm = (startNode, prevNode, origMazeGrid, animations) => {
             }
             
             // For each set, randomly create a random number (1+) of vertical connections downward to the next row.
-            const extensionNo = 1 + Math.floor(Math.random() * setCounter);
+            const extensionNo = 1 + Math.floor(Math.random() * setCounter) * .5;
             let extensionCounter = 0;
             while (extensionCounter < extensionNo) {  // Keeps cycling until correct number of columns are created
                 const extensionColumn = Math.floor(Math.random() * setCounter) * 2;
@@ -172,7 +172,7 @@ const ellersMazeAlgorithm = (startNode, prevNode, origMazeGrid, animations) => {
             } 
         }
     }
-    for (let i = 1; i < mazeGrid[0].length - 1; i+=2) { //For the last row, join all adjacent cells that do not share a set
+    for (let i = 1; i < mazeGrid[0].length - 2; i+=2) { //For the last row, join all adjacent cells that do not share a set
         if (mazeGrid[mazeGrid.length - 2][i] !== mazeGrid[mazeGrid.length - 2][i + 2]) {
             mazeGrid[mazeGrid.length - 2][i + 1] = mazeGrid[mazeGrid.length - 2][i];
             animations.push([mazeGrid.length - 2, i + 1]);
