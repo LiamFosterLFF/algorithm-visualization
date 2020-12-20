@@ -1,6 +1,15 @@
 import $ from 'jquery';
 
 // ***Sort Functions***
+
+export const defaultSort = () => {
+    return []
+}
+
+export const defaultAnimations = () => {
+    return []
+}
+
 // Bubble Sort
 export const bubbleSort = (origArr) => {
     // Clone the original array so as not to mutate it
@@ -32,12 +41,17 @@ export const bubbleSortBarChartAnimation = (animations) => {
         const ht1 = `${animation[0][1] / 10}%`
         const ht2 = `${animation[1][1] / 10}%`
         
+
         // Highlight the two elements to be swapped, and swap their heights
+        // Default as paused so they don't start automatically every time
+        const animation1 = bar1.animate([{backgroundColor: 'rgb(51, 226, 217)'}, {backgroundColor: 'red'}], {duration: duration, delay: index * duration});
+        const animation2 = bar1.animate([{ height: ht2 }, { height: ht2 }], { fill: "forwards", duration: duration, delay: index * duration });
+        const animation3 = bar2.animate([{ backgroundColor: 'rgb(51, 226, 217)' }, { backgroundColor: 'red' }], { duration: duration, delay: index * duration });
+        const animation4 = bar2.animate([{ height: ht1 }, { height: ht1 }], { fill: "forwards", duration: duration, delay: index * duration });
+
+        // Save animations for reuse
         barAnimations.push(
-            bar1.animate([{backgroundColor: 'rgb(51, 226, 217)'}, {backgroundColor: 'red'}], {duration: duration, delay: index * duration}),
-            bar1.animate([{ height: ht2 }, { height: ht2 }], { fill: "forwards", duration: duration, delay: index * duration }),
-            bar2.animate([{ backgroundColor: 'rgb(51, 226, 217)' }, { backgroundColor: 'red' }], { duration: duration, delay: index * duration }),
-            bar2.animate([{ height: ht1 }, { height: ht1 }], { fill: "forwards", duration: duration, delay: index * duration }),
+            animation1, animation2, animation3, animation4
         )
     })
 

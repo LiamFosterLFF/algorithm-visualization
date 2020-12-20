@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 
 import Bar from './Bar';
 
-import { barShuffle, bubbleSort, bubbleSortBarChartAnimation, selectionSort, selectionSortBarChartAnimation, insertionSort, insertionSortBarChartAnimation, mergeSort, mergeSortBarChartAnimation, quickSort, quickSortBarChartAnimation, barChartRadixSort, radixSortBarChartAnimation } from "../utilities";
+import { barShuffle, defaultSort, defaultAnimations, bubbleSort, bubbleSortBarChartAnimation, selectionSort, selectionSortBarChartAnimation, insertionSort, insertionSortBarChartAnimation, mergeSort, mergeSortBarChartAnimation, quickSort, quickSortBarChartAnimation, barChartRadixSort, radixSortBarChartAnimation } from "../utilities";
 
 const BarChart = ({ sort }) => {
-    const [bars, setBars] = useState(barShuffle(100));
-    const [animations, setAnimations] = useState([])
-    const [sortType, setSortType] = useState({function: bubbleSort});
-    const [animationType, setAnimationType] = useState({ function: bubbleSortBarChartAnimation });
+    const [ bars, ] = useState(barShuffle(100));
+    const [ animations, setAnimations ] = useState([])
+    const [ sortType, setSortType ] = useState({function: defaultSort});
+    const [ animationType, setAnimationType ] = useState({ function: defaultAnimations });
     
     useEffect(() => {
         switch (sort) {
@@ -36,27 +36,28 @@ const BarChart = ({ sort }) => {
                 setSortType({ function: barChartRadixSort})
                 setAnimationType({ function: radixSortBarChartAnimation })
                 break;
+            case "default":
+                setSortType({ function: defaultSort})
+                setAnimationType({ function: defaultAnimations })
+            break;
             }
         }, [sort])
 
     useEffect(() => {
-        resetAnimations(animations)
-        runAnimations(bars)
-
+        cancelAnimations(animations);
+        buildAnimations(bars);
+        console.log("On one");
     }, [sortType])
 
-
-
-
-    const runAnimations = (bars) => {
-        const barAnimations = animationType.function(sortType.function(bars))
-        setAnimations(barAnimations)
+    const buildAnimations = (bars) => {
+        const barAnimations = animationType.function(sortType.function(bars));
+        setAnimations(barAnimations);
     }
 
     const playAnimations = (animations) => {
         animations.map((animation) => {
             if (animation.playState !== "finished") {
-                animation.play()
+                animation.play();
             }
         })
     }
@@ -69,9 +70,9 @@ const BarChart = ({ sort }) => {
         })
     }
 
-    const resetAnimations = animations => {
+    const cancelAnimations = animations => {
         animations.map((animation) => {
-            animation.cancel()
+            animation.cancel();
         })
     }   
 
@@ -84,7 +85,6 @@ const BarChart = ({ sort }) => {
                     )
                 })}
                 <div className="buttons-bar">
-                    <button onClick={() => resetAnimations(animations)}>Reset</button>
                     <button onClick={() => playAnimations(animations)}>Play</button>
                     <button onClick={() => pauseAnimations(animations)}>Pause</button>
                 </div>

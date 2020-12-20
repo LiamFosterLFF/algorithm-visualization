@@ -10,7 +10,7 @@ import PixelMap from './PixelMap';
 
 const Sorting = () => {  
     
-    const [sort, setSort] = useState("bubble")
+    const [sort, setSort] = useState("default")
 
 
     return (
