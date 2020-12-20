@@ -176,44 +176,45 @@ const Pathfinding = () => {
         setGrid(fillGrid)
     }
 
+    const [ mazeGenAlgoTitle, setMazeGenAlgoTitle ] = useState("Select Generation Algorithm");
+    const handleMazeGenSelect = (algorithm, title) => {
+        setMazeGenAlgo(algorithm);
+        setMazeGenAlgoTitle(title);
+    }
+
+    const [ mazeSolveAlgoTitle, setMazeSolveAlgoTitle ] = useState("Select Solving Algorithm");
+    const handleMazeSolveSelect = (algorithm, title) => {
+        setMazeSolveAlgo(algorithm);
+        setMazeSolveAlgoTitle(title);
+    }
     
     return (
         <div>
             <div className="nav-bar">
                 <div className="gen-algo-bar">
-                <Dropdown>
-                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                        {mazeGenAlgo}
-                    </Dropdown.Toggle>
+                    <Dropdown>
+                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                            {mazeGenAlgoTitle}
+                        </Dropdown.Toggle>
 
-                    <Dropdown.Menu>
-                        <Dropdown.Item onClick={() => setMazeGenAlgo("eller's")} href="#/action-1">Eller's</Dropdown.Item>
-                        <Dropdown.Item onClick={() => setMazeGenAlgo("depthFirst")} href="#/action-2">Depth First</Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
+                        <Dropdown.Menu>
+                            <Dropdown.Item onClick={() => handleMazeGenSelect("eller's", "Elller's Algorithm")} href="#/action-1">Eller's Algorithm</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleMazeGenSelect("depthFirst", "Recursive Backtracking")} href="#/action-2">Recursive Backtracking</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
 
-                <Dropdown>
-                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                        {mazeSolveAlgo}
-                    </Dropdown.Toggle>
+                    <Dropdown>
+                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                            {mazeSolveAlgoTitle}
+                        </Dropdown.Toggle>
 
-                    <Dropdown.Menu>
-                        <Dropdown.Item onClick={() => setMazeSolveAlgo("depthFirst")}>Depth First</Dropdown.Item>
-                        <Dropdown.Item onClick={() => setMazeSolveAlgo("breadthFirst")}>Breadth First</Dropdown.Item>
-                        <Dropdown.Item onClick={() => setMazeSolveAlgo("dijkstra's")}>Dijkstra's</Dropdown.Item>
-                        <Dropdown.Item onClick={() => setMazeSolveAlgo("a-star")}>A-star</Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
-                    <ButtonGroup>
-                        <Button onClick={() => setMazeGenAlgo("eller's")} >Eller's</Button>
-                        <Button onClick={() => setMazeGenAlgo("depthFirst")} >Depth First</Button>
-                    </ButtonGroup>
-                </div>
-                <div className="gen-algo-bar">
-                    <Button onClick={() => setMazeSolveAlgo("depthFirst")}>Depth First</Button>
-                    <Button onClick={() => setMazeSolveAlgo("breadthFirst")}>Breadth First</Button>
-                    <Button onClick={() => setMazeSolveAlgo("dijkstra's")}>Dijkstra's</Button>
-                    <Button onClick={() => setMazeSolveAlgo("a-star")}>A-star</Button>
+                        <Dropdown.Menu>
+                            <Dropdown.Item onClick={() => handleMazeSolveSelect("depthFirst", "Depth-First Search")}>Depth-First Search</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleMazeSolveSelect("breadthFirst", "Breadth-First Search")}>Breadth-First Search</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleMazeSolveSelect("dijkstra's", "Djikstra's Algorithm")}>Dijkstra's Algorithm</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleMazeSolveSelect("a-star", "A* Search Algorithm")}>A* Search Algorith</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </div>
                 <div className="sliders-bar">
                     <input onChange="" type="range" min="1" max="100" value="50" class="slider" id="myRange"></input>
