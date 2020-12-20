@@ -46,7 +46,6 @@ const BarChart = ({ sort }) => {
     useEffect(() => {
         cancelAnimations(animations);
         buildAnimations(bars);
-        console.log("On one");
     }, [sortType])
 
     const buildAnimations = (bars) => {

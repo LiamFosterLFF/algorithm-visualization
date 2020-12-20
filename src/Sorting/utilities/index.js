@@ -90,7 +90,6 @@ export const selectionSortBarChartAnimation = (animations) => {
     const chart = document.getElementsByClassName("bar");
     const duration = 3;// The base duration, for easy changing later (duration can also be changed via the API)
     const barAnimations = [];
-    console.log(('a'));
     
     animations.forEach((animation, index) => {
         const baseChild = chart[animation[0][0]];
@@ -179,7 +178,6 @@ export const mergeSort = (origArray) => {
     }
     // Initialize first function call
     mergeSortHelper(mainArray, 0, n - 1, auxArray, animations);
-    // console.log("main", mainArray, "aux", auxArray);;
 
     return animations;
 }
@@ -432,7 +430,6 @@ export const bubbleSortPixelMapAnimation = (animations, speed) => {
             const parent = document.getElementsByClassName('chart');
             const child1 = parent[0].childNodes[ind1];
             const child2 = parent[0].childNodes[ind2];
-            // console.log(child1);
 
             // child1.style.backgroundColor = "red";
             // child2.style.backgroundColor = "red";

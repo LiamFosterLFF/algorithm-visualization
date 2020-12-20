@@ -19,19 +19,19 @@ const Sorting = () => {
             <Nav className="nav-bar">
                 <Nav.Item>
                     <Nav.Link>
-                        <Link to="/barchart">Bar Chart</Link>
+                        <Link to="/barchart" onClick={() => setSort("default")}>Bar Chart</Link>
                     </Nav.Link>
                 </Nav.Item>
 
                 <Nav.Item>
                     <Nav.Link>
-                        <Link to="/colormap">Color Map</Link>
+                        <Link to="/colormap" onClick={() => setSort("default")}>Color Map</Link>
                     </Nav.Link>
                 </Nav.Item>
 
                 <Nav.Item>
                     <Nav.Link>
-                        <Link to="/pixelmap">Bar Pixel</Link>
+                        <Link to="/pixelmap" onClick={() => setSort("default")}>Bar Pixel</Link>
                     </Nav.Link>
                 </Nav.Item>
                 <div>
@@ -84,7 +84,6 @@ export default Sorting;
 // Top bar? What does it say
 // // Sorting
 // Buttons ugly, use bootstrap
-// Shouldn't auto-play on switching sort types
 // Reset should be a totally different layout each timers
 // Needs back button
 // Picture sorting not working (low priority)

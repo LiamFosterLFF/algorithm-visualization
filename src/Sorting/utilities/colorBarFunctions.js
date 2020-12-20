@@ -175,7 +175,6 @@ export const mergeSort = (origArray) => {
     }
     // Initialize first function call
     mergeSortHelper(mainArray, 0, n - 1, auxArray, animations);
-    // console.log("main", mainArray, "aux", auxArray);;
 
     return animations;
 }
