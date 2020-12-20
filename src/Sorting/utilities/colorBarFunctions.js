@@ -1,3 +1,12 @@
+// ***Sort Functions***
+export const defaultSort = () => {
+    return []
+}
+
+export const defaultAnimations = () => {
+    return []
+}
+
 // Generate Random Colors
 export const colorShuffle = (bars) => {
     const colorList = [];

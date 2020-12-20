@@ -25,13 +25,13 @@ const Sorting = () => {
 
                 <Nav.Item>
                     <Nav.Link>
-                        <Link to="/colorchart">Color Map</Link>
+                        <Link to="/colormap">Color Map</Link>
                     </Nav.Link>
                 </Nav.Item>
 
                 <Nav.Item>
                     <Nav.Link>
-                        <Link to="/pixelchart">Bar Pixel</Link>
+                        <Link to="/pixelmap">Bar Pixel</Link>
                     </Nav.Link>
                 </Nav.Item>
                 <div>

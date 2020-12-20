@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ColorBar from "./ColorBar";
-import { colorShuffle, colorMapBubbleSort, colorMapBubbleSortAnimation, selectionSort, colorMapSelectionSortAnimation, insertionSort, colorMapInsertionSortAnimation, mergeSort, colorMapMergeSortAnimation, quickSort, colorMapQuickSortAnimation, radixSort, colorMapRadixSortAnimation } from '../utilities/colorBarFunctions';
+import { colorShuffle, defaultSort, defaultAnimations, colorMapBubbleSort, colorMapBubbleSortAnimation, selectionSort, colorMapSelectionSortAnimation, insertionSort, colorMapInsertionSortAnimation, mergeSort, colorMapMergeSortAnimation, quickSort, colorMapQuickSortAnimation, radixSort, colorMapRadixSortAnimation } from '../utilities/colorBarFunctions';
 
 const ColorMap = ({ sort }) => {
-    const [colors, setColors] = useState(colorShuffle(200))
+    const [colors, ] = useState(colorShuffle(200))
     const [animations, setAnimations] = useState([])
-    const [sortType, setSortType] = useState({ function: colorMapBubbleSort });
-    const [animationType, setAnimationType] = useState({ function: colorMapBubbleSortAnimation });
+    const [sortType, setSortType] = useState({ function: defaultSort });
+    const [animationType, setAnimationType] = useState({ function: defaultAnimations });
 
     useEffect(() => {
         switch (sort) {
@@ -38,7 +38,7 @@ const ColorMap = ({ sort }) => {
     }, [sort])
 
     useEffect(() => {
-        resetAnimations(animations)
+        cancelAnimations(animations)
         runAnimations(colors)
     }, [sortType])
 
@@ -63,7 +63,7 @@ const ColorMap = ({ sort }) => {
         })
     }
 
-    const resetAnimations = animations => {
+    const cancelAnimations = animations => {
         animations.map((animation) => {
             animation.cancel()
         })
@@ -79,7 +79,6 @@ const ColorMap = ({ sort }) => {
                     )
                 })}
                 <div className="buttons-bar">
-                    <button onClick={() => resetAnimations(animations)}>Reset</button>
                     <button onClick={() => playAnimations(animations)}>Play</button>
                     <button onClick={() => pauseAnimations(animations)}>Pause</button>
                 </div>

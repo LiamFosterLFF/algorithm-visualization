@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PixelBar from "./PixelBar";
-import { pixelBarShuffle, bubbleSort, pixelMapBubbleSortAnimation, pixelMapSelectionSort, pixelMapSelectionSortAnimation, pixelMapInsertionSort, pixelMapInsertionSortAnimation, pixelMapMergeSort, pixelMapMergeSortAnimation, pixelMapQuickSort, pixelMapQuickSortAnimation, pixelMapRadixSort, pixelMapRadixSortAnimation } from "../utilities/pixelMapFunctions";
+import { pixelBarShuffle, defaultSort, defaultAnimations, bubbleSort, pixelMapBubbleSortAnimation, pixelMapSelectionSort, pixelMapSelectionSortAnimation, pixelMapInsertionSort, pixelMapInsertionSortAnimation, pixelMapMergeSort, pixelMapMergeSortAnimation, pixelMapQuickSort, pixelMapQuickSortAnimation, pixelMapRadixSort, pixelMapRadixSortAnimation } from "../utilities/pixelMapFunctions";
 
 const PixelMap = ({ sort }) => {
-    const [pixelBars, setPixelBars] = useState(pixelBarShuffle())
+    const [pixelBars, ] = useState(pixelBarShuffle())
     const [animations, setAnimations] = useState([])
-    const [sortType, setSortType] = useState({ function: bubbleSort });
-    const [animationType, setAnimationType] = useState({ function: pixelMapBubbleSortAnimation });
+    const [sortType, setSortType] = useState({ function: defaultSort });
+    const [animationType, setAnimationType] = useState({ function: defaultAnimations });
     
     useEffect(() => {
         switch (sort) {
@@ -38,7 +38,7 @@ const PixelMap = ({ sort }) => {
     }, [sort])
 
     useEffect(() => {
-        resetAnimations(animations)
+        cancelAnimations(animations)
         runAnimations(pixelBars)
         
     }, [sortType])
@@ -67,20 +67,11 @@ const PixelMap = ({ sort }) => {
         })
     }
 
-    const resetAnimations = animations => {
+    const cancelAnimations = animations => {
         animations.map((animation) => {
             animation.cancel()
         })
     }   
-
-    
-
-
-
-    
-
-    
-
     
 
     return (
@@ -92,7 +83,6 @@ const PixelMap = ({ sort }) => {
                     )
                 })}
                 <div className="buttons-bar">
-                    <button onClick={() => resetAnimations(animations)}>Reset</button>
                     <button onClick={() => playAnimations(animations)}>Play</button>
                     <button onClick={() => pauseAnimations(animations)}>Pause</button>
                 </div>

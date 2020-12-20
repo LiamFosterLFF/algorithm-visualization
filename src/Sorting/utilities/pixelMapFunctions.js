@@ -1,3 +1,13 @@
+// Sorting Functions
+
+export const defaultSort = () => {
+    return []
+}
+
+export const defaultAnimations = () => {
+    return []
+}
+
 // Generate Random Pixel Bars
 const shuffle = (array) => {
 
