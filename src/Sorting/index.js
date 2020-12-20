@@ -1,17 +1,44 @@
 import React, {useState} from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
-import Nav from 'react-bootstrap/Nav';
+import { Nav, Button, ButtonGroup } from 'react-bootstrap';
 
 import BarChart from './BarChart';
 import ColorMap from './ColorMap';
 import PixelMap from './PixelMap';
+import { defaultAnimations } from './utilities';
 // import PixelPainting from './PixelPainting';
 
 const Sorting = () => {  
     
-    const [sort, setSort] = useState("default")
+    const [ sort, setSort ] = useState("default");
+    const [ fadeOpen, setFadeOpen ] = useState(false);
 
+    const handleChartTypeClick = () => {
+        setSort("default");
+        setFadeOpen(true);
+    }
+
+    const handleSortTypeClick = (type) => {
+        setSort(type);
+    }
+
+    const FadeVariety = () => {
+        if (fadeOpen) {
+            return (
+                <ButtonGroup data-toggle="button">
+                    <Button variant="secondary" onClick={() => handleSortTypeClick("bubble")}>Bubble</Button>
+                    <Button variant="secondary" onClick={() => handleSortTypeClick("selection")} >Selection</Button>
+                    <Button variant="secondary" onClick={() => handleSortTypeClick("insertion")} >Insertion</Button>
+                    <Button variant="secondary" onClick={() => handleSortTypeClick("merge")} >Merge</Button>
+                    <Button variant="secondary" onClick={() => handleSortTypeClick("quick")} >Quick</Button>
+                    <Button variant="secondary" onClick={() => handleSortTypeClick("radix")} >Radix</Button>
+                </ButtonGroup>
+            )
+        } else {
+            return <div></div>
+        }
+    }
 
     return (
 
@@ -19,43 +46,24 @@ const Sorting = () => {
             <Nav className="nav-bar">
                 <Nav.Item>
                     <Nav.Link>
-                        <Link to="/barchart" onClick={() => setSort("default")}>Bar Chart</Link>
+                        <Link to="/barchart" onClick={() => handleChartTypeClick()}>Bar Chart</Link>
                     </Nav.Link>
                 </Nav.Item>
 
                 <Nav.Item>
                     <Nav.Link>
-                        <Link to="/colormap" onClick={() => setSort("default")}>Color Map</Link>
+                        <Link to="/colormap" onClick={() => handleChartTypeClick()}>Color Map</Link>
                     </Nav.Link>
                 </Nav.Item>
 
                 <Nav.Item>
                     <Nav.Link>
-                        <Link to="/pixelmap" onClick={() => setSort("default")}>Bar Pixel</Link>
+                        <Link to="/pixelmap" onClick={() => handleChartTypeClick()}>Pixel Map</Link>
                     </Nav.Link>
                 </Nav.Item>
-                <div>
 
-                    <ul className="sort-types">
-                        <li onClick={() => setSort("bubble")}>
-                            bubble
-                        </li>
-                        <li onClick={() => setSort("selection")}>
-                            selection
-                        </li>
-                        <li onClick={() => setSort("insertion")}>
-                            insertion
-                        </li>
-                        <li onClick={() => setSort("merge")}>
-                            merge
-                        </li>
-                        <li onClick={() => setSort("quick")}>
-                            quick
-                        </li>
-                        <li onClick={() => setSort("radix")}>
-                            radix
-                        </li>
-                    </ul>
+                <div in={fadeOpen}>
+                    <FadeVariety/>
                 </div>
             </Nav>
 
@@ -69,9 +77,6 @@ const Sorting = () => {
                 <Route path="/pixelmap">
                     <PixelMap sort={sort} />
                 </Route>
-                {/* <Route path="/pixelpainting">
-                    <PixelPainting/>
-                </Route> */}
             </Switch>
         </Router>
 
@@ -85,8 +90,6 @@ export default Sorting;
 // // Sorting
 // Buttons ugly, use bootstrap
 // Reset should be a totally different layout each timers
-// Needs back button
-// Picture sorting not working (low priority)
 // // Maze
 // Mazes should generate when button press
 // Mazes should solve when button press

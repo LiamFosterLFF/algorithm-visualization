@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { initializeGrid, generateMaze, clearCanvas, fillCanvas } from './PathfindingFunctions/mazeGeneratingFunctions.js';
 import { solveMaze, nodeFinder } from './PathfindingFunctions/mazeSolvingFunctions.js';
 import { animateMazeDrawing, animateMazeSolving, animateMazeSolvingBacktrack } from './PathfindingFunctions/mazeAnimatingFunctions.js';
+import { Dropdown, Button, ButtonGroup } from 'react-bootstrap';
 
 
 const Pathfinding = () => {
@@ -25,6 +26,7 @@ const Pathfinding = () => {
             x,
             y
         })
+        fillCanvas(canvas, cellSize)
 
     }, [])
 
@@ -179,26 +181,51 @@ const Pathfinding = () => {
         <div>
             <div className="nav-bar">
                 <div className="gen-algo-bar">
-                    <button onClick={() => setMazeGenAlgo("eller's")}>Eller's</button>
-                    <button onClick={() => setMazeGenAlgo("depthFirst")}>Depth First</button>
+                <Dropdown>
+                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        {mazeGenAlgo}
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => setMazeGenAlgo("eller's")} href="#/action-1">Eller's</Dropdown.Item>
+                        <Dropdown.Item onClick={() => setMazeGenAlgo("depthFirst")} href="#/action-2">Depth First</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+
+                <Dropdown>
+                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        {mazeSolveAlgo}
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => setMazeSolveAlgo("depthFirst")}>Depth First</Dropdown.Item>
+                        <Dropdown.Item onClick={() => setMazeSolveAlgo("breadthFirst")}>Breadth First</Dropdown.Item>
+                        <Dropdown.Item onClick={() => setMazeSolveAlgo("dijkstra's")}>Dijkstra's</Dropdown.Item>
+                        <Dropdown.Item onClick={() => setMazeSolveAlgo("a-star")}>A-star</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+                    <ButtonGroup>
+                        <Button onClick={() => setMazeGenAlgo("eller's")} >Eller's</Button>
+                        <Button onClick={() => setMazeGenAlgo("depthFirst")} >Depth First</Button>
+                    </ButtonGroup>
                 </div>
                 <div className="gen-algo-bar">
-                    <button onClick={() => setMazeSolveAlgo("depthFirst")}>Depth First</button>
-                    <button onClick={() => setMazeSolveAlgo("breadthFirst")}>Breadth First</button>
-                    <button onClick={() => setMazeSolveAlgo("dijkstra's")}>Dijkstra's</button>
-                    <button onClick={() => setMazeSolveAlgo("a-star")}>A-star</button>
+                    <Button onClick={() => setMazeSolveAlgo("depthFirst")}>Depth First</Button>
+                    <Button onClick={() => setMazeSolveAlgo("breadthFirst")}>Breadth First</Button>
+                    <Button onClick={() => setMazeSolveAlgo("dijkstra's")}>Dijkstra's</Button>
+                    <Button onClick={() => setMazeSolveAlgo("a-star")}>A-star</Button>
                 </div>
                 <div className="sliders-bar">
                     <input onChange="" type="range" min="1" max="100" value="50" class="slider" id="myRange"></input>
                 </div>
             </div>
             <div id="canvas">
-                <button onClick={handleClearCanvas}>Clear</button>
-                <button onClick={handleFillCanvas}>Fill</button>
+                <Button onClick={handleClearCanvas}>Clear</Button>
+                <Button onClick={handleFillCanvas}>Fill</Button>
                 <canvas onClick={handleOnClick} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseOut={handleMouseOut} onMouseMove={handleMouseMove} ref={canvas}></canvas>
-                <button onClick={() => setMazeGenerating(true)}>Generate Maze</button>
-                <button onClick={() => setMazeSolving(true)}>Solve Maze</button>
-                <button onClick ={() => animateMazeDrawing.play()}>Play</button>
+                <Button onClick={() => setMazeGenerating(true)}>Generate Maze</Button>
+                <Button onClick={() => setMazeSolving(true)}>Solve Maze</Button>
+                <Button onClick ={() => animateMazeDrawing.play()}>Play</Button>
             </div>
         </div>
     )

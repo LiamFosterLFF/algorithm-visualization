@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Button from 'react-bootstrap/Button';
+
 import PixelBar from "./PixelBar";
 import { pixelBarShuffle, defaultSort, defaultAnimations, bubbleSort, pixelMapBubbleSortAnimation, pixelMapSelectionSort, pixelMapSelectionSortAnimation, pixelMapInsertionSort, pixelMapInsertionSortAnimation, pixelMapMergeSort, pixelMapMergeSortAnimation, pixelMapQuickSort, pixelMapQuickSortAnimation, pixelMapRadixSort, pixelMapRadixSortAnimation } from "../utilities/pixelMapFunctions";
 
@@ -83,8 +85,8 @@ const PixelMap = ({ sort }) => {
                     )
                 })}
                 <div className="buttons-bar">
-                    <button onClick={() => playAnimations(animations)}>Play</button>
-                    <button onClick={() => pauseAnimations(animations)}>Pause</button>
+                    <Button onClick={() => playAnimations(animations)}>Play</Button>
+                    <Button onClick={() => pauseAnimations(animations)}>Pause</Button>
                 </div>
             </div>
         </div>

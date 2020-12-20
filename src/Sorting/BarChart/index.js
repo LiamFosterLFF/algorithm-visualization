@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Button from 'react-bootstrap/Button';
 
 import Bar from './Bar';
 
@@ -84,8 +85,8 @@ const BarChart = ({ sort }) => {
                     )
                 })}
                 <div className="buttons-bar">
-                    <button onClick={() => playAnimations(animations)}>Play</button>
-                    <button onClick={() => pauseAnimations(animations)}>Pause</button>
+                    <Button size="lg" onClick={() => playAnimations(animations)}>Play</Button>
+                    <Button onClick={() => pauseAnimations(animations)}>Pause</Button>
                 </div>
             </div>
 
