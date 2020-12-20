@@ -11,31 +11,23 @@ const App = () => {
     return (
         <div className="page">
              <Router>
-             <Nav activeKey="/main" onSelect={(selectedKey) => alert(`selected ${selectedKey}`)} >
-                <Nav.Item>
-                    <Nav.Link>
-                        <Link to="/">Main</Link>
-                    </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link>
-                        <Link to="/sorting">Sorting</Link>
-                    </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link>
-                        <Link to="/pathfinding">Pathfinding</Link>
-                    </Nav.Link>
-                </Nav.Item>
-            </Nav>
-                {/* <nav className="nav-bar">
-                    <div>
-                        <ul className="chart-types">
-                            <li><Link className="chart-link" id="sorting"to="/sorting">Sorting</Link></li>
-                            <li><Link  className="chart-link" id="pathfinding" to="/pathfinding">Pathfinding</Link></li>
-                        </ul>
-                    </div>
-                </nav> */}
+                <Nav activeKey="/main" >
+                    <Nav.Item>
+                        <Nav.Link>
+                            <Link to="/">Main</Link>
+                        </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link>
+                            <Link to="/sorting">Sorting</Link>
+                        </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link>
+                            <Link to="/pathfinding">Pathfinding</Link>
+                        </Nav.Link>
+                    </Nav.Item>
+                </Nav>
 
                 <Switch>
                     <Route path="/sorting">
@@ -52,4 +44,3 @@ const App = () => {
 
 export default App;
 
-// Buttons ugly, use bootstrap

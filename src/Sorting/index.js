@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
+import Nav from 'react-bootstrap/Nav';
+
 import BarChart from './BarChart';
 import ColorMap from './ColorMap';
 import PixelMap from './PixelMap';
@@ -14,14 +16,26 @@ const Sorting = () => {
     return (
 
         <Router>
-            <nav className="nav-bar">
+            <Nav className="nav-bar">
+                <Nav.Item>
+                    <Nav.Link>
+                        <Link to="/barchart">Bar Chart</Link>
+                    </Nav.Link>
+                </Nav.Item>
+
+                <Nav.Item>
+                    <Nav.Link>
+                        <Link to="/colorchart">Color Map</Link>
+                    </Nav.Link>
+                </Nav.Item>
+
+                <Nav.Item>
+                    <Nav.Link>
+                        <Link to="/pixelchart">Bar Pixel</Link>
+                    </Nav.Link>
+                </Nav.Item>
                 <div>
-                    <ul className="chart-types">
-                        <li><Link className="chart-link" id="bar-chart"to="/barchart">Bar Chart</Link></li>
-                        <li><Link  className="chart-link" id="color-map" to="/colormap">Color Map</Link></li>
-                        <li><Link  className="chart-link" id="pixel-map" to="/pixelmap">Pixel Map</Link></li>
-                        {/* <li><Link to="/pixelpainting">Pixel Painting</Link></li> */}
-                    </ul>
+
                     <ul className="sort-types">
                         <li onClick={() => setSort("bubble")}>
                             bubble
@@ -43,7 +57,7 @@ const Sorting = () => {
                         </li>
                     </ul>
                 </div>
-            </nav>
+            </Nav>
 
             <Switch>
                 <Route path="/barchart">
