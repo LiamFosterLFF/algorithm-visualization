@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
+import {Button, ButtonGroup} from 'react-bootstrap';
 
 import PixelBar from "./PixelBar";
 import { pixelBarShuffle, defaultSort, defaultAnimations, bubbleSort, pixelMapBubbleSortAnimation, pixelMapSelectionSort, pixelMapSelectionSortAnimation, pixelMapInsertionSort, pixelMapInsertionSortAnimation, pixelMapMergeSort, pixelMapMergeSortAnimation, pixelMapQuickSort, pixelMapQuickSortAnimation, pixelMapRadixSort, pixelMapRadixSortAnimation } from "../utilities/pixelMapFunctions";
@@ -77,19 +77,21 @@ const PixelMap = ({ sort }) => {
     
 
     return (
-        <div className="pixel-map">
-            <div className="chart">
-                {pixelBars.map((barHeights, barIndex) => {
-                    return (
-                        <PixelBar key={barIndex} heights={barHeights} />
-                    )
-                })}
-                <div className="buttons-bar">
-                    <Button onClick={() => playAnimations(animations)}>Play</Button>
-                    <Button onClick={() => pauseAnimations(animations)}>Pause</Button>
+        <div>
+            <ButtonGroup>
+                <Button onClick={() => playAnimations(animations)}>Play</Button>
+                <Button onClick={() => pauseAnimations(animations)}>Pause</Button>
+            </ButtonGroup>
+            <div className="pixel-map">
+                <div className="chart">
+                    {pixelBars.map((barHeights, barIndex) => {
+                        return (
+                            <PixelBar key={barIndex} heights={barHeights} />
+                        )
+                    })}
                 </div>
             </div>
-        </div>
+    </div>
     )
 }
 

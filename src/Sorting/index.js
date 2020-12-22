@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
-import { Fade, Nav, Dropdown } from 'react-bootstrap';
+import { Fade, Nav, Dropdown, ButtonGroup, Button } from 'react-bootstrap';
 
 import BarChart from './BarChart';
 import ColorMap from './ColorMap';
@@ -13,22 +13,24 @@ const Sorting = () => {
     
     const [ sort, setSort ] = useState("default");
     const [ dropdownText, setDropdownText ] = useState("Choose Sorting Algorithm");
-    const [ fadeOpen, setFadeOpen ] = useState(false);
+    const [ showDropdown, setShowDropdown ] = useState(false);
 
     const handleChartTypeClick = () => {
         setSort("default");
         setDropdownText("Choose Sorting Algorithm");
-        setFadeOpen(true);
+        setShowDropdown(true);
     }
 
     const handleSortTypeClick = (type) => {
         setSort(type);
         setDropdownText(`${type.charAt(0).toUpperCase() + type.slice(1)} Sort Algorithm`);
-
     }
 
+
+
+
     const FadeVariety = () => {
-        if (fadeOpen) {
+        if (showDropdown) {
             return (
                 <Dropdown>
                     <Dropdown.Toggle variant="success" id="dropdown-basic">
@@ -50,6 +52,8 @@ const Sorting = () => {
             return <div></div>
         }
     }
+
+
 
     return (
 
@@ -73,7 +77,7 @@ const Sorting = () => {
                     </Nav.Link>
                 </Nav.Item>
 
-                <Fade in={fadeOpen}>
+                <Fade in={showDropdown}>
                     <FadeVariety/>
                 </Fade>
             </Nav>

@@ -25,7 +25,10 @@
     align-items: center;
     margin: 8% auto;
     padding-bottom: 5%;
-    
+}
+
+.pixel-map {
+    height: 100%;
 }
 
 

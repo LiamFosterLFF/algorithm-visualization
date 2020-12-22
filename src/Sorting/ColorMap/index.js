@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
+import { Button, ButtonGroup } from 'react-bootstrap';
 
 import ColorBar from "./ColorBar";
 import { colorShuffle, defaultSort, defaultAnimations, colorMapBubbleSort, colorMapBubbleSortAnimation, selectionSort, colorMapSelectionSortAnimation, insertionSort, colorMapInsertionSortAnimation, mergeSort, colorMapMergeSortAnimation, quickSort, colorMapQuickSortAnimation, radixSort, colorMapRadixSortAnimation } from '../utilities/colorBarFunctions';
@@ -80,10 +80,10 @@ const ColorMap = ({ sort }) => {
                         <ColorBar key={colorIndex} color={color} />
                     )
                 })}
-                <div className="buttons-bar">
+                <ButtonGroup>
                     <Button onClick={() => playAnimations(animations)}>Play</Button>
                     <Button onClick={() => pauseAnimations(animations)}>Pause</Button>
-                </div>
+                </ButtonGroup>
             </div>
         </div>
     )
