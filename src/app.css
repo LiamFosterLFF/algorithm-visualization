@@ -1,14 +1,3 @@
-* {
-    box-sizing: border-box;
-}
-
-html {
-    font-size: 10px;
-}
-
-body {
-    margin: 0;
-}
 
 .page {
     position: fixed;
@@ -24,59 +13,13 @@ body {
 
 /* Sorting */
 
-.nav-bar {
-    background-color: #2711a0;
-    height: 10%;
-    width: 100%;
-    position: absolute;
-}
-
-.chart-types {
-    list-style-type: none;
-    margin-block-start: 0;
-
-}
-
-.chart-types li {
-    display: inline-block;
-    margin: 0 1rem;
-    font-size: 2rem;
-    float: left;
-}
-
-.chart-link {
-    color: white;
-}
-
-.sort-types {
-    list-style-type: none;
-    margin-block-start: 0;
-    margin-block-end: 0;
-}
-
-.sort-types li {
-    display: inline-block;
-    margin: 0 1rem;
-    font-size: 2rem;
-    float: right;
-    color: white;
-    cursor: pointer;
-}
-
-.bar-chart {
-    height: 100%;
-}
-
 .color-map {
-    height: 100%;
+    /* height: 100%; */
 }
 
-.pixel-map {
-    height: 100%;
-}
 
 .chart {
-    height: 80%;
+    height: 75%;
     width: 90%;
     justify-content: center;
     align-items: center;
@@ -85,13 +28,10 @@ body {
     
 }
 
-.buttons-bar {
-    display: block;
-}
 
 /* BarChart */
 .bar {
-    width: 10px;
+    width: 1%;
     background-color: rgb(51, 226, 217);
     border: 1px solid rgb(35, 139, 139);
     display: inline-block;
@@ -99,15 +39,15 @@ body {
 
 /* ColorMap */
 .color-bar {
-    width: 5px;
-    height: 100%;
+    width: .5%;
+    height: 60vh;
     display: inline-block;
 }
 
 /* PixelMap */
 .pixel-bar {
-    width: 5px;
-    height: 100%;
+    width: 1%;
+    height: 20vh;
     display: inline-block;
 }
 

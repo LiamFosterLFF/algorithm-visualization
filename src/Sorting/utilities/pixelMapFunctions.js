@@ -19,7 +19,7 @@ const shuffle = (array) => {
 };
 
 export const pixelBarShuffle = () => {
-    const height = 200;
+    const height = 100;
     const pixelBarList = [];
     for (let pixBar = 0; pixBar < height; pixBar++) {
         const pixelBarHeights = [pixBar, 1, height - pixBar - 1]
@@ -72,10 +72,10 @@ export const pixelMapBubbleSortAnimation = (animations) => {
 
         // Exchange the colors of the two elements being selected
         barAnimations.push(
-            compareEl1Bottom.animate([{ height: `${3 * swapHt2Bottom}px` }, { height: `${3 * swapHt2Bottom}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
-            compareEl1Top.animate([{ height: `${3 * swapHt2Top}px` }, { height: `${3 * swapHt2Top}px` }], { fill: "forwards", duration: duration, delay: index * duration }), 
-            compareEl2Bottom.animate([{ height: `${3 * swapHt1Bottom}px` }, { height: `${3 * swapHt1Bottom}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
-            compareEl2Top.animate([{ height: `${3 * swapHt1Top}px` }, { height: `${3 * swapHt1Top}px` }], { fill: "forwards", duration: duration, delay: index * duration })
+            compareEl1Bottom.animate([{ height: `${3 * swapHt2Bottom}%` }, { height: `${3 * swapHt2Bottom}%` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            compareEl1Top.animate([{ height: `${3 * swapHt2Top}%` }, { height: `${3 * swapHt2Top}%` }], { fill: "forwards", duration: duration, delay: index * duration }), 
+            compareEl2Bottom.animate([{ height: `${3 * swapHt1Bottom}%` }, { height: `${3 * swapHt1Bottom}%` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            compareEl2Top.animate([{ height: `${3 * swapHt1Top}%` }, { height: `${3 * swapHt1Top}%` }], { fill: "forwards", duration: duration, delay: index * duration })
         )
 
     })
@@ -130,10 +130,10 @@ export const pixelMapSelectionSortAnimation = (animations) => {
         // if the two elements are to be swapped, perform the swap 
         if (swap === true) {
             barAnimations.push(
-                minChildTop.animate([{ height: `${3 * baseTopHeight}px` }, { height: `${3 * baseTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
-                baseChildTop.animate([{ height: `${3 * minTopHeight}px` }, { height: `${3 * minTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
-                minChildBottom.animate([{ height: `${3 * baseBottomHeight}px` }, { height: `${3 * baseBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
-                baseChildBottom.animate([{ height: `${3 * minBottomHeight}px` }, { height: `${3 * minBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration })
+                minChildTop.animate([{ height: `${3 * baseTopHeight}%` }, { height: `${3 * baseTopHeight}%` }], { fill: "forwards", duration: duration, delay: index * duration }),
+                baseChildTop.animate([{ height: `${3 * minTopHeight}%` }, { height: `${3 * minTopHeight}%` }], { fill: "forwards", duration: duration, delay: index * duration }),
+                minChildBottom.animate([{ height: `${3 * baseBottomHeight}%` }, { height: `${3 * baseBottomHeight}%` }], { fill: "forwards", duration: duration, delay: index * duration }),
+                baseChildBottom.animate([{ height: `${3 * minBottomHeight}%` }, { height: `${3 * minBottomHeight}%` }], { fill: "forwards", duration: duration, delay: index * duration })
             )
         }
     })
@@ -183,10 +183,10 @@ export const pixelMapInsertionSortAnimation = (animations) => {
 
         // Highlight two elements being compared in green, and animate them being swapped
         barAnimations.push(
-            swapElLtTop.animate([{ height: `${3 * swapElRtTopHeight}px` }, { height: `${3 * swapElRtTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
-            swapElLtBottom.animate([{ height: `${3 * swapElRtBottomHeight}px` }, { height: `${3 * swapElRtBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
-            swapElRtTop.animate([{ height: `${3 * swapElLtTopHeight}px` }, { height: `${3 * swapElLtTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
-            swapElRtBottom.animate([{ height: `${3 * swapElLtBottomHeight}px` }, { height: `${3 * swapElLtBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            swapElLtTop.animate([{ height: `${3 * swapElRtTopHeight}%` }, { height: `${3 * swapElRtTopHeight}%` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            swapElLtBottom.animate([{ height: `${3 * swapElRtBottomHeight}%` }, { height: `${3 * swapElRtBottomHeight}%` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            swapElRtTop.animate([{ height: `${3 * swapElLtTopHeight}%` }, { height: `${3 * swapElLtTopHeight}%` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            swapElRtBottom.animate([{ height: `${3 * swapElLtBottomHeight}%` }, { height: `${3 * swapElLtBottomHeight}%` }], { fill: "forwards", duration: duration, delay: index * duration }),
         )
     })
 
@@ -282,8 +282,8 @@ export const pixelMapMergeSortAnimation = (animations) => {
 
         // Highlight two elements being compared in green, and animate them being swapped
         barAnimations.push(
-            swapElTop.animate([{ height: `${3 * swapTopHeight}px` }, { height: `${3 * swapTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
-            swapElBottom.animate([{ height: `${3 * swapBottomHeight}px` }, { height: `${3 * swapBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            swapElTop.animate([{ height: `${3 * swapTopHeight}%` }, { height: `${3 * swapTopHeight}%` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            swapElBottom.animate([{ height: `${3 * swapBottomHeight}%` }, { height: `${3 * swapBottomHeight}%` }], { fill: "forwards", duration: duration, delay: index * duration }),
         )
     })
 
@@ -358,10 +358,10 @@ export const pixelMapQuickSortAnimation = (animations) => {
 
         // Highlight two elements being compared in green, and pivot in red, and animate them being swapped
         barAnimations.push(
-            leftElTop.animate([{ height: `${3 * rightTopHeight}px` }, { height: `${3 * rightTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
-            leftElBottom.animate([{ height: `${3 * rightBottomHeight}px` }, { height: `${3 * rightBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
-            rightElTop.animate([{ height: `${3 * leftTopHeight}px` }, { height: `${3 * leftTopHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
-            rightElBottom.animate([{ height: `${3 * leftBottomHeight}px` }, { height: `${3 * leftBottomHeight}px` }], { fill: "forwards", duration: duration, delay: index * duration })
+            leftElTop.animate([{ height: `${3 * rightTopHeight}%` }, { height: `${3 * rightTopHeight}%` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            leftElBottom.animate([{ height: `${3 * rightBottomHeight}%` }, { height: `${3 * rightBottomHeight}%` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            rightElTop.animate([{ height: `${3 * leftTopHeight}%` }, { height: `${3 * leftTopHeight}%` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            rightElBottom.animate([{ height: `${3 * leftBottomHeight}%` }, { height: `${3 * leftBottomHeight}%` }], { fill: "forwards", duration: duration, delay: index * duration })
         )
     })
 
@@ -426,8 +426,8 @@ export const pixelMapRadixSortAnimation = (animations) => {
 
         // Highlight two elements being compared in green, and pivot in red, and animate them being swapped
         barAnimations.push(
-            elementTop.animate([{ height: `${3 * heightTop}px` }, { height: `${3 * heightTop}px` }], { fill: "forwards", duration: duration, delay: index * duration }),
-            elementBottom.animate([{ height: `${3 * heightBottom}px` }, { height: `${3 * heightBottom}px` }], { fill: "forwards", duration: duration, delay: index * duration })
+            elementTop.animate([{ height: `${3 * heightTop}%` }, { height: `${3 * heightTop}%` }], { fill: "forwards", duration: duration, delay: index * duration }),
+            elementBottom.animate([{ height: `${3 * heightBottom}%` }, { height: `${3 * heightBottom}%` }], { fill: "forwards", duration: duration, delay: index * duration })
         )
     })
 

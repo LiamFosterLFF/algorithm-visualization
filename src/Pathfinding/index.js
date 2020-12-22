@@ -26,7 +26,8 @@ const Pathfinding = () => {
             x,
             y
         })
-        fillCanvas(canvas, cellSize)
+        const fillGrid = fillCanvas(canvas, cellSize)
+        setGrid(fillGrid)
 
     }, [])
 
@@ -78,7 +79,6 @@ const Pathfinding = () => {
         if (mazeSolving) {
             const defaults = { enter: [0, 1], exit: [grid.length - 1, grid[0].length - 2], start: [1, 1] };
             const animations = solveMaze(grid, defaults, mazeSolveAlgo)
-            console.log("maze done");
             
             setSolvingAnimations(animations.solvingAnimations)
             setBacktrackingAnimations(animations.backtrackingAnimations)
@@ -221,8 +221,11 @@ const Pathfinding = () => {
                 </div>
             </div>
             <div id="canvas">
-                <Button onClick={handleClearCanvas}>Clear</Button>
-                <Button onClick={handleFillCanvas}>Fill</Button>
+                <ButtonGroup>
+                    <Button onClick={handleClearCanvas}>Clear</Button>
+                    <Button onClick={handleFillCanvas}>Fill</Button>
+                </ButtonGroup>
+                
                 <canvas onClick={handleOnClick} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseOut={handleMouseOut} onMouseMove={handleMouseMove} ref={canvas}></canvas>
                 <Button onClick={() => setMazeGenerating(true)}>Generate Maze</Button>
                 <Button onClick={() => setMazeSolving(true)}>Solve Maze</Button>

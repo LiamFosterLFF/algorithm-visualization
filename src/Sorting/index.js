@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
-import { Nav, Button, ButtonGroup } from 'react-bootstrap';
+import { Fade, Nav, Dropdown } from 'react-bootstrap';
 
 import BarChart from './BarChart';
 import ColorMap from './ColorMap';
@@ -12,28 +12,39 @@ import { defaultAnimations } from './utilities';
 const Sorting = () => {  
     
     const [ sort, setSort ] = useState("default");
+    const [ dropdownText, setDropdownText ] = useState("Choose Sorting Algorithm");
     const [ fadeOpen, setFadeOpen ] = useState(false);
 
     const handleChartTypeClick = () => {
         setSort("default");
+        setDropdownText("Choose Sorting Algorithm");
         setFadeOpen(true);
     }
 
     const handleSortTypeClick = (type) => {
         setSort(type);
+        setDropdownText(`${type.charAt(0).toUpperCase() + type.slice(1)} Sort Algorithm`);
+
     }
 
     const FadeVariety = () => {
         if (fadeOpen) {
             return (
-                <ButtonGroup data-toggle="button">
-                    <Button variant="secondary" onClick={() => handleSortTypeClick("bubble")}>Bubble</Button>
-                    <Button variant="secondary" onClick={() => handleSortTypeClick("selection")} >Selection</Button>
-                    <Button variant="secondary" onClick={() => handleSortTypeClick("insertion")} >Insertion</Button>
-                    <Button variant="secondary" onClick={() => handleSortTypeClick("merge")} >Merge</Button>
-                    <Button variant="secondary" onClick={() => handleSortTypeClick("quick")} >Quick</Button>
-                    <Button variant="secondary" onClick={() => handleSortTypeClick("radix")} >Radix</Button>
-                </ButtonGroup>
+                <Dropdown>
+                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        {dropdownText}
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => handleSortTypeClick("bubble")}>Bubble</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSortTypeClick("selection")}>Selection</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSortTypeClick("insertion")}>Insertion</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSortTypeClick("merge")}>Merge</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSortTypeClick("quick")}>Quick</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSortTypeClick("radix")}>Radix</Dropdown.Item>
+                    </Dropdown.Menu>
+                    
+                </Dropdown>
             )
         } else {
             return <div></div>
@@ -62,9 +73,9 @@ const Sorting = () => {
                     </Nav.Link>
                 </Nav.Item>
 
-                <div in={fadeOpen}>
+                <Fade in={fadeOpen}>
                     <FadeVariety/>
-                </div>
+                </Fade>
             </Nav>
 
             <Switch>

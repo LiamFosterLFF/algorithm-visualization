@@ -3,15 +3,15 @@ import React from 'react';
 const PixelBar = ({ heights }) => {
 
     const firstSegmentStyle = {
-        height: `${3*heights[0]}px`,
+        height: `${3*heights[0]}%`,
         backgroundColor: '#000'
     }
     const secondSegmentStyle = {
-        height: `${3*heights[1]}px`,
+        height: `${3*heights[1]}%`,
         backgroundColor: '#fff)'
     }
     const thirdSegmentStyle = {
-        height: `${3*heights[2]}px`,
+        height: `${3*heights[2]}%`,
         backgroundColor: '#000'
     }
 
