@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-
 import { Fade, Nav, Dropdown, ButtonGroup, Button } from 'react-bootstrap';
 
+import ButtonWrapper from './ButtonWrapper';
 import BarChart from './BarChart';
 import ColorMap from './ColorMap';
 import PixelMap from './PixelMap';
@@ -14,6 +14,7 @@ const Sorting = () => {
     const [ sort, setSort ] = useState("default");
     const [ dropdownText, setDropdownText ] = useState("Choose Sorting Algorithm");
     const [ showDropdown, setShowDropdown ] = useState(false);
+    const [ showButton, setShowButton ] = useState(false);
 
     const handleChartTypeClick = () => {
         setSort("default");
@@ -23,6 +24,7 @@ const Sorting = () => {
 
     const handleSortTypeClick = (type) => {
         setSort(type);
+        setShowDropdown(true);
         setDropdownText(`${type.charAt(0).toUpperCase() + type.slice(1)} Sort Algorithm`);
     }
 
@@ -84,7 +86,7 @@ const Sorting = () => {
 
             <Switch>
                 <Route path="/barchart">
-                    <BarChart sort={sort} />
+                    <BarChart sort={sort} showButton={showButton}/>
                 </Route>
                 <Route path="/colormap">
                     <ColorMap sort={sort} />

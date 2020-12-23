@@ -77,6 +77,7 @@ const BarChart = ({ sort }) => {
     }   
 
 
+
     return (
             <div className="chart">
                 {bars.map((barHeight, barIndex) => {
