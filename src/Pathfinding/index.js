@@ -2,13 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { initializeGrid, generateMaze, clearCanvas, fillCanvas } from './PathfindingFunctions/mazeGeneratingFunctions.js';
 import { solveMaze, nodeFinder } from './PathfindingFunctions/mazeSolvingFunctions.js';
 import { animateMazeDrawing, animateMazeSolving, animateMazeSolvingBacktrack } from './PathfindingFunctions/mazeAnimatingFunctions.js';
-import { Dropdown, Button, ButtonGroup } from 'react-bootstrap';
+import { Dropdown, Button, ButtonGroup, Nav } from 'react-bootstrap';
 
 
 const Pathfinding = () => {
-    const canvas = useRef(null);
     const [cellSize, setCellSize] = useState(10) // Fix this so that it's set with number of cells, not sizee !!!!
-    const [canvasDimensions, setCanvasDimensions] = useState({width: cellSize*51, height: cellSize*51, x: 0, y: 0}) //FIX SO THAT SET PROGRAMMATICALLY
+    const canvas = useRef(null);
     const [grid, setGrid] = useState([])
     const [mazeAnimations, setMazeAnimations] = useState({ drawingAnimations: [], nodeAnimations: [] })
     const [solvingAnimations, setSolvingAnimations] = useState([])
@@ -16,9 +15,27 @@ const Pathfinding = () => {
     const [mazeGenAlgo, setMazeGenAlgo] = useState("eller's")
     const [mazeSolveAlgo, setMazeSolveAlgo] = useState("depthFirst")
 
+    const calculateCanvasDimensions = () => {
+        const normalizeDimension = (dimension) => {
+            const adjustedDim = dimension* .8;
+            const dimCellMult = Math.floor(adjustedDim / cellSize);
+            const oddDimCellMult = (dimCellMult %2 === 0) ? dimCellMult + 1 : dimCellMult;
+            const normalizedDim = oddDimCellMult * cellSize;
+            return normalizedDim;
+        }
+
+        const dimensions = {width: 0, height: 0, x: 0, y: 0};
+        
+        dimensions["width"] = normalizeDimension(window.innerWidth);
+        dimensions["height"] = normalizeDimension(window.innerHeight);
+        return dimensions;
+    };
+
+    const [canvasDimensions, setCanvasDimensions] = useState(calculateCanvasDimensions())
+
     useEffect(() => {
         const [initialGrid, x, y] = initializeGrid(canvas, cellSize, canvasDimensions)
-        console.log(window.innerHeight);
+        console.log(window.innerHeight, window.innerWidth);
         
         setGrid(initialGrid)
         setCanvasDimensions({
@@ -191,7 +208,7 @@ const Pathfinding = () => {
     return (
         <div>
             <div className="nav-bar">
-                <div className="gen-algo-bar">
+                <Nav>
                     <Dropdown>
                         <Dropdown.Toggle variant="success" id="dropdown-basic">
                             {mazeGenAlgoTitle}
@@ -215,10 +232,11 @@ const Pathfinding = () => {
                             <Dropdown.Item onClick={() => handleMazeSolveSelect("a-star", "A* Search Algorithm")}>A* Search Algorith</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
-                </div>
-                <div className="sliders-bar">
-                    <input onChange="" type="range" min="1" max="100" value="50" class="slider" id="myRange"></input>
-                </div>
+                    <div className="sliders-bar">
+                        <input onChange="" type="range" min="1" max="100" value="50" class="slider" id="myRange"></input>
+                    </div>
+                </Nav>
+                
             </div>
             <div id="canvas">
                 <ButtonGroup>
