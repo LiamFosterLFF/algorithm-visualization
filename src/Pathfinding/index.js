@@ -6,7 +6,6 @@ import { Dropdown, Button, ButtonGroup, Nav } from 'react-bootstrap';
 
 
 const Pathfinding = () => {
-    const [cellSize, setCellSize] = useState(10) // Fix this so that it's set with number of cells, not sizee !!!!
     const canvas = useRef(null);
     const [grid, setGrid] = useState([])
     const [mazeAnimations, setMazeAnimations] = useState({ drawingAnimations: [], nodeAnimations: [] })
@@ -15,10 +14,16 @@ const Pathfinding = () => {
     const [mazeGenAlgo, setMazeGenAlgo] = useState("eller's")
     const [mazeSolveAlgo, setMazeSolveAlgo] = useState("depthFirst")
 
+    const calculateCellSize = () => {
+        const cellSz = (window.innerWidth < 450) ? 5 : 10;
+        return cellSz;
+    }
+
+    const [cellSize, setCellSize] = useState(calculateCellSize()) 
+
     const calculateCanvasDimensions = () => {
         const normalizeDimension = (dimension) => {
-            const adjustedDim = dimension* .8;
-            const dimCellMult = Math.floor(adjustedDim / cellSize);
+            const dimCellMult = Math.floor(dimension / cellSize);
             const oddDimCellMult = (dimCellMult %2 === 0) ? dimCellMult + 1 : dimCellMult;
             const normalizedDim = oddDimCellMult * cellSize;
             return normalizedDim;
@@ -26,8 +31,8 @@ const Pathfinding = () => {
 
         const dimensions = {width: 0, height: 0, x: 0, y: 0};
         
-        dimensions["width"] = normalizeDimension(window.innerWidth);
-        dimensions["height"] = normalizeDimension(window.innerHeight);
+        dimensions["width"] = normalizeDimension(window.innerWidth * .8);
+        dimensions["height"] = normalizeDimension(window.innerHeight * .7);
         return dimensions;
     };
 
@@ -35,7 +40,6 @@ const Pathfinding = () => {
 
     useEffect(() => {
         const [initialGrid, x, y] = initializeGrid(canvas, cellSize, canvasDimensions)
-        console.log(window.innerHeight, window.innerWidth);
         
         setGrid(initialGrid)
         setCanvasDimensions({
@@ -193,13 +197,13 @@ const Pathfinding = () => {
         setGrid(fillGrid)
     }
 
-    const [ mazeGenAlgoTitle, setMazeGenAlgoTitle ] = useState("Select Generation Algorithm");
+    const [ mazeGenAlgoTitle, setMazeGenAlgoTitle ] = useState("Eller's Algorithm");
     const handleMazeGenSelect = (algorithm, title) => {
         setMazeGenAlgo(algorithm);
         setMazeGenAlgoTitle(title);
     }
 
-    const [ mazeSolveAlgoTitle, setMazeSolveAlgoTitle ] = useState("Select Solving Algorithm");
+    const [ mazeSolveAlgoTitle, setMazeSolveAlgoTitle ] = useState("Depth-First Search");
     const handleMazeSolveSelect = (algorithm, title) => {
         setMazeSolveAlgo(algorithm);
         setMazeSolveAlgoTitle(title);
@@ -215,7 +219,7 @@ const Pathfinding = () => {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                            <Dropdown.Item onClick={() => handleMazeGenSelect("eller's", "Elller's Algorithm")} href="#/action-1">Eller's Algorithm</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleMazeGenSelect("eller's", "Eller's Algorithm")} href="#/action-1">Eller's Algorithm</Dropdown.Item>
                             <Dropdown.Item onClick={() => handleMazeGenSelect("depthFirst", "Recursive Backtracking")} href="#/action-2">Recursive Backtracking</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
