@@ -8,6 +8,7 @@ import { Dropdown, Button, ButtonGroup, Nav } from 'react-bootstrap';
 const Pathfinding = () => {
     const canvas = useRef(null);
     const [grid, setGrid] = useState([])
+    const [ windowDimensions, setWindowDimensions ] = useState({width: window.innerWidth, height: window.innerHeight});
     const [mazeAnimations, setMazeAnimations] = useState({ drawingAnimations: [], nodeAnimations: [] })
     const [solvingAnimations, setSolvingAnimations] = useState([])
     const [drawSpeed, setDrawSpeed] = useState(0)
@@ -31,8 +32,8 @@ const Pathfinding = () => {
 
         const dimensions = {width: 0, height: 0, x: 0, y: 0};
         
-        dimensions["width"] = normalizeDimension(window.innerWidth * .8);
-        dimensions["height"] = normalizeDimension(window.innerHeight * .7);
+        dimensions["width"] = normalizeDimension(windowDimensions.width * .8);
+        dimensions["height"] = normalizeDimension(windowDimensions.height * .7);
         return dimensions;
     };
 
@@ -47,11 +48,30 @@ const Pathfinding = () => {
             x,
             y
         })
+        
+
+    }, [windowDimensions])
+
+    useEffect(() => {
         const fillGrid = fillCanvas(canvas, cellSize)
-        setGrid(fillGrid)
+        setGrid(fillGrid)   
+    }, [canvasDimensions])
 
-    }, [])
 
+    useEffect(() => {
+        function handleResize() {
+            setWindowDimensions({
+                height: window.innerHeight,
+                width: window.innerWidth
+            })
+        }
+        
+        window.addEventListener('resize', handleResize);
+
+        return _ => {
+            window.removeEventListener('resize', handleResize)
+        }
+    })
     
     
 
