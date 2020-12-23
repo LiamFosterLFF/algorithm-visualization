@@ -41,10 +41,11 @@ const Pathfinding = () => {
 
     useEffect(() => {
         const [initialGrid, x, y] = initializeGrid(canvas, cellSize, canvasDimensions)
-        
+        const { width, height } = calculateCanvasDimensions();
         setGrid(initialGrid)
         setCanvasDimensions({
-            ...canvasDimensions,
+            width,
+            height,
             x,
             y
         })
@@ -65,6 +66,7 @@ const Pathfinding = () => {
                 width: window.innerWidth
             })
         }
+        console.log(windowDimensions, canvasDimensions);
         
         window.addEventListener('resize', handleResize);
 
