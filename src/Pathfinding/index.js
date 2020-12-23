@@ -39,23 +39,35 @@ const Pathfinding = () => {
     };
 
     const [canvasDimensions, setCanvasDimensions] = useState(calculateCanvasDimensions())
+    useEffect(() => {
+        console.log("Boom");
+        console.log(windowDimensions, canvasDimensions);
+        const initialDimensions = calculateCanvasDimensions();
+        const [initialGrid, x, y] = initializeGrid(canvas, cellSize, initialDimensions)
+        initialDimensions.x = x;
+        initialDimensions.y = y;
+
+        setCanvasDimensions({
+            ...initialDimensions
+        })
+        
+    }, [windowDimensions])
+
+
+
+        
 
     useEffect(() => {
         const [initialGrid, x, y] = initializeGrid(canvas, cellSize, canvasDimensions)
-        const { width, height } = calculateCanvasDimensions();
+        // setCanvasDimensions({
+        //     ...canvasDimensions,
+        //     x,
+        //     y
+        // })
         setGrid(initialGrid)
-        setCanvasDimensions({
-            width,
-            height,
-            x,
-            y
-        })
-        
-
-    }, [windowDimensions])
-
-    useEffect(() => {
         setMazeGenerated(false)
+        console.log("Bang");
+        console.log(windowDimensions, canvasDimensions);
         const fillGrid = fillCanvas(canvas, cellSize)
         setGrid(fillGrid)   
     }, [canvasDimensions, mazeGenAlgo, mazeSolveAlgo])
@@ -68,7 +80,6 @@ const Pathfinding = () => {
                 width: window.innerWidth
             })
         }
-        console.log(windowDimensions, canvasDimensions);
         
         window.addEventListener('resize', handleResize);
 
