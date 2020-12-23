@@ -26,7 +26,7 @@ export const animateMazeDrawing = (mazeAnimations, canvas, cellSize) => {
         window.requestAnimationFrame(drawPath)
     }
 
-    const stop = () => {
+    const stopMazeDrawingAnimations = () => {
         cancelAnimationFrame(stepId)
         return stepId
     }

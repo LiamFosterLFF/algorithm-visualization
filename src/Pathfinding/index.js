@@ -14,7 +14,8 @@ const Pathfinding = () => {
     const [drawSpeed, setDrawSpeed] = useState(0)
     const [mazeGenAlgo, setMazeGenAlgo] = useState("eller's")
     const [mazeSolveAlgo, setMazeSolveAlgo] = useState("depthFirst")
-
+    const [mazeGenerating, setMazeGenerating] = useState(false)
+    const [mazeGenerated, setMazeGenerated] = useState(false)
     const calculateCellSize = () => {
         const cellSz = (window.innerWidth < 450) ? 5 : 10;
         return cellSz;
@@ -54,9 +55,10 @@ const Pathfinding = () => {
     }, [windowDimensions])
 
     useEffect(() => {
+        setMazeGenerated(false)
         const fillGrid = fillCanvas(canvas, cellSize)
         setGrid(fillGrid)   
-    }, [canvasDimensions])
+    }, [canvasDimensions, mazeGenAlgo, mazeSolveAlgo])
 
 
     useEffect(() => {
@@ -94,7 +96,7 @@ const Pathfinding = () => {
 
     
 
-    const [mazeGenerating, setMazeGenerating] = useState(false)
+
 
     useEffect(() => {
         
@@ -107,6 +109,8 @@ const Pathfinding = () => {
             setGrid(mazeGrid)
             if (mazeFinished) {
                 setMazeGenerating(false)
+                console.log("AND ONE");
+                setMazeGenerated(true)
             }
 
         }
@@ -210,11 +214,13 @@ const Pathfinding = () => {
     }
 
     const handleClearCanvas = () => {
+        setMazeGenerated(false)
         const clearGrid = clearCanvas(canvas, cellSize)
         setGrid(clearGrid)
     }
 
     const handleFillCanvas = () => {
+        setMazeGenerated(false)
         const fillGrid = fillCanvas(canvas, cellSize)
         setGrid(fillGrid)
     }
@@ -229,8 +235,9 @@ const Pathfinding = () => {
     const handleMazeSolveSelect = (algorithm, title) => {
         setMazeSolveAlgo(algorithm);
         setMazeSolveAlgoTitle(title);
+
     }
-    
+
     return (
         <div>
             <div className="nav-bar">
@@ -272,7 +279,7 @@ const Pathfinding = () => {
                 
                 <canvas onClick={handleOnClick} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseOut={handleMouseOut} onMouseMove={handleMouseMove} ref={canvas}></canvas>
                 <Button onClick={() => setMazeGenerating(true)}>Generate Maze</Button>
-                <Button onClick={() => setMazeSolving(true)}>Solve Maze</Button>
+                <Button onClick={() => setMazeSolving(true)} disabled={!mazeGenerated}>Solve Maze</Button>
                 <Button onClick ={() => animateMazeDrawing.play()}>Play</Button>
             </div>
         </div>
