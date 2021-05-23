@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import {Button, ButtonGroup} from 'react-bootstrap';
 
 import PixelBar from "./PixelBar";
+import SortingDropdown  from '../SortingDropdown';
+
 import { pixelBarShuffle, defaultSort, defaultAnimations, bubbleSort, pixelMapBubbleSortAnimation, pixelMapSelectionSort, pixelMapSelectionSortAnimation, pixelMapInsertionSort, pixelMapInsertionSortAnimation, pixelMapMergeSort, pixelMapMergeSortAnimation, pixelMapQuickSort, pixelMapQuickSortAnimation, pixelMapRadixSort, pixelMapRadixSortAnimation } from "../utilities/pixelMapFunctions";
 
-const PixelMap = ({ sort }) => {
+const PixelMap = () => {
     const [pixelBars, ] = useState(pixelBarShuffle())
     const [animations, setAnimations] = useState([])
+    const [ sort, setSort ] = useState("bubble");
     const [sortType, setSortType] = useState({ function: defaultSort });
     const [animationType, setAnimationType] = useState({ function: defaultAnimations });
     
@@ -41,15 +44,16 @@ const PixelMap = ({ sort }) => {
 
     useEffect(() => {
         cancelAnimations(animations)
-        runAnimations(pixelBars)
+        buildAnimations(pixelBars)
         
     }, [sortType])
 
 
 
 
-    const runAnimations = (pixelBars) => {
-        const barAnimations = animationType.function(sortType.function(pixelBars))
+    const buildAnimations = (pixelBars) => {
+        const barAnimations = animationType.function(sortType.function(pixelBars));
+        pauseAnimations(barAnimations)
         setAnimations(barAnimations)
     }
 
@@ -78,6 +82,7 @@ const PixelMap = ({ sort }) => {
 
     return (
         <>
+            <SortingDropdown sortType={sort} sortFn={setSort}/>
             <ButtonGroup>
                 <Button onClick={() => playAnimations(animations)}>Play</Button>
                 <Button onClick={() => pauseAnimations(animations)}>Pause</Button>

@@ -87,11 +87,11 @@ const BarChart = () => {
                         <Bar key={barIndex} height={barHeight} />
                     )
                 })}
+                <SortingDropdown sortType={sort} sortFn={setSort}/>
                 <ButtonGroup>
                     <Button size="lg" onClick={() => playAnimations(animations)}>Play</Button>
                     <Button size="lg" onClick={() => pauseAnimations(animations)}>Pause</Button>
                 </ButtonGroup>
-                <SortingDropdown sortType={sort} sortFn={setSort}/>
             </div>
            
             
