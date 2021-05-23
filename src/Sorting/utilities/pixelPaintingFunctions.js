@@ -106,6 +106,9 @@ export const pixelPaintingBubbleSort = (origArr) => {
         return animations
     }
 }
+
+
+
 // // Bubble Sort Pixel Painting Animation
 // export const pixelPaintingBubbleSortAnimation = (animations, canvas, speed) => {
 //     const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)

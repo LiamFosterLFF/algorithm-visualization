@@ -4,42 +4,21 @@ import {Button, ButtonGroup} from 'react-bootstrap';
 import PixelBar from "./PixelBar";
 import SortingDropdown  from '../SortingDropdown';
 
-import { pixelBarShuffle, defaultSort, defaultAnimations, bubbleSort, pixelMapBubbleSortAnimation, pixelMapSelectionSort, pixelMapSelectionSortAnimation, pixelMapInsertionSort, pixelMapInsertionSortAnimation, pixelMapMergeSort, pixelMapMergeSortAnimation, pixelMapQuickSort, pixelMapQuickSortAnimation, pixelMapRadixSort, pixelMapRadixSortAnimation } from "../utilities/pixelMapFunctions";
+import { pixelBarShuffle } from "../utilities";
+
+import pixelMapFunctions from "../utilities/pixelMapFunctions";
+
 
 const PixelMap = () => {
     const [pixelBars, ] = useState(pixelBarShuffle())
     const [animations, setAnimations] = useState([])
     const [ sort, setSort ] = useState("bubble");
-    const [sortType, setSortType] = useState({ function: defaultSort });
-    const [animationType, setAnimationType] = useState({ function: defaultAnimations });
+    const [sortType, setSortType] = useState({ function: pixelMapFunctions.defaultSort });
+    const [animationType, setAnimationType] = useState({ function: pixelMapFunctions.defaultAnimations });
     
     useEffect(() => {
-        switch (sort) {
-            case "bubble":
-                setSortType({ function: bubbleSort })
-                setAnimationType({ function: pixelMapBubbleSortAnimation })
-                break;
-            case "selection":
-                setSortType({ function: pixelMapSelectionSort })
-                setAnimationType({ function: pixelMapSelectionSortAnimation })
-                break;
-            case "insertion":
-                setSortType({ function: pixelMapInsertionSort })
-                setAnimationType({ function: pixelMapInsertionSortAnimation })
-                break;
-            case "merge":
-                setSortType({ function: pixelMapMergeSort })
-                setAnimationType({ function: pixelMapMergeSortAnimation })
-                break;
-            case "quick":
-                setSortType({ function: pixelMapQuickSort })
-                setAnimationType({ function: pixelMapQuickSortAnimation })
-                break;
-            case "radix":
-                setSortType({ function: pixelMapRadixSort })
-                setAnimationType({ function: pixelMapRadixSortAnimation })
-                break;
-        }
+        setSortType({ function: pixelMapFunctions[`${sort}Sort`]})
+        setAnimationType({ function: pixelMapFunctions[`${sort}SortAnimation`]})
     }, [sort])
 
     useEffect(() => {

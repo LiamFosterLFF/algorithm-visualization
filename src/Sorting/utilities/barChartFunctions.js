@@ -1,17 +1,17 @@
-import $ from 'jquery';
-
 // ***Sort Functions***
 
-export const defaultSort = () => {
+import { barChartRadixSort } from "."
+
+ const defaultSort = () => {
     return []
 }
 
-export const defaultAnimations = () => {
+ const defaultAnimations = () => {
     return []
 }
 
 // Bubble Sort
-export const bubbleSort = (origArr) => {
+ const bubbleSort = (origArr) => {
     // Clone the original array so as not to mutate it
     const arr = [...origArr]
     // Store the indices of the swaps made in order, to be used in the animations
@@ -29,7 +29,7 @@ export const bubbleSort = (origArr) => {
     return animations
 }
 
-export const bubbleSortBarChartAnimation = (animations) => {
+ const bubbleSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("bar");
     const duration = 3;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -58,32 +58,8 @@ export const bubbleSortBarChartAnimation = (animations) => {
     return barAnimations
 }
 
-// Bubble Sort Color Map Animation
-export const colorMapBubbleSortAnimation = (animations) => {
-    // Sets the animations using the Web Animations API
-    const chart = document.getElementsByClassName("color-bar");
-    const duration = .5;   // The base duration, for easy changing later (duration can also be changed via the API)
-    const barAnimations = [];
-    animations.forEach((animation, index) => {
-        const compareEl1 = chart[animation[0][0]];
-        const compareEl2 = chart[animation[1][0]];
-        const swapColor1 = animation[0][1];
-        const swapColor2 = animation[1][1];
-
-
-        // Exchange the colors of the two elements being selected
-        barAnimations.push(
-            compareEl1.animate([{ backgroundColor: `hsl(${swapColor2}, 100%, 50%)` }, { backgroundColor: `hsl(${swapColor2}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration }),
-            compareEl2.animate([{ backgroundColor: `hsl(${swapColor1}, 100%, 50%)` }, { backgroundColor: `hsl(${swapColor1}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration }),
-
-        )
-
-    })
-    return barAnimations
-}
-
 // Selection Sort 
-export const selectionSort = (origArr) => {
+ const selectionSort = (origArr) => {
     // Clone the original array so as not to mutate it
     const arr = [...origArr]
     // Store the indices of the swaps made in order, to be used in the animations
@@ -108,8 +84,7 @@ export const selectionSort = (origArr) => {
     return animations
 }
 
-
-export const selectionSortBarChartAnimation = (animations) => {
+ const selectionSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("bar");
     const duration = 3;// The base duration, for easy changing later (duration can also be changed via the API)
@@ -142,7 +117,7 @@ export const selectionSortBarChartAnimation = (animations) => {
 }
 
 // Insertion Sort 
-export const insertionSort = (origArr) => {
+ const insertionSort = (origArr) => {
     // Clone the original array so as not to mutate it
     const arr = [...origArr]
     // Store the indices of the swaps made in order, to be used in the animations
@@ -164,8 +139,7 @@ export const insertionSort = (origArr) => {
     return animations
 }
 
-
-export const insertionSortBarChartAnimation = (animations) => {
+ const insertionSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("bar");
     const duration = 3;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -189,9 +163,8 @@ export const insertionSortBarChartAnimation = (animations) => {
     return barAnimations
 }
 
-
 // Merge Sort 
-export const mergeSort = (origArray) => {
+ const mergeSort = (origArray) => {
     // Two separate arrays, one main one and one to hold swapped values until they can be unswapped. Avoids having to create a buffer array during the sorting process
     const mainArray = [...origArray];
     const auxArray = [...mainArray]
@@ -262,7 +235,7 @@ const merge = (mainArray, startIdx, midIdx, endIdx, auxArray, animations) => {
     }
 }
 
-export const mergeSortBarChartAnimation = (animations) => {
+ const mergeSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("bar");
     const duration = 30;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -286,7 +259,7 @@ export const mergeSortBarChartAnimation = (animations) => {
 }
 
 // Quick Sort 
-export const quickSort = (origArray) => {
+ const quickSort = (origArray) => {
     // Copy original array so as not to mutate it 
     const array = [...origArray];
     const animations = [];
@@ -333,7 +306,7 @@ export const quickSort = (origArray) => {
     return animations
 }
 
-export const quickSortBarChartAnimation = (animations) => {
+ const quickSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("bar");
     const duration = 30;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -361,9 +334,8 @@ export const quickSortBarChartAnimation = (animations) => {
     return barAnimations
 }
 
-
 // Radix Bar Sort 
-export const barChartRadixSort = (origArr) => {
+ const radixSort = (origArr) => {
     const arr = [...origArr] // Copy original array so as not to mutate it
     const animations = [];
 
@@ -402,7 +374,7 @@ export const barChartRadixSort = (origArr) => {
 
 }
 
-export const radixSortBarChartAnimation = (animations) => {
+ const radixSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("bar");
     const duration = 30;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -424,72 +396,118 @@ export const radixSortBarChartAnimation = (animations) => {
     return barAnimations
 }
 
-
-
-// PixelMap Animations 
-
-// Pixel Map Bubble Sort
-export const pixelMapBubbleSort = (origArr) => {
-    // Clone the original array so as not to mutate it
-    const arr = [...origArr]
-    // Store the indices of the swaps made in order, to be used in the animations
-    const animations = []
-    const n = arr.length;
-    for (let i = 0; i < n; i++) {
-        for (let j = 0; j < n - i - 1; j++) {
-            if (arr[j][0] > arr[j + 1][0]) {
-                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-                animations.push([j, j + 1])
-            }
-        }
-    }
-    return animations
+const barChartFunctions = {
+    defaultSort,
+    defaultAnimations,
+    bubbleSort, 
+    bubbleSortAnimation, 
+    selectionSort,
+    selectionSortAnimation,
+    insertionSort,
+    insertionSortAnimation,
+    mergeSort,
+    mergeSortAnimation,
+    quickSort,
+    quickSortAnimation,
+    radixSort,
+    radixSortAnimation,
 }
 
-// Bubble Sort Pixel Mpa Animation
-export const bubbleSortPixelMapAnimation = (animations, speed) => {
-    for (let i = 0; i < animations.length; i++) {
-        const [ind1, ind2] = animations[i]
-        setTimeout(() => {
-            const parent = document.getElementsByClassName('chart');
-            const child1 = parent[0].childNodes[ind1];
-            const child2 = parent[0].childNodes[ind2];
+export default barChartFunctions;
+// // Color Map Animations
 
-            // child1.style.backgroundColor = "red";
-            // child2.style.backgroundColor = "red";
-            for (let i = 0; i <= 2; i++) {
-                [child1.childNodes[i].style.height, child2.childNodes[i].style.height] = [child2.childNodes[i].style.height, child1.childNodes[i].style.height]
-
-            }
-            setTimeout(() => {
-                // child1.style.backgroundColor = "rgb(51, 226, 217)";
-                // child2.style.backgroundColor = "rgb(51, 226, 217)";
-            }, speed);
-        }, i * speed);
-    }
-}
+// // Bubble Sort Color Map Animation
+// export const colorMapBubbleSortAnimation = (animations) => {
+//     // Sets the animations using the Web Animations API
+//     const chart = document.getElementsByClassName("color-bar");
+//     const duration = .5;   // The base duration, for easy changing later (duration can also be changed via the API)
+//     const barAnimations = [];
+//     animations.forEach((animation, index) => {
+//         const compareEl1 = chart[animation[0][0]];
+//         const compareEl2 = chart[animation[1][0]];
+//         const swapColor1 = animation[0][1];
+//         const swapColor2 = animation[1][1];
 
 
-// ***Display Functions***
+//         // Exchange the colors of the two elements being selected
+//         barAnimations.push(
+//             compareEl1.animate([{ backgroundColor: `hsl(${swapColor2}, 100%, 50%)` }, { backgroundColor: `hsl(${swapColor2}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration }),
+//             compareEl2.animate([{ backgroundColor: `hsl(${swapColor1}, 100%, 50%)` }, { backgroundColor: `hsl(${swapColor1}, 100%, 50%)` }], { fill: "forwards", duration: duration, delay: index * duration }),
 
-// BarChart
-export const barShuffle = (bars) => {
-    const barList = [];
-    for (let bar = 0; bar < bars; bar++) {
-        const barHeight = Math.floor(Math.random() * 1000);
-        barList.push(barHeight)
-    }
-    return barList;
-}
+//         )
 
-
-// ColorMap
+//     })
+//     return barAnimations
+// }
 
 
+// // PixelMap Animations 
+
+// // Pixel Map Bubble Sort
+// export const pixelMapBubbleSort = (origArr) => {
+//     // Clone the original array so as not to mutate it
+//     const arr = [...origArr]
+//     // Store the indices of the swaps made in order, to be used in the animations
+//     const animations = []
+//     const n = arr.length;
+//     for (let i = 0; i < n; i++) {
+//         for (let j = 0; j < n - i - 1; j++) {
+//             if (arr[j][0] > arr[j + 1][0]) {
+//                 [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+//                 animations.push([j, j + 1])
+//             }
+//         }
+//     }
+//     return animations
+// }
+
+// // Bubble Sort Pixel Map Animation
+// export const bubbleSortPixelMapAnimation = (animations, speed) => {
+//     for (let i = 0; i < animations.length; i++) {
+//         const [ind1, ind2] = animations[i]
+//         setTimeout(() => {
+//             const parent = document.getElementsByClassName('chart');
+//             const child1 = parent[0].childNodes[ind1];
+//             const child2 = parent[0].childNodes[ind2];
+
+//             // child1.style.backgroundColor = "red";
+//             // child2.style.backgroundColor = "red";
+//             for (let i = 0; i <= 2; i++) {
+//                 [child1.childNodes[i].style.height, child2.childNodes[i].style.height] = [child2.childNodes[i].style.height, child1.childNodes[i].style.height]
+
+//             }
+//             setTimeout(() => {
+//                 // child1.style.backgroundColor = "rgb(51, 226, 217)";
+//                 // child2.style.backgroundColor = "rgb(51, 226, 217)";
+//             }, speed);
+//         }, i * speed);
+//     }
+// }
 
 
 
-// PixelMap
+
+
+// // ***Display Functions***
+
+// // BarChart
+// export const barShuffle = (bars) => {
+//     const barList = [];
+//     for (let bar = 0; bar < bars; bar++) {
+//         const barHeight = Math.floor(Math.random() * 1000);
+//         barList.push(barHeight)
+//     }
+//     return barList;
+// }
+
+
+// // ColorMap
+
+
+
+
+
+// // PixelMap
 // const shuffle = (array) => {
 
 //     for (let i = array.length - 1; i > 0; i--) {
@@ -511,41 +529,12 @@ export const barShuffle = (bars) => {
 // }
 
 
-// PixelPainting
+// // PixelPainting
 
 
 
 
 
 
-// Generate Random Colors
-export const colorShuffle = (bars) => {
-    const colorList = [];
-    for (let color = 0; color < bars; color++) {
-        const hueValue = Math.floor(Math.random() * 359)
-
-        colorList.push(hueValue)
-    }
-    return colorList
-}
 
 
-// Generate Random Pixel Bars
-const shuffle = (array) => {
-
-    for (let i = array.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array
-};
-
-export const pixelBarShuffle = () => {
-    const height = 100;
-    const pixelBarList = [];
-    for (let pixBar = 0; pixBar < height; pixBar++) {
-        const pixelBarHeights = [pixBar, 1, height - pixBar - 1]
-        pixelBarList.push(pixelBarHeights)
-    }
-    return shuffle(pixelBarList)
-}

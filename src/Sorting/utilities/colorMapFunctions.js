@@ -1,26 +1,15 @@
 // ***Sort Functions***
-export const defaultSort = () => {
+const defaultSort = () => {
     return []
 }
 
-export const defaultAnimations = () => {
+const defaultAnimations = () => {
     return []
 }
-
-// Generate Random Colors
-export const colorShuffle = (bars) => {
-    const colorList = [];
-    for (let color = 0; color < bars; color++) {
-        const hueValue = Math.floor(Math.random() * 359)
-
-        colorList.push(hueValue)
-    }
-    return colorList
-}
-
 
 // ColorMap Bubble Sort
-export const colorMapBubbleSort = (origArr) => {
+
+const bubbleSort = (origArr) => {
     // Clone the original array so as not to mutate it
     const arr = [...origArr]
     // Store the indices of the swaps made in order, to be used in the animations
@@ -39,9 +28,8 @@ export const colorMapBubbleSort = (origArr) => {
 }
 
 
-
 // Bubble Sort Color Map Animation
-export const colorMapBubbleSortAnimation = (animations) => {
+const bubbleSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("color-bar");
     const duration = .5;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -65,7 +53,7 @@ export const colorMapBubbleSortAnimation = (animations) => {
 }
 
 // Selection Sort 
-export const selectionSort = (origArr) => {
+const selectionSort = (origArr) => {
     // Clone the original array so as not to mutate it
     const arr = [...origArr]
     // Store the indices of the swaps made in order, to be used in the animations
@@ -90,8 +78,7 @@ export const selectionSort = (origArr) => {
     return animations
 }
 
-
-export const colorMapSelectionSortAnimation = (animations) => {
+const selectionSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("color-bar");
     const duration = .5;// The base duration, for easy changing later (duration can also be changed via the API)
@@ -117,7 +104,7 @@ export const colorMapSelectionSortAnimation = (animations) => {
 }
 
 // Insertion Sort 
-export const insertionSort = (origArr) => {
+const insertionSort = (origArr) => {
     // Clone the original array so as not to mutate it
     const arr = [...origArr]
     // Store the indices of the swaps made in order, to be used in the animations
@@ -139,8 +126,7 @@ export const insertionSort = (origArr) => {
     return animations
 }
 
-
-export const colorMapInsertionSortAnimation = (animations) => {
+const insertionSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("color-bar");
     const duration = 3;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -162,9 +148,8 @@ export const colorMapInsertionSortAnimation = (animations) => {
     return barAnimations
 }
 
-
 // Merge Sort 
-export const mergeSort = (origArray) => {
+const mergeSort = (origArray) => {
     // Two separate arrays, one main one and one to hold swapped values until they can be unswapped. Avoids having to create a buffer array during the sorting process
     const mainArray = [...origArray];
     const auxArray = [...mainArray]
@@ -235,7 +220,7 @@ const merge = (mainArray, startIdx, midIdx, endIdx, auxArray, animations) => {
     }
 }
 
-export const colorMapMergeSortAnimation = (animations) => {
+const mergeSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("color-bar");
     const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -255,7 +240,7 @@ export const colorMapMergeSortAnimation = (animations) => {
 }
 
 // Quick Sort 
-export const quickSort = (origArray) => {
+const quickSort = (origArray) => {
     // Copy original array so as not to mutate it 
     const array = [...origArray];
     const animations = [];
@@ -302,7 +287,7 @@ export const quickSort = (origArray) => {
     return animations
 }
 
-export const colorMapQuickSortAnimation = (animations) => {
+const quickSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("color-bar");
     const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -326,9 +311,8 @@ export const colorMapQuickSortAnimation = (animations) => {
     return barAnimations
 }
 
-
 // Radix Bar Sort 
-export const radixSort = (origArr) => {
+const radixSort = (origArr) => {
     const arr = [...origArr] // Copy original array so as not to mutate it
     const animations = [];
 
@@ -367,7 +351,7 @@ export const radixSort = (origArr) => {
 
 }
 
-export const colorMapRadixSortAnimation = (animations) => {
+const radixSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("color-bar");
     const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -387,3 +371,22 @@ export const colorMapRadixSortAnimation = (animations) => {
 
     return barAnimations
 }
+
+const colorMapFunctions = {
+    defaultSort,
+    defaultAnimations,
+    bubbleSort, 
+    bubbleSortAnimation, 
+    selectionSort,
+    selectionSortAnimation,
+    insertionSort,
+    insertionSortAnimation,
+    mergeSort,
+    mergeSortAnimation,
+    quickSort,
+    quickSortAnimation,
+    radixSort,
+    radixSortAnimation,
+};
+
+export default colorMapFunctions;

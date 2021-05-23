@@ -6,6 +6,8 @@ import SortingDropdown  from '../SortingDropdown';
 
 import { barShuffle, defaultSort, defaultAnimations, bubbleSort, bubbleSortBarChartAnimation, selectionSort, selectionSortBarChartAnimation, insertionSort, insertionSortBarChartAnimation, mergeSort, mergeSortBarChartAnimation, quickSort, quickSortBarChartAnimation, barChartRadixSort, radixSortBarChartAnimation } from "../utilities";
 
+import barChartFunctions from "../utilities/barChartFunctions";
+
 const BarChart = () => {
     const [ bars, ] = useState(barShuffle(100));
     const [ animations, setAnimations ] = useState([])
@@ -14,36 +16,8 @@ const BarChart = () => {
     const [ animationType, setAnimationType ] = useState({ function: defaultAnimations });
     
     useEffect(() => {
-        switch (sort) {
-            case "bubble":
-                setSortType({ function: bubbleSort })
-                setAnimationType({ function: bubbleSortBarChartAnimation })
-                break;
-            case "selection":
-                setSortType({ function: selectionSort })
-                setAnimationType({ function: selectionSortBarChartAnimation })
-                break;
-            case "insertion":
-                setSortType({ function: insertionSort })
-                setAnimationType({ function: insertionSortBarChartAnimation })
-                break;
-            case "merge":
-                setSortType({ function: mergeSort })
-                setAnimationType({ function: mergeSortBarChartAnimation })
-                break;
-            case "quick":
-                setSortType({ function: quickSort })
-                setAnimationType({ function: quickSortBarChartAnimation })
-                break;
-            case "radix":
-                setSortType({ function: barChartRadixSort })
-                setAnimationType({ function: radixSortBarChartAnimation })
-                break;
-            case "default":
-                setSortType({ function: defaultSort })
-                setAnimationType({ function: defaultAnimations })
-            break;
-            }
+        setSortType({ function: barChartFunctions[`${sort}Sort`]})
+        setAnimationType({ function: barChartFunctions[`${sort}SortAnimation`]})
         }, [sort])
 
     useEffect(() => {

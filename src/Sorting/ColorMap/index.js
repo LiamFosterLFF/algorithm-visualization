@@ -4,42 +4,20 @@ import { Button, ButtonGroup } from 'react-bootstrap';
 import ColorBar from "./ColorBar";
 import SortingDropdown  from '../SortingDropdown';
 
-import { colorShuffle, defaultSort, defaultAnimations, colorMapBubbleSort, colorMapBubbleSortAnimation, selectionSort, colorMapSelectionSortAnimation, insertionSort, colorMapInsertionSortAnimation, mergeSort, colorMapMergeSortAnimation, quickSort, colorMapQuickSortAnimation, radixSort, colorMapRadixSortAnimation } from '../utilities/colorBarFunctions';
+import { colorShuffle } from '../utilities';
+
+import colorMapFunctions from "../utilities/colorMapFunctions";
 
 const ColorMap = () => {
     const [ colors, ] = useState(colorShuffle(200))
     const [ animations, setAnimations] = useState([])
-    const [ sort, setSort ] = useState("bubble")
-    const [ sortType, setSortType] = useState({ function: defaultSort });
-    const [ animationType, setAnimationType] = useState({ function: defaultAnimations });
+    const [ sort, setSort ] = useState("bubble");
+    const [ sortType, setSortType] = useState({ function: colorMapFunctions.defaultSort });
+    const [ animationType, setAnimationType] = useState({ function: colorMapFunctions.defaultAnimations });
 
     useEffect(() => {
-        switch (sort) {
-            case "bubble":
-                setSortType({ function: colorMapBubbleSort })
-                setAnimationType({ function: colorMapBubbleSortAnimation })
-                break;
-            case "selection":
-                setSortType({ function: selectionSort })
-                setAnimationType({ function: colorMapSelectionSortAnimation })
-                break;
-            case "insertion":
-                setSortType({ function: insertionSort })
-                setAnimationType({ function: colorMapInsertionSortAnimation })
-                break;
-            case "merge":
-                setSortType({ function: mergeSort })
-                setAnimationType({ function: colorMapMergeSortAnimation })
-                break;
-            case "quick":
-                setSortType({ function: quickSort })
-                setAnimationType({ function: colorMapQuickSortAnimation })
-                break;
-            case "radix":
-                setSortType({ function: radixSort })
-                setAnimationType({ function: colorMapRadixSortAnimation })
-                break;
-        }
+        setSortType({ function: colorMapFunctions[`${sort}Sort`]})
+        setAnimationType({ function: colorMapFunctions[`${sort}SortAnimation`]})
     }, [sort])
 
     useEffect(() => {

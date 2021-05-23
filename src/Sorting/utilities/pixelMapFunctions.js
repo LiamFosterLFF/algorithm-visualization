@@ -1,36 +1,14 @@
 // Sorting Functions
-
-export const defaultSort = () => {
+const defaultSort = () => {
     return []
 }
 
-export const defaultAnimations = () => {
+const defaultAnimations = () => {
     return []
 }
-
-// Generate Random Pixel Bars
-const shuffle = (array) => {
-
-    for (let i = array.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array
-};
-
-export const pixelBarShuffle = () => {
-    const height = 100;
-    const pixelBarList = [];
-    for (let pixBar = 0; pixBar < height; pixBar++) {
-        const pixelBarHeights = [pixBar, 1, height - pixBar - 1]
-        pixelBarList.push(pixelBarHeights)
-    }
-    return shuffle(pixelBarList)
-}
-
 
 // ColorMap Bubble Sort
-export const bubbleSort = (origArr) => {
+const bubbleSort = (origArr) => {
     // Clone the original array so as not to mutate it
     const arr = [...origArr]
     // Store the indices of the swaps made in order, to be used in the animations
@@ -48,10 +26,8 @@ export const bubbleSort = (origArr) => {
     return animations
 }
 
-
-
 // Bubble Sort Color Map Animation
-export const pixelMapBubbleSortAnimation = (animations) => {
+const bubbleSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("pixel-bar");
     const duration = .5;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -83,7 +59,7 @@ export const pixelMapBubbleSortAnimation = (animations) => {
 }
 
 // Selection Sort 
-export const pixelMapSelectionSort = (origArr) => {
+const selectionSort = (origArr) => {
     // Clone the original array so as not to mutate it
     const arr = [...origArr]
     // Store the indices of the swaps made in order, to be used in the animations
@@ -109,8 +85,7 @@ export const pixelMapSelectionSort = (origArr) => {
     return animations
 }
 
-
-export const pixelMapSelectionSortAnimation = (animations) => {
+const selectionSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("pixel-bar");
     const duration = .5;// The base duration, for easy changing later (duration can also be changed via the API)
@@ -142,7 +117,7 @@ export const pixelMapSelectionSortAnimation = (animations) => {
 }
 
 // Insertion Sort 
-export const pixelMapInsertionSort = (origArr) => {
+const insertionSort = (origArr) => {
     // Clone the original array so as not to mutate it
     const arr = [...origArr]
     // Store the indices of the swaps made in order, to be used in the animations
@@ -164,8 +139,7 @@ export const pixelMapInsertionSort = (origArr) => {
     return animations
 }
 
-
-export const pixelMapInsertionSortAnimation = (animations) => {
+const insertionSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("pixel-bar");
     const duration = 3;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -193,9 +167,8 @@ export const pixelMapInsertionSortAnimation = (animations) => {
     return barAnimations
 }
 
-
 // Merge Sort 
-export const pixelMapMergeSort = (origArray) => {
+const mergeSort = (origArray) => {
     // Two separate arrays, one main one and one to hold swapped values until they can be unswapped. Avoids having to create a buffer array during the sorting process
     const mainArray = [...origArray];
     const auxArray = [...mainArray]
@@ -266,7 +239,7 @@ const merge = (mainArray, startIdx, midIdx, endIdx, auxArray, animations) => {
     }
 }
 
-export const pixelMapMergeSortAnimation = (animations) => {
+const mergeSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("pixel-bar");
     const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -291,7 +264,7 @@ export const pixelMapMergeSortAnimation = (animations) => {
 }
 
 // Quick Sort 
-export const pixelMapQuickSort = (origArray) => {
+const quickSort = (origArray) => {
     // Copy original array so as not to mutate it 
     const array = [...origArray];
     const animations = [];
@@ -338,7 +311,7 @@ export const pixelMapQuickSort = (origArray) => {
     return animations
 }
 
-export const pixelMapQuickSortAnimation = (animations) => {
+const quickSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("pixel-bar");
     const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -368,9 +341,8 @@ export const pixelMapQuickSortAnimation = (animations) => {
     return barAnimations
 }
 
-
 // Radix Bar Sort 
-export const pixelMapRadixSort = (origArr) => {
+const radixSort = (origArr) => {
     const arr = [...origArr] // Copy original array so as not to mutate it
     const animations = [];
 
@@ -410,7 +382,7 @@ export const pixelMapRadixSort = (origArr) => {
 
 }
 
-export const pixelMapRadixSortAnimation = (animations) => {
+const radixSortAnimation = (animations) => {
     // Sets the animations using the Web Animations API
     const chart = document.getElementsByClassName("pixel-bar");
     const duration = 5;   // The base duration, for easy changing later (duration can also be changed via the API)
@@ -433,3 +405,22 @@ export const pixelMapRadixSortAnimation = (animations) => {
 
     return barAnimations
 }
+
+const pixelMapFunctions = {
+    defaultSort,
+    defaultAnimations,
+    bubbleSort, 
+    bubbleSortAnimation, 
+    selectionSort,
+    selectionSortAnimation,
+    insertionSort,
+    insertionSortAnimation,
+    mergeSort,
+    mergeSortAnimation,
+    quickSort,
+    quickSortAnimation,
+    radixSort,
+    radixSortAnimation,
+};
+
+export default pixelMapFunctions;
