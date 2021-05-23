@@ -77,7 +77,7 @@ const PixelMap = ({ sort }) => {
     
 
     return (
-        <div>
+        <>
             <ButtonGroup>
                 <Button onClick={() => playAnimations(animations)}>Play</Button>
                 <Button onClick={() => pauseAnimations(animations)}>Pause</Button>
@@ -91,7 +91,7 @@ const PixelMap = ({ sort }) => {
                     })}
                 </div>
             </div>
-    </div>
+    </>
     )
 }
 
