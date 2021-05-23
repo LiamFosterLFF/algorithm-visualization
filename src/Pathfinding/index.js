@@ -17,7 +17,7 @@ const Pathfinding = () => {
     const [mazeGenerating, setMazeGenerating] = useState(false)
     const [mazeGenerated, setMazeGenerated] = useState(false)
     const calculateCellSize = () => {
-        const cellSz = (window.innerWidth < 450) ? 5 : 10;
+        let cellSz = (window.innerWidth < 450) ? 5 : 10;
         return cellSz;
     }
 
@@ -51,7 +51,7 @@ const Pathfinding = () => {
             ...initialDimensions
         })
         
-    }, [windowDimensions])
+    }, [windowDimensions, cellSize])
 
 
 
@@ -59,15 +59,8 @@ const Pathfinding = () => {
 
     useEffect(() => {
         const [initialGrid, x, y] = initializeGrid(canvas, cellSize, canvasDimensions)
-        // setCanvasDimensions({
-        //     ...canvasDimensions,
-        //     x,
-        //     y
-        // })
         setGrid(initialGrid)
         setMazeGenerated(false)
-        console.log("Bang");
-        console.log(windowDimensions, canvasDimensions);
         const fillGrid = fillCanvas(canvas, cellSize)
         setGrid(fillGrid)   
     }, [canvasDimensions, mazeGenAlgo, mazeSolveAlgo])
@@ -90,20 +83,6 @@ const Pathfinding = () => {
     
     
 
-    // Get all algorithms to work on the non-maze board
-    // Once finished, fix up website and prepare for deployment
-
-    // Possible add-ons
-        // Pixelpainting descrambler
-        // Other maze-building algos - Hunt & kill, sidewinder, prims, kruskal, ellers
-        // Other algorithms - 
-            // Pathfinding - best first search
-            // Sorting Heap Sort
-        // More animations - 
-            //Pathfinding - show red backtrack and removal for backtracking building algo, current node highlighted in green, path in rainbow colors, show nodes of node graph and connnxns, make a binary search tree and animate it being built
-            // Sorting - 
-        // More functionality 
-            //Pathfinding - can go forwards and reverse, adjust number of loops, adjust size, adjust speed, reset maze solve or build, make it possible to skip animations, random wall generation, A* draws the optimal path, Dijkstra draws the optimal path?
 
     
 
@@ -298,3 +277,19 @@ const Pathfinding = () => {
 }
 
 export default Pathfinding;
+
+
+    // Get all algorithms to work on the non-maze board
+    // Once finished, fix up website and prepare for deployment
+
+    // Possible add-ons
+        // Pixelpainting descrambler
+        // Other maze-building algos - Hunt & kill, sidewinder, prims, kruskal, ellers
+        // Other algorithms - 
+            // Pathfinding - best first search
+            // Sorting Heap Sort
+        // More animations - 
+            //Pathfinding - show red backtrack and removal for backtracking building algo, current node highlighted in green, path in rainbow colors, show nodes of node graph and connnxns, make a binary search tree and animate it being built
+            // Sorting - 
+        // More functionality 
+            //Pathfinding - can go forwards and reverse, adjust number of loops, adjust size, adjust speed, reset maze solve or build, make it possible to skip animations, random wall generation, A* draws the optimal path, Dijkstra draws the optimal path?

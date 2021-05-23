@@ -47,10 +47,12 @@ const BarChart = ({ sort }) => {
     useEffect(() => {
         cancelAnimations(animations);
         buildAnimations(bars);
+        console.log("render");
     }, [sortType])
 
     const buildAnimations = (bars) => {
         const barAnimations = animationType.function(sortType.function(bars));
+        pauseAnimations(barAnimations)
         setAnimations(barAnimations);
     }
 
