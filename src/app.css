@@ -17,18 +17,17 @@
     /* height: 100%; */
 }
 
+.tab-pane {
+    height: 75vh;
+}
 
 .chart {
-    height: 75%;
+    height: 100%;
     width: 90%;
     justify-content: center;
     align-items: center;
-    margin: 8% auto;
-    padding-bottom: 5%;
-}
-
-.pixel-map {
-    height: 100%;
+    margin: 5% auto;
+    /* padding-bottom: 5%; */
 }
 
 

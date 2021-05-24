@@ -1,4 +1,13 @@
-// ***Sort Functions***
+const shuffle = (bars) => {
+    const colorList = [];
+    for (let color = 0; color < bars; color++) {
+        const hueValue = Math.floor(Math.random() * 359)
+
+        colorList.push(hueValue)
+    }
+    return colorList
+}
+
 const defaultSort = () => {
     return []
 }
@@ -373,6 +382,7 @@ const radixSortAnimation = (animations) => {
 }
 
 const colorMapFunctions = {
+    shuffle,
     defaultSort,
     defaultAnimations,
     bubbleSort, 

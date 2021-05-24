@@ -1,3 +1,22 @@
+const shuffle = (array) => {
+
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array
+};
+
+const pixelBarShuffle = () => {
+    const height = 100;
+    const pixelBarList = [];
+    for (let pixBar = 0; pixBar < height; pixBar++) {
+        const pixelBarHeights = [pixBar, 1, height - pixBar - 1]
+        pixelBarList.push(pixelBarHeights)
+    }
+    return shuffle(pixelBarList)
+}
+
 // Sorting Functions
 const defaultSort = () => {
     return []
@@ -407,6 +426,7 @@ const radixSortAnimation = (animations) => {
 }
 
 const pixelMapFunctions = {
+    shuffle: pixelBarShuffle,
     defaultSort,
     defaultAnimations,
     bubbleSort, 

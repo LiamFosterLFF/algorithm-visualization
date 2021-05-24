@@ -1,18 +1,65 @@
-import React, {useState} from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import { Nav, ButtonGroup, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Tab, Tabs, ButtonGroup, Button } from 'react-bootstrap';
 
-import ButtonWrapper from './ButtonWrapper';
+import SortingDropdown  from './SortingDropdown';
+import sortFunctions from "./utilities";
+
 import BarChart from './BarChart';
 import ColorMap from './ColorMap';
 import PixelMap from './PixelMap';
-import { defaultAnimations } from './utilities';
 // import PixelPainting from './PixelPainting';
 
 const Sorting = () => {  
     
     const [ showButton, setShowButton ] = useState(false);
+    const [ chartType, setChartType ] = useState("barChart"); // Add in functionality from parent
+    const [ bars, setBars] = useState(sortFunctions[chartType].shuffle()); // Combine all three to use the same shuffl function from the functions import
+    const [ animations, setAnimations ] = useState([])
+    const [ sort, setSort ] = useState("bubble")
+    const [ sortType, setSortType ] = useState({function: sortFunctions[chartType].defaultSort });
+    const [ animationType, setAnimationType ] = useState({ function: sortFunctions[chartType].defaultAnimations });
+    
+    useEffect(() => {
+        setBars(sortFunctions[chartType].shuffle(100))
+    }, [chartType])
+    
+    useEffect(() => {
+        setSortType({ function: sortFunctions[chartType][`${sort}Sort`]})
+        setAnimationType({ function: sortFunctions[chartType][`${sort}SortAnimation`]})
+    }, [sort])
 
+    useEffect(() => {
+        cancelAnimations(animations);
+        buildAnimations(bars);
+    }, [sortType])
+
+    const buildAnimations = (bars) => {
+        const barAnimations = animationType.function(sortType.function(bars));
+        pauseAnimations(barAnimations)
+        setAnimations(barAnimations);
+    }
+
+    const playAnimations = (animations) => {
+        animations.map((animation) => {
+            if (animation.playState !== "finished") {
+                animation.play();
+            }
+        })
+    }
+
+    const pauseAnimations = (animations) => {
+        animations.map((animation) => {
+            if (animation.playState !== "finished") {
+                animation.pause();
+            }
+        })
+    }
+
+    const cancelAnimations = animations => {
+        animations.map((animation) => {
+            animation.cancel();
+        })
+    }   
     // const handleChartTypeClick = () => {
     //     setSort("bubble");
     //     setDropdownText("Choose Sorting Algorithm");
@@ -26,40 +73,29 @@ const Sorting = () => {
     // }
 
     return (
+        <div>
+            <Tabs
+                id="controlled-tab-example"
+                activeKey={chartType}
+                onSelect={(chart) => setChartType(chart)}
+            >
+                <Tab eventKey="barChart" title="Bar Chart">
+                    <BarChart bars={bars}/>
+                </Tab>
+                <Tab eventKey="colorMap" title="Color Map">
+                    <ColorMap bars={bars}/>
+                </Tab>
+                <Tab eventKey="pixelMap" title="Pixel Map">
+                    <PixelMap bars={bars}/>
+                </Tab>
+            </Tabs>
+            <SortingDropdown sortType={sort} sortFn={setSort}/>
+            <ButtonGroup>
+                <Button size="lg" onClick={() => playAnimations(animations)}>Play</Button>
+                <Button size="lg" onClick={() => pauseAnimations(animations)}>Pause</Button>
+            </ButtonGroup>
+        </div>
 
-        <Router>
-            <Nav className="nav-bar">
-                <Nav.Item>
-                    <Nav.Link>
-                        <Link to="/barchart">Bar Chart</Link>
-                    </Nav.Link>
-                </Nav.Item>
-
-                <Nav.Item>
-                    <Nav.Link>
-                        <Link to="/colormap">Color Map</Link>
-                    </Nav.Link>
-                </Nav.Item>
-
-                <Nav.Item>
-                    <Nav.Link>
-                        <Link to="/pixelmap">Pixel Map</Link>
-                    </Nav.Link>
-                </Nav.Item>
-            </Nav>
-
-            <Switch>
-                <Route path="/barchart">
-                    <BarChart showButton={showButton}/>
-                </Route>
-                <Route path="/colormap">
-                    <ColorMap />
-                </Route>
-                <Route path="/pixelmap">
-                    <PixelMap />
-                </Route>
-            </Switch>
-        </Router>
 
     )
 }
@@ -82,3 +118,38 @@ export default Sorting;
 // Need a back button
 // Buttons ugly, use bootstrap
 // Center the thing on the page
+
+
+        // <Router>
+        //     <Nav className="nav-bar">
+        //         <Nav.Item>
+        //             <Nav.Link>
+        //                 <Link to="/barchart">Bar Chart</Link>
+        //             </Nav.Link>
+        //         </Nav.Item>
+
+        //         <Nav.Item>
+        //             <Nav.Link>
+        //                 <Link to="/colormap">Color Map</Link>
+        //             </Nav.Link>
+        //         </Nav.Item>
+
+        //         <Nav.Item>
+        //             <Nav.Link>
+        //                 <Link to="/pixelmap">Pixel Map</Link>
+        //             </Nav.Link>
+        //         </Nav.Item>
+        //     </Nav>
+
+        //     <Switch>
+        //         <Route path="/barchart">
+        //             <BarChart showButton={showButton}/>
+        //         </Route>
+        //         <Route path="/colormap">
+        //             <ColorMap />
+        //         </Route>
+        //         <Route path="/pixelmap">
+        //             <PixelMap />
+        //         </Route>
+        //     </Switch>
+        // </Router>
