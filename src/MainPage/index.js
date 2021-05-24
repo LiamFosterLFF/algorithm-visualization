@@ -1,22 +1,23 @@
 import React from 'react';
 import { CardDeck, Card, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
+
 
 import mazeCardImage from "./maze-card-image.png";
 import sortingCardImage from "./sorting-card-image.png";
 
 const MainPage = () => {
 
-    const handleOnClick = () => {
-
+    const history = useHistory();
+      
+    const handleClick = (route) => {
+        history.push(`/${route}`);
     }
-
+      
     return (
         <CardDeck>
-            <Card>
-                <Link to="/main">
-                    <Card.Img variant="top" src={sortingCardImage} />
-                </Link>
+            <Card onClick={() => handleClick("sorting")} >
+                <Card.Img variant="top" src={sortingCardImage} />
                 <Card.Body>
                 <Card.Title>Sorting Algorithms</Card.Title>
                 <Card.Text>
@@ -27,8 +28,8 @@ const MainPage = () => {
                     <Button>Click Here to Open</Button>
                 </Card.Footer>
             </Card>
-            <Card>
-                <Card.Img variant="top" src={mazeCardImage} />
+            <Card onClick={() => handleClick("pathfinding")}>
+                <Card.Img variant="top" src={mazeCardImage}/>
                 <Card.Body>
                 <Card.Title>Maze Algorithms</Card.Title>
                 <Card.Text>
