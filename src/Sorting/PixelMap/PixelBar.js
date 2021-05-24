@@ -1,7 +1,6 @@
 import React from 'react';
 
 const PixelBar = ({ heights }) => {
-    console.log(heights);
     const firstSegmentStyle = {
         height: `${heights[0]}%`,
         backgroundColor: '#000'
