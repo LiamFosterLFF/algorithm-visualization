@@ -25,6 +25,10 @@
     margin: 5% auto;
 }
 
+.dropdown {
+    margin: 10px 10px;
+}
+
 
 /* BarChart */
 .bar {
