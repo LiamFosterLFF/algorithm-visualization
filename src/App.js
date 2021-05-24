@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Nav from 'react-bootstrap/Nav';
+import { Nav, Navbar, Button } from 'react-bootstrap';
 import './app.css';
 
 import MainPage from './MainPage';
@@ -11,24 +11,24 @@ import Pathfinding from './Pathfinding'
 const App = () => {
     return (
         <div className="page">
-             <Router>
-                <Nav activeKey="/main" >
-                    <Nav.Item>
-                        <Nav.Link>
-                            <Link to="/main">Main</Link>
-                        </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link>
-                            <Link to="/sorting">Sorting</Link>
-                        </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link>
-                            <Link to="/pathfinding">Pathfinding</Link>
-                        </Nav.Link>
-                    </Nav.Item>
-                </Nav>
+            <Router>
+                <Navbar>
+                    <Nav activeKey="/main" >
+                        <Nav.Item>
+                            <Nav.Link>
+                                <Link to="/sorting">Sorting</Link>
+                            </Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link >
+                                <Link to="/pathfinding">Pathfinding</Link>
+                            </Nav.Link>
+                        </Nav.Item>
+                    </Nav>
+                    <Navbar.Collapse className="justify-content-end">
+                        <Link to="/main">Back to Main</Link>
+                    </Navbar.Collapse>
+                </Navbar>
 
                 <Switch>
                     <Route path="/main">

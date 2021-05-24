@@ -2,14 +2,13 @@ import React from 'react';
 import { CardDeck, Card, Button } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
 
-
 import mazeCardImage from "./maze-card-image.png";
 import sortingCardImage from "./sorting-card-image.png";
 
 const MainPage = () => {
 
-    const history = useHistory();
-      
+    let history = useHistory();
+    
     const handleClick = (route) => {
         history.push(`/${route}`);
     }
