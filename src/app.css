@@ -37,14 +37,14 @@
 /* ColorMap */
 .color-bar {
     width: .5%;
-    height: 60vh;
+    height: 100%;
     display: inline-block;
 }
 
 /* PixelMap */
 .pixel-bar {
     width: 1%;
-    height: 20vh;
+    height: 100%;
     display: inline-block;
 }
 
