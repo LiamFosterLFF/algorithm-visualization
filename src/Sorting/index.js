@@ -32,8 +32,7 @@ const Sorting = () => {
     }, [sort])
 
     useEffect(() => {
-        cancelAnimations(animations);
-        buildAnimations(bars);
+        restartAnimations(animations, bars);
     }, [sortType])
 
     const buildAnimations = (bars) => {
@@ -58,22 +57,20 @@ const Sorting = () => {
         })
     }
 
+    const restartAnimations = (animations) => {
+        cancelAnimations(animations);
+        buildAnimations(bars);
+    }
+
+    const resetAnimations = (animations) => {
+        setSort("default");
+    }
+
     const cancelAnimations = animations => {
         animations.map((animation) => {
             animation.cancel();
         })
     }   
-    // const handleChartTypeClick = () => {
-    //     setSort("bubble");
-    //     setDropdownText("Choose Sorting Algorithm");
-    //     setShowDropdown(true);
-    // }
-
-    // const handleSortTypeClick = (type) => {
-    //     setSort(type);
-    //     setShowDropdown(true);
-    //     setDropdownText(`${type.charAt(0).toUpperCase() + type.slice(1)} Sort Algorithm`);
-    // }
 
     return (
         <div>
@@ -93,7 +90,12 @@ const Sorting = () => {
                 </Tab>
             </Tabs>
             <SortingDropdown sortType={sort} sortFn={setSort}/>
-            <ControlButtons play={() => playAnimations(animations)} pause={() => pauseAnimations(animations)}/>
+            <ControlButtons 
+            play={() => playAnimations(animations)} 
+            pause={() => pauseAnimations(animations)}
+            restart={() => restartAnimations(animations)}
+            reset={() => resetAnimations(animations)}
+            />
         </div>
     )
 }
