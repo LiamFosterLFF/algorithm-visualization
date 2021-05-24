@@ -1,4 +1,5 @@
-const shuffle = (bars) => {
+const shuffle = () => {
+    const bars = 200;
     const colorList = [];
     for (let color = 0; color < bars; color++) {
         const hueValue = Math.floor(Math.random() * 359)

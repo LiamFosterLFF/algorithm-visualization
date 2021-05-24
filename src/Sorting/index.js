@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tab, Tabs, ButtonGroup, Button } from 'react-bootstrap';
+import { Tab, Tabs } from 'react-bootstrap';
 
 import SortingDropdown  from './SortingDropdown';
 import ControlButtons from './ControlButtons';
