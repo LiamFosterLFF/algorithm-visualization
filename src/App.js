@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from 'react-bootstrap/Nav';
 import './app.css';
 
+import MainPage from './MainPage';
 import Sorting from './Sorting';
 import Pathfinding from './Pathfinding'
 
@@ -14,7 +15,7 @@ const App = () => {
                 <Nav activeKey="/main" >
                     <Nav.Item>
                         <Nav.Link>
-                            <Link to="/">Main</Link>
+                            <Link to="/main">Main</Link>
                         </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
@@ -30,6 +31,9 @@ const App = () => {
                 </Nav>
 
                 <Switch>
+                    <Route path="/main">
+                        <MainPage />
+                    </Route>
                     <Route path="/sorting">
                         <Sorting />
                     </Route>
