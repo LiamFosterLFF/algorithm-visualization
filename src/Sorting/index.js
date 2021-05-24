@@ -12,16 +12,18 @@ import PixelMap from './PixelMap';
 
 const Sorting = () => {  
     
-    const [ showButton, setShowButton ] = useState(false);
     const [ chartType, setChartType ] = useState("barChart");
     const [ bars, setBars] = useState(sortFunctions[chartType].shuffle());
     const [ animations, setAnimations ] = useState([])
-    const [ sort, setSort ] = useState("bubble")
+    const [ sort, setSort ] = useState("default")
     const [ sortType, setSortType ] = useState({function: sortFunctions[chartType].defaultSort });
-    const [ animationType, setAnimationType ] = useState({ function: sortFunctions[chartType].defaultAnimations });
+    const [ animationType, setAnimationType ] = useState({ function: sortFunctions[chartType].defaultSortAnimation });
     
     useEffect(() => {
+        cancelAnimations(animations)
+        setSort("default")
         setBars(sortFunctions[chartType].shuffle(100))
+        setAnimations([])
     }, [chartType])
     
     useEffect(() => {

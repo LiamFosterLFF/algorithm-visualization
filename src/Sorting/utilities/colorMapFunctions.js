@@ -12,7 +12,7 @@ const defaultSort = () => {
     return []
 }
 
-const defaultAnimations = () => {
+const defaultSortAnimation = () => {
     return []
 }
 
@@ -384,7 +384,7 @@ const radixSortAnimation = (animations) => {
 const colorMapFunctions = {
     shuffle,
     defaultSort,
-    defaultAnimations,
+    defaultSortAnimation,
     bubbleSort, 
     bubbleSortAnimation, 
     selectionSort,

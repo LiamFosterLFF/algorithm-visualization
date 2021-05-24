@@ -3,8 +3,7 @@ import { Dropdown } from 'react-bootstrap';
 
 const SortingDropdown = ({ sortType, sortFn }) => {  
 
-    console.log(sortType);
-    const dropdownText = `${sortType.charAt(0).toUpperCase() + sortType.slice(1)} Sort Algorithm`;
+    const dropdownText = (sortType === "default") ? "Choose Sorting Algorithm" : `${sortType.charAt(0).toUpperCase() + sortType.slice(1)} Sort Algorithm`;
 
     return(
         <Dropdown>

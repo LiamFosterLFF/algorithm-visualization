@@ -13,7 +13,7 @@ const shuffle = () => {
     return []
 }
 
- const defaultAnimations = () => {
+ const defaultSortAnimation = () => {
     return []
 }
 
@@ -406,7 +406,7 @@ const merge = (mainArray, startIdx, midIdx, endIdx, auxArray, animations) => {
 const barChartFunctions = {
     shuffle,
     defaultSort,
-    defaultAnimations,
+    defaultSortAnimation,
     bubbleSort, 
     bubbleSortAnimation, 
     selectionSort,
