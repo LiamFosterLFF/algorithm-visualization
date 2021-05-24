@@ -91,10 +91,11 @@ const Sorting = () => {
             </Tabs>
             <SortingDropdown sortType={sort} sortFn={setSort}/>
             <ControlButtons 
-            play={() => playAnimations(animations)} 
-            pause={() => pauseAnimations(animations)}
-            restart={() => restartAnimations(animations)}
-            reset={() => resetAnimations(animations)}
+                disabled={sort === "default"}
+                play={() => playAnimations(animations)} 
+                pause={() => pauseAnimations(animations)}
+                restart={() => restartAnimations(animations)}
+                reset={() => resetAnimations(animations)}
             />
         </div>
     )
