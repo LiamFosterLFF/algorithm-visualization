@@ -13,12 +13,8 @@
 
 /* Sorting */
 
-.color-map {
-    /* height: 100%; */
-}
-
 .tab-pane {
-    height: 75vh;
+    height: 50vh;
 }
 
 .chart {
@@ -27,7 +23,6 @@
     justify-content: center;
     align-items: center;
     margin: 5% auto;
-    /* padding-bottom: 5%; */
 }
 
 

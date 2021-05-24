@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Tab, Tabs, ButtonGroup, Button } from 'react-bootstrap';
 
 import SortingDropdown  from './SortingDropdown';
+import ControlButtons from './ControlButtons';
 import sortFunctions from "./utilities";
 
 import BarChart from './BarChart';
@@ -12,8 +13,8 @@ import PixelMap from './PixelMap';
 const Sorting = () => {  
     
     const [ showButton, setShowButton ] = useState(false);
-    const [ chartType, setChartType ] = useState("barChart"); // Add in functionality from parent
-    const [ bars, setBars] = useState(sortFunctions[chartType].shuffle()); // Combine all three to use the same shuffl function from the functions import
+    const [ chartType, setChartType ] = useState("barChart");
+    const [ bars, setBars] = useState(sortFunctions[chartType].shuffle());
     const [ animations, setAnimations ] = useState([])
     const [ sort, setSort ] = useState("bubble")
     const [ sortType, setSortType ] = useState({function: sortFunctions[chartType].defaultSort });
@@ -90,13 +91,8 @@ const Sorting = () => {
                 </Tab>
             </Tabs>
             <SortingDropdown sortType={sort} sortFn={setSort}/>
-            <ButtonGroup>
-                <Button size="lg" onClick={() => playAnimations(animations)}>Play</Button>
-                <Button size="lg" onClick={() => pauseAnimations(animations)}>Pause</Button>
-            </ButtonGroup>
+            <ControlButtons play={() => playAnimations(animations)} pause={() => pauseAnimations(animations)}/>
         </div>
-
-
     )
 }
 
@@ -118,38 +114,3 @@ export default Sorting;
 // Need a back button
 // Buttons ugly, use bootstrap
 // Center the thing on the page
-
-
-        // <Router>
-        //     <Nav className="nav-bar">
-        //         <Nav.Item>
-        //             <Nav.Link>
-        //                 <Link to="/barchart">Bar Chart</Link>
-        //             </Nav.Link>
-        //         </Nav.Item>
-
-        //         <Nav.Item>
-        //             <Nav.Link>
-        //                 <Link to="/colormap">Color Map</Link>
-        //             </Nav.Link>
-        //         </Nav.Item>
-
-        //         <Nav.Item>
-        //             <Nav.Link>
-        //                 <Link to="/pixelmap">Pixel Map</Link>
-        //             </Nav.Link>
-        //         </Nav.Item>
-        //     </Nav>
-
-        //     <Switch>
-        //         <Route path="/barchart">
-        //             <BarChart showButton={showButton}/>
-        //         </Route>
-        //         <Route path="/colormap">
-        //             <ColorMap />
-        //         </Route>
-        //         <Route path="/pixelmap">
-        //             <PixelMap />
-        //         </Route>
-        //     </Switch>
-        // </Router>

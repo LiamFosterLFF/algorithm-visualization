@@ -4,13 +4,13 @@ import PixelBar from "./PixelBar";
 const PixelMap = ({ bars }) => {
 
     return (
-            <div className="chart">
-                {bars.map((barHeights, barIndex) => {
-                    return (
-                        <PixelBar key={barIndex} heights={barHeights} />
-                    )
-                })}
-            </div>
+        <div className="chart">
+            {bars.map((barHeights, barIndex) => {
+                return (
+                    <PixelBar key={barIndex} heights={barHeights} />
+                )
+            })}
+        </div>
     )
 }
 
