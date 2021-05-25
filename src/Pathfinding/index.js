@@ -97,31 +97,52 @@ const Pathfinding = () => {
         return [Math.floor((e.clientY - canvasBoundingBox.y) / cellSize), Math.floor((e.clientX - canvasBoundingBox.x + .5) / cellSize)]
     }
 
-    const [ drawing, setDrawing ] = useState(false)
+    // Mousedown starts you drawing
+    const [ isDrawing, setIsDrawing ] = useState(false)
+    // Moving sets all interim points to the opposite of whatever the original cell was
     const [ fillType, setFillType ] = useState(null)
+    // Saving previous point allows us to catch all points dragged over (as browser event has fairly slow fire rate)
+    const [ previousPoint, setPreviousPoint ] = useState([null, null])
     const handleMouseDown = (e) => {
         const [row, col] = getMouseCellLocation(e, cellSize);
+        setPreviousPoint([row, col])
         const newCells = [...cells];
         // Fill type remains constant as the opposite of cell content before the click, so you can draw lines after click
         const flippedCellContent = (newCells[row][col] === "wall") ? "path" : "wall"
         setFillType(flippedCellContent)
         newCells[row][col] = flippedCellContent;
         setCells(newCells)
-        setDrawing(true)
+        setIsDrawing(true)
+    }
+
+    const handleMouseOutUp = () => {
+        setIsDrawing(false)
+        setPreviousPoint([null, null])
     }
 
     const handleMouseMove = (e) => {
         const [row, col] = getMouseCellLocation(e, cellSize);
-
-        if (drawing && cells[row][col] !== fillType) {
+        const isPreviousPoint = (row === previousPoint[0] && col === previousPoint[1])
+        if (isDrawing && !isPreviousPoint) {
             const newCells = [...cells];
-            newCells[row][col] = fillType;
+            // Find all cells in between two points by:
+            // Finding Manhattan distance values between the two points
+            const [rowDiff, colDiff] = [row - previousPoint[0], col - previousPoint[1]];
+            // Choosing which one is larger (in absolute terms)
+            const maxDiff = Math.max(Math.abs(rowDiff), Math.abs(colDiff));
+            // Cycling through all cells in between previousPoint and current one
+            // Add the smallest jump along the line between cells that will change value of one of the cells
+            for (let i = 0; i < maxDiff; i++) {
+                const [rowJump, colJump] = [rowDiff * ((i+1) / maxDiff), colDiff * ((i+1) / maxDiff)];
+                const [mRow, mCol] = [Math.floor(previousPoint[0] + rowJump), Math.floor(previousPoint[1] + colJump)];
+                newCells[mRow][mCol] = fillType;
+
+            }
             setCells(newCells)
+            setPreviousPoint([row, col])
         }
     }
 
-    // // Generating and solving animations. Do these really need to be in a useEffect hook? The sorting ones were but those were set when the algorithm changes
-    // // Possibly they do since it generates a unique maze each time but remains tbd
     // useEffect(() => {
 
     //     if(mazeGenerating) {
@@ -207,8 +228,8 @@ const Pathfinding = () => {
                     height={canvasDimensions.height}
                     
                     onMouseDown={(e) => handleMouseDown(e)} 
-                    onMouseUp={() => setDrawing(false)} 
-                    onMouseOut={() => setDrawing(false)} 
+                    onMouseUp={() => handleMouseOutUp()} 
+                    onMouseOut={() => handleMouseOutUp()} 
                     onMouseMove={(e) => handleMouseMove(e)}
                 />
 
