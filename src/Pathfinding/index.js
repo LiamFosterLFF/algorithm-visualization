@@ -62,7 +62,6 @@ const Pathfinding = () => {
     useEffect(() => {
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        console.log(cells);
         for (let row = 0; row < cells.length; row++) {
             for (let col = 0; col < cells[row].length; col++) {
                 const cell = cells[row][col];
@@ -98,51 +97,29 @@ const Pathfinding = () => {
         return [Math.floor((e.clientY - canvasBoundingBox.y) / cellSize), Math.floor((e.clientX - canvasBoundingBox.x + .5) / cellSize)]
     }
 
-    // Clicking turns a cell from a wall to a path or vice versa
-    const handleOnClick = (e) => {
-        // console.log(e.clientX, e.clientY);
+    const [ drawing, setDrawing ] = useState(false)
+    const [ fillType, setFillType ] = useState(null)
+    const handleMouseDown = (e) => {
         const [row, col] = getMouseCellLocation(e, cellSize);
-
         const newCells = [...cells];
-        newCells[row][col] = (newCells[row][col] === "wall") ? "path" : "wall"
+        // Fill type remains constant as the opposite of cell content before the click, so you can draw lines after click
+        const flippedCellContent = (newCells[row][col] === "wall") ? "path" : "wall"
+        setFillType(flippedCellContent)
+        newCells[row][col] = flippedCellContent;
         setCells(newCells)
-    };
+        setDrawing(true)
+    }
 
-    // const [mouseDown, setMouseDown] = useState(false)
-    // const [fillType, setFillType] = useState("wall")
-    // const handleMouseDown = (e) => {
-    //     setMouseDown(true)
-    //     const [row, col] = [Math.floor((e.clientY - canvasDimensions.y) / cellSize), Math.floor((e.clientX - canvasDimensions.x + .5) / cellSize)];
-    //     setFillType((grid[row][col] === "wall") ? "path" : "wall")
-    // }
+    const handleMouseMove = (e) => {
+        if (drawing) {
+            const [row, col] = getMouseCellLocation(e, cellSize);
 
-    // const handleMouseUp = (e) => {
-    //     setMouseDown(false)
-    // }
+            const newCells = [...cells];
+            newCells[row][col] = fillType;
 
-    // const handleMouseOut = (e) => {
-    //     setMouseDown(false)
-    // }
-
-    // const handleMouseMove = (e) => {
-    //     if (mouseDown) {
-    //         const [row, col] = [Math.floor((e.clientY - canvasDimensions.y) / cellSize), Math.floor((e.clientX - canvasDimensions.x + .5) / cellSize)];
-
-    //         const newGrid = [...grid];
-
-    //         const ctx = canvas.current.getContext('2d');
-    //         if (fillType === "wall") {
-    //             ctx.fillStyle = "#444";
-    //             ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
-    //             newGrid[row][col] = "wall";
-    //         } else {
-    //             ctx.clearRect(col * cellSize, row * cellSize, cellSize, cellSize);
-    //             newGrid[row][col] = "path";
-    //         }
-
-    //         setGrid(newGrid)
-    //     }
-    // }
+            setCells(newCells)
+        }
+    }
 
     // // Generating and solving animations. Do these really need to be in a useEffect hook? The sorting ones were but those were set when the algorithm changes
     // // Possibly they do since it generates a unique maze each time but remains tbd
@@ -230,11 +207,10 @@ const Pathfinding = () => {
                     width={canvasDimensions.width}
                     height={canvasDimensions.height}
                     
-                    onClick={(e) => handleOnClick(e)} 
-                    // onMouseDown={handleMouseDown} 
-                    // onMouseUp={handleMouseUp} 
-                    // onMouseOut={handleMouseOut} 
-                    // onMouseMove={handleMouseMove}
+                    onMouseDown={(e) => handleMouseDown(e)} 
+                    onMouseUp={() => setDrawing(false)} 
+                    onMouseOut={() => setDrawing(false)} 
+                    onMouseMove={(e) => handleMouseMove(e)}
                 />
 
                 <Dropdown
