@@ -118,7 +118,7 @@ export const solveMaze = (grid, defaults, algorithm) => {
     const newGrid = JSON.parse(JSON.stringify(grid)); // Deep copy of grid
     const animations = { solvingAnimations: [], backtrackingAnimations: [] };
 
-    let solvingAlgorithm = dijkstrasSolvingAlgorithm
+    let solvingAlgorithm;
     switch (algorithm) {
         case "Depth-First Search":
             solvingAlgorithm = depthFirstSearchSolvingAlgorithm;
@@ -131,6 +131,9 @@ export const solveMaze = (grid, defaults, algorithm) => {
             break;
         case "A* Search Algorithm":
             solvingAlgorithm = aStarSolvingAlgorithm
+            break;
+        default: 
+            solvingAlgorithm = undefined;
             break;
     }
 

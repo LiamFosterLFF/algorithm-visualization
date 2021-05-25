@@ -1,62 +1,44 @@
-// Draw initial Grid
-export const initializeGrid = (canvas, cellSize, canvasDimensions) => {
-
-    const ctx = canvas.current.getContext('2d');
-    const [width, height] = [canvasDimensions.width, canvasDimensions.height]
-
-    // Initialize Background
-    ctx.canvas.width = width;
-    ctx.canvas.height = height;
-
-    // Initialize Grid as Clear
-    const initialGrid = clearCanvas(canvas, cellSize)
-    
-    // Find x and y coordinates of canvas
-    const [xCoordinate, yCoordinate] = [canvas.current.getBoundingClientRect().x, canvas.current.getBoundingClientRect().y]
-
-    return [initialGrid, xCoordinate, yCoordinate]
-
-
-
-}
-
-export const clearCanvas = (canvas, cellSize) => {
-    const ctx = canvas.current.getContext('2d');
-    const [width, height] = [ctx.canvas.width, ctx.canvas.height]
-    
-    // Clear Background
-    ctx.clearRect(0, 0, width, height);
-
-    // Construct Grid of Cells
-    const [cols, rows] = [width / cellSize, height / cellSize];
-    
-    const clearGrid = [];
-    // Builds a rows*cols nested array full of walls
-    for (let row = 0; row < rows; row++) {
-        clearGrid.push([])
-        for (let col = 0; col < cols; col++) {
-            clearGrid[row].push("path")
-        }
+export const calculateCanvasSize = (windowDims, cellSize) => {
+    const normalizeDimension = (dimension, cellSize) => {
+        const noOfCells = Math.floor(dimension / cellSize);
+        // Cells have to be odd, as maze has a path every other cell
+        const oddNoOfCells = (noOfCells %2 === 0) ? noOfCells + 1 : noOfCells;
+        const normalizedDim = oddNoOfCells * cellSize;
+        return normalizedDim;
     }
-    return clearGrid
+
+    // Canvas dims are .8vw, .7vh
+    const canvasViewportDims = {width: .8, height: .7}
+    const canvasDims = {
+        width: normalizeDimension(windowDims.width * canvasViewportDims.width, cellSize), 
+        height: normalizeDimension(windowDims.height * canvasViewportDims.height, cellSize)
+    }
+    return canvasDims;
 }
 
-export const fillCanvas = (canvas, cellSize) => {
-    const ctx = canvas.current.getContext('2d');
-    const [width, height] = [ctx.canvas.width, ctx.canvas.height]
-
-    // Fill Background
-    ctx.fillStyle = "#444";
-    ctx.fillRect(0, 0, width, height);
-
+export const getFullCanvas = (canvasDimensions, cellSize) => {
     // Construct Grid of Cells
-    const [cols, rows] = [width / cellSize, height / cellSize]
+    const [cols, rows] = [canvasDimensions.width / cellSize, canvasDimensions.height / cellSize]
     const fillGrid = [];
     // Builds a rows*cols nested array full of walls
     for (let row = 0; row < rows; row++) {
         fillGrid.push([])
         for (let col = 0; col < cols; col++) {
             fillGrid[row].push("wall")
+        }
+    }
+    return fillGrid
+}
+
+export const getClearCanvas = (canvasDimensions, cellSize) => {
+    // Construct Grid of Cells
+    const [cols, rows] = [canvasDimensions.width / cellSize, canvasDimensions.height / cellSize]
+    const fillGrid = [];
+    // Builds a rows*cols nested array full of walls
+    for (let row = 0; row < rows; row++) {
+        fillGrid.push([])
+        for (let col = 0; col < cols; col++) {
+            fillGrid[row].push("path")
         }
     }
     return fillGrid
@@ -81,13 +63,16 @@ export const generateMaze = (grid, algorithm) => {
     // Calls with start as current and previous node; this is to allow for previous node to be used in recursive call
     let mazeFinished;
 
-    let mazeAlgorithm = ellersMazeAlgorithm
+    let mazeAlgorithm;
     switch (algorithm) {
         case "Eller's Algorithm":
             mazeAlgorithm = ellersMazeAlgorithm
             break;
         case "Recursive Backtracking":
             mazeAlgorithm = depthFirstMazeAlgorithm
+            break;
+        case "default" :
+            mazeAlgorithm = undefined;
             break;
     }
 

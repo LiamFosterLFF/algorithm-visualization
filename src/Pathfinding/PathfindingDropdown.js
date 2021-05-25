@@ -3,7 +3,6 @@ import { Dropdown } from 'react-bootstrap';
 
 const PathfindingDropdown = (props) => {
 
-    console.log(props);
     const menuOptions = props.algorithms.map((option, ind) => 
         <Dropdown.Item 
             onClick={() => props.select(option)} 
