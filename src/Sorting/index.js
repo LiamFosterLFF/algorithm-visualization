@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
 
 import SortingDropdown  from './SortingDropdown';
-import ControlButtons from './ControlButtons';
+import ControlButtons from './SortingControlButtons';
 import sortFunctions from "./utilities";
 
 import BarChart from './BarChart';

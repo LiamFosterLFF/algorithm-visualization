@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, ButtonGroup } from 'react-bootstrap';
 
-const ControlButtons = (props) => {
+const SortingControlButtons = (props) => {
     
     return (
         <div>
@@ -15,4 +15,4 @@ const ControlButtons = (props) => {
     )
 }
 
-export default ControlButtons;
+export default SortingControlButtons;

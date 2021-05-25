@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { initializeGrid, generateMaze, clearCanvas, fillCanvas } from './PathfindingFunctions/mazeGeneratingFunctions.js';
 import { solveMaze, nodeFinder } from './PathfindingFunctions/mazeSolvingFunctions.js';
 import { animateMazeDrawing, animateMazeSolving, animateMazeSolvingBacktrack } from './PathfindingFunctions/mazeAnimatingFunctions.js';
-import { Dropdown, Button, ButtonGroup, Nav } from 'react-bootstrap';
-import PathfindingDropdown from './PathfindingDropdown.js';
+import Dropdown from './PathfindingDropdown.js';
+import ControlButtons from './PathfindingControlButtons.js';
 
 
 const Pathfinding = () => {
@@ -22,7 +22,6 @@ const Pathfinding = () => {
         return cellSz;
     }
 
-    console.log(mazeGenAlgo);
 
     const [cellSize, setCellSize] = useState(calculateCellSize()) 
 
@@ -129,8 +128,6 @@ const Pathfinding = () => {
 
     useEffect(() => {
         const test = animateMazeDrawing(mazeAnimations, canvas, cellSize, drawSpeed);
-        console.log(test);
-        
     }, [mazeAnimations]);
 
 
@@ -232,26 +229,28 @@ const Pathfinding = () => {
 
     return (
         <div>
-            <PathfindingDropdown
+            <Dropdown
                 select={setMazeGenAlgo}
                 title={mazeGenAlgo}
                 algorithms={mazeGenAlgos}
             />
-            <PathfindingDropdown
+            <Dropdown
                 select={setMazeSolveAlgo}
                 title={mazeSolveAlgo}
                 algorithms={mazeSolveAlgos}
             />
+{/* <div className="sliders-bar">
+<input onChange="" type="range" min="1" max="100" value="50" class="slider" id="myRange"></input>
+</div> */}
             <div id="canvas">
-                <ButtonGroup>
-                    <Button onClick={handleClearCanvas}>Clear</Button>
-                    <Button onClick={handleFillCanvas}>Fill</Button>
-                </ButtonGroup>
-                
                 <canvas onClick={handleOnClick} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseOut={handleMouseOut} onMouseMove={handleMouseMove} ref={canvas}></canvas>
-                <Button onClick={() => setMazeGenerating(true)}>Generate Maze</Button>
-                <Button onClick={() => setMazeSolving(true)} disabled={!mazeGenerated}>Solve Maze</Button>
-                <Button onClick ={() => animateMazeDrawing.play()}>Play</Button>
+                <ControlButtons
+                    clear={handleClearCanvas}
+                    fill={handleFillCanvas}
+                    generate={setMazeGenerating}
+                    solve={setMazeSolving}
+                    animate={animateMazeDrawing.play}
+                />
             </div>
         </div>
     )

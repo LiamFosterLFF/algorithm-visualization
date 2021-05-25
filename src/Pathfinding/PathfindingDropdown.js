@@ -6,10 +6,7 @@ const PathfindingDropdown = (props) => {
     console.log(props);
     const menuOptions = props.algorithms.map((option, ind) => 
         <Dropdown.Item 
-            onClick={() => {
-                console.log(option);
-                props.select(option)
-            }} 
+            onClick={() => props.select(option)} 
             href={`#/action-${ind+1}`}
         >
             {option}
@@ -28,11 +25,6 @@ const PathfindingDropdown = (props) => {
                 </Dropdown.Menu>
             </Dropdown>
 
-            
-
-            {/* <div className="sliders-bar">
-                <input onChange="" type="range" min="1" max="100" value="50" class="slider" id="myRange"></input>
-            </div> */}
         </>
     )
 }
