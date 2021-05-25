@@ -120,16 +120,16 @@ export const solveMaze = (grid, defaults, algorithm) => {
 
     let solvingAlgorithm = dijkstrasSolvingAlgorithm
     switch (algorithm) {
-        case "depthFirst":
+        case "Depth-First Search":
             solvingAlgorithm = depthFirstSearchSolvingAlgorithm;
             break;
-        case "breadthFirst":
+        case "Breadth-First Search":
             solvingAlgorithm = breadthFirstSearchSolvingAlgorithm
             break;
-        case "dijkstra's":
+        case "Djikstra's Algorithm":
             solvingAlgorithm = dijkstrasSolvingAlgorithm
             break;
-        case "a-star":
+        case "A* Search Algorithm":
             solvingAlgorithm = aStarSolvingAlgorithm
             break;
     }

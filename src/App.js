@@ -34,3 +34,19 @@ const App = () => {
 
 export default App;
 
+// // All
+// Top bar? What does it say
+// // Sorting
+// Buttons ugly, use bootstrap
+// Reset should be a totally different layout each timers
+// // Maze
+// Mazes should generate when button press
+// Mazes should solve when button press
+// Black board should generate on load
+// Solving again should reset to uncolored maze
+// Can't adjust maze size
+// Draw maze more slowly? Maybe a bar
+// Bars need to be labelled
+// Need a back button
+// Buttons ugly, use bootstrap
+// Center the thing on the page

@@ -3,6 +3,7 @@ import { initializeGrid, generateMaze, clearCanvas, fillCanvas } from './Pathfin
 import { solveMaze, nodeFinder } from './PathfindingFunctions/mazeSolvingFunctions.js';
 import { animateMazeDrawing, animateMazeSolving, animateMazeSolvingBacktrack } from './PathfindingFunctions/mazeAnimatingFunctions.js';
 import { Dropdown, Button, ButtonGroup, Nav } from 'react-bootstrap';
+import PathfindingDropdown from './PathfindingDropdown.js';
 
 
 const Pathfinding = () => {
@@ -12,14 +13,16 @@ const Pathfinding = () => {
     const [mazeAnimations, setMazeAnimations] = useState({ drawingAnimations: [], nodeAnimations: [] })
     const [solvingAnimations, setSolvingAnimations] = useState([])
     const [drawSpeed, setDrawSpeed] = useState(0)
-    const [mazeGenAlgo, setMazeGenAlgo] = useState("eller's")
-    const [mazeSolveAlgo, setMazeSolveAlgo] = useState("depthFirst")
+    const [mazeGenAlgo, setMazeGenAlgo] = useState("Eller's Algorithm")
+    const [mazeSolveAlgo, setMazeSolveAlgo] = useState("Depth-First Search")
     const [mazeGenerating, setMazeGenerating] = useState(false)
     const [mazeGenerated, setMazeGenerated] = useState(false)
     const calculateCellSize = () => {
         let cellSz = (window.innerWidth < 450) ? 5 : 10;
         return cellSz;
     }
+
+    console.log(mazeGenAlgo);
 
     const [cellSize, setCellSize] = useState(calculateCellSize()) 
 
@@ -40,8 +43,6 @@ const Pathfinding = () => {
 
     const [canvasDimensions, setCanvasDimensions] = useState(calculateCanvasDimensions())
     useEffect(() => {
-        console.log("Boom");
-        console.log(windowDimensions, canvasDimensions);
         const initialDimensions = calculateCanvasDimensions();
         const [initialGrid, x, y] = initializeGrid(canvas, cellSize, initialDimensions)
         initialDimensions.x = x;
@@ -99,7 +100,6 @@ const Pathfinding = () => {
             setGrid(mazeGrid)
             if (mazeFinished) {
                 setMazeGenerating(false)
-                console.log("AND ONE");
                 setMazeGenerated(true)
             }
 
@@ -170,7 +170,6 @@ const Pathfinding = () => {
     const [fillType, setFillType] = useState("wall")
     const handleMouseDown = (e) => {
         setMouseDown(true)
-        console.log(e);
         const [row, col] = [Math.floor((e.clientY - canvasDimensions.y) / cellSize), Math.floor((e.clientX - canvasDimensions.x + .5) / cellSize)];
         setFillType((grid[row][col] === "wall") ? "path" : "wall")
     }
@@ -228,39 +227,21 @@ const Pathfinding = () => {
 
     }
 
+    const mazeGenAlgos = ["Eller's Algorithm", "Recursive Backtracking"];
+    const mazeSolveAlgos = ["Depth-First Search", "Breadth-First Search", "Djikstra's Algorithm", "A* Search Algorithm"];
+
     return (
         <div>
-            <div className="nav-bar">
-                <Nav>
-                    <Dropdown>
-                        <Dropdown.Toggle variant="success" id="dropdown-basic">
-                            {mazeGenAlgoTitle}
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                            <Dropdown.Item onClick={() => handleMazeGenSelect("eller's", "Eller's Algorithm")} href="#/action-1">Eller's Algorithm</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleMazeGenSelect("depthFirst", "Recursive Backtracking")} href="#/action-2">Recursive Backtracking</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-
-                    <Dropdown>
-                        <Dropdown.Toggle variant="success" id="dropdown-basic">
-                            {mazeSolveAlgoTitle}
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                            <Dropdown.Item onClick={() => handleMazeSolveSelect("depthFirst", "Depth-First Search")}>Depth-First Search</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleMazeSolveSelect("breadthFirst", "Breadth-First Search")}>Breadth-First Search</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleMazeSolveSelect("dijkstra's", "Djikstra's Algorithm")}>Dijkstra's Algorithm</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleMazeSolveSelect("a-star", "A* Search Algorithm")}>A* Search Algorith</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                    <div className="sliders-bar">
-                        <input onChange="" type="range" min="1" max="100" value="50" class="slider" id="myRange"></input>
-                    </div>
-                </Nav>
-                
-            </div>
+            <PathfindingDropdown
+                select={setMazeGenAlgo}
+                title={mazeGenAlgo}
+                algorithms={mazeGenAlgos}
+            />
+            <PathfindingDropdown
+                select={setMazeSolveAlgo}
+                title={mazeSolveAlgo}
+                algorithms={mazeSolveAlgos}
+            />
             <div id="canvas">
                 <ButtonGroup>
                     <Button onClick={handleClearCanvas}>Clear</Button>
@@ -280,7 +261,6 @@ export default Pathfinding;
 
 
     // Get all algorithms to work on the non-maze board
-    // Once finished, fix up website and prepare for deployment
 
     // Possible add-ons
         // Pixelpainting descrambler

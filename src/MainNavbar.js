@@ -7,7 +7,6 @@ const MainNavbar = () => {
     const location = useLocation();
 
     const isCurrentURL = (url) => {
-        console.log(location.pathname);
         return location.pathname.toLowerCase() === url.toLowerCase();
     }
 

@@ -83,10 +83,10 @@ export const generateMaze = (grid, algorithm) => {
 
     let mazeAlgorithm = ellersMazeAlgorithm
     switch (algorithm) {
-        case "eller's":
+        case "Eller's Algorithm":
             mazeAlgorithm = ellersMazeAlgorithm
             break;
-        case "depthFirst":
+        case "Recursive Backtracking":
             mazeAlgorithm = depthFirstMazeAlgorithm
             break;
     }
