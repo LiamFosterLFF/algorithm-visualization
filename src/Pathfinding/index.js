@@ -192,19 +192,17 @@ const Pathfinding = () => {
 
 
 
-    // // Finally, the control functionality
+    // Control functionality
 
-    // const handleClearCanvas = () => {
-    //     setMazeGenerated(false)
-    //     const clearGrid = clearCanvas(canvas, cellSize)
-    //     setGrid(clearGrid)
-    // }
+    const handleClearCanvas = () => {
+        // setMazeGenerated(false)
+        setCells(getClearCanvas(canvasDimensions, cellSize));
+    }
 
-    // const handleFillCanvas = () => {
-    //     setMazeGenerated(false)
-    //     const fillGrid = fillCanvas(canvas, cellSize)
-    //     setGrid(fillGrid)
-    // }
+    const handleFillCanvas = () => {
+        // setMazeGenerated(false)
+        setCells(getFullCanvas(canvasDimensions, cellSize));
+    }
 
     // My proposed organization is as thusly:
     // First - Pull canvas out into its own Component
@@ -243,13 +241,13 @@ const Pathfinding = () => {
                     title={mazeSolveAlgo}
                     algorithms={["Depth-First Search", "Breadth-First Search", "Djikstra's Algorithm", "A* Search Algorithm"]}
                 />
-                {/* <ControlButtons
+                <ControlButtons
                     clear={handleClearCanvas}
                     fill={handleFillCanvas}
-                    generate={setMazeGenerating}
-                    solve={setMazeSolving}
-                    animate={animateMazeDrawing.play}
-                /> */}
+                    // generate={setMazeGenerating}
+                    // solve={setMazeSolving}
+                    // animate={animateMazeDrawing.play}
+                />
             </div>
 
         </div>
