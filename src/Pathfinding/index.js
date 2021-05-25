@@ -111,12 +111,11 @@ const Pathfinding = () => {
     }
 
     const handleMouseMove = (e) => {
-        if (drawing) {
-            const [row, col] = getMouseCellLocation(e, cellSize);
+        const [row, col] = getMouseCellLocation(e, cellSize);
 
+        if (drawing && cells[row][col] !== fillType) {
             const newCells = [...cells];
             newCells[row][col] = fillType;
-
             setCells(newCells)
         }
     }
