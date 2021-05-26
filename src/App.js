@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 
@@ -17,15 +17,10 @@ const App = () => {
                 <Navbar/>
 
                 <Switch>
-                    <Route path="/main">
-                        <MainPage />
-                    </Route>
-                    <Route path="/sorting">
-                        <Sorting />
-                    </Route>
-                    <Route path="/pathfinding">
-                        <Pathfinding />
-                    </Route>
+                    <Redirect exact from= "/" to="/main" />
+                    <Route exact path="/main" component={MainPage} />
+                    <Route exact path="/sorting" component={Sorting} />
+                    <Route exact path="/pathfinding" component={Pathfinding} />
                 </Switch>
             </Router>
         </div>
