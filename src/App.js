@@ -52,7 +52,7 @@ export default App;
 //      Sorting Algorithms
 //      Sorting Complexity
 //      Pathfinding algorithms
-//      
+//      Games Title
 
 // Nice but not necessary:
 //      Sorting slider for bars
@@ -60,3 +60,4 @@ export default App;
 //      Refactor sorting algorithm state to be a single state value
 //      Sorting animations play automatically?
 //      Go through and comment/possibly refactor algorithms
+//      Alt-text on buttons?
