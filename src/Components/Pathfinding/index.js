@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useInterval } from './useInterval'
+import { useInterval } from '../useInterval'
 // Import all functions from a single file as a dictionary, order them better as well
 import { initializeGrid, generateMaze, getFullCanvas, getClearCanvas, calculateCanvasSize } from './PathfindingFunctions/mazeGeneratingFunctions.js';
 
@@ -14,6 +14,12 @@ const Pathfinding = () => {
     const [animations, setAnimations] = useState({ mazeAnimations: [], nodeAnimations: [], solvingAnimations: [], backtrackingAnimations: [] })
     const [mazeGenAlgo, setMazeGenAlgo] = useState("default")
     const [mazeSolveAlgo, setMazeSolveAlgo] = useState("default")
+    const [ storedMaze, setStoredMaze ] = useState([])
+    // Speed controlled by slider
+    const [ animationSpeed, setAnimationSpeed ] = useState(50)
+    // Animations controlled using a stack, allows for pausing as well as easy repeats and works better with interval
+    const [ animationStack, setAnimationStack ] = useState([])
+    const [ playingAnimations, setPlayingAnimations ] = useState(false)
     const [windowDimensions, setWindowDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
 
     // Calculate size of cells on basis of how many cells wide the maze should be (can be adjusted with slider)
@@ -49,7 +55,7 @@ const Pathfinding = () => {
         setCells(getFullCanvas(canvasDimensions, cellSize))
     }, [canvasDimensions])
 
-    // Redraw canvas cells every time it is changed
+    // Redraw canvas cells every time array representing them are changed
     useEffect(() => {
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
@@ -128,22 +134,21 @@ const Pathfinding = () => {
         }
     }
 
-    const [ storedMaze, setStoredMaze ] = useState([])
-
     const handleGenerateMaze = () => {
+        // Fill in cells for use by algorithm, default is walls
         const fillGrid = getFullCanvas(canvasDimensions, cellSize)
         setCells(fillGrid)
         const [ mazeGrid, {mazeAnimations, nodeAnimations}, ] = generateMaze(fillGrid, mazeGenAlgo)
-        console.log("A");
+        // Store maze for use in reset
         setStoredMaze(mazeGrid)
         setAnimations({
             ...animations,
             mazeAnimations,
             nodeAnimations,
         })
+        // Add to stack and play animations
         setAnimationStack([...animationStack, ...mazeAnimations])
         setPlayingAnimations(true)
-        // runAnimations("mazeAnimations")
     }
 
     const handleSolveMaze = () => {
@@ -151,25 +156,20 @@ const Pathfinding = () => {
         const defaults = { enter: [0, 1], exit: [cells.length - 1, cells[0].length - 2], start: [1, 1] };
 
         // // Reset cells to those stored in maze cells, in case a solution already in place
-        // setCells(mazeCells)
+        setCells(storedMaze)
         const {solvingAnimations, backtrackingAnimations} = solveMaze(cells, defaults, mazeSolveAlgo)
         setAnimations({
             ...animations,
             solvingAnimations,
             backtrackingAnimations
         })
+        // Add to stack and play animations
         setAnimationStack([...animationStack, ...solvingAnimations, ...backtrackingAnimations])
         setPlayingAnimations(true)
-
-        // runAnimations("backtrackingAnimations");
     }
 
-    // Custom hook for animations - can control speed, choose type, control playback
-    // Speed controlled by slider, set as a side effect
-    const [ animationSpeed, setAnimationSpeed ] = useState(50)
 
-    const [ animationStack, setAnimationStack ] = useState([])
-    const [ playingAnimations, setPlayingAnimations ] = useState(false)
+    // Custom hook for animations - can control speed, choose type, control playback
     useInterval(() => {     
         const newCells = [...cells];
         const remainingStack = [...animationStack]
@@ -206,41 +206,13 @@ const Pathfinding = () => {
 
     const resetSolvingAnimations = () => {
         handleFillCanvas()
-        console.log(storedMaze);
         setCells(storedMaze);
-        // setAnimationCounter(0)
     }
 
     const replayAnimations = () => {
         resetSolvingAnimations()
         playAnimations()
     }
-
-    // Still left:
-    // Hover on main page cards
-    // Get rid of all console logs
-    // Make sure all comments are good
-    // Bugs: 
-    //      Play button needs to do something
-    //      Sorting bug: why animations tarts early
-    //      Get maze building working with no maze
-    //      What happens if no solution to maze?
-    //      Changing solving algorithm should reset to just maze w/ no solutions
-    //      Reset/replay only works on the first go round, then seems to be resetting  to the solved maze
-    //      Buttons overlap maze currently
-    //      On first load, main page is currently blank
-    
-    // explanations, for
-    //      Games Readme
-    //      Games How to play
-    //      Sorting Algorithms
-    //      Sorting Complexity
-    //      Pathfinding algorithms
-    //      
-
-    // Nice but not necessary:
-    //      Sorting slider for bars
-    //      Build a dynamic slider for maze cell size
 
     return (
         <div>

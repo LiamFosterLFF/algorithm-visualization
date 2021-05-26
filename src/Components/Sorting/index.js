@@ -15,58 +15,56 @@ const Sorting = () => {
     const [ chartType, setChartType ] = useState("barChart");
     const [ bars, setBars] = useState(sortFunctions[chartType].shuffle());
     const [ animations, setAnimations ] = useState([])
+    // Sort value used to set sorts and animations, honestly following three could be a single state item
     const [ sort, setSort ] = useState("default")
     const [ sortType, setSortType ] = useState({function: sortFunctions[chartType].defaultSort });
     const [ animationType, setAnimationType ] = useState({ function: sortFunctions[chartType].defaultSortAnimation });
     
+    // Side effect for changing chart type, resets bars and animations every time chart is changed (currently, could save possibly)
     useEffect(() => {
         cancelAnimations(animations)
         setSort("default")
-        setBars(sortFunctions[chartType].shuffle(100))
+        // Currently, bars are set by their personal functions but this will need to change if they are to be changeable dynamically
+        setBars(sortFunctions[chartType].shuffle())
         setAnimations([])
     }, [chartType])
     
+    // As said above, this would probably be better if it were a single usestate hook but this is how sorts are changed presently
     useEffect(() => {
         const formatSortFunctionName = (sortText) => {
-            console.log(`${sortText.split(' ')[0].toLowerCase()}Sort`)
             return `${sortText.split(' ')[0].toLowerCase()}Sort`
         }
         setSortType({ function: sortFunctions[chartType][formatSortFunctionName(sort)]})
         setAnimationType({ function: sortFunctions[chartType][formatSortFunctionName(sort) + 'Animation']})
     }, [sort])
 
+    // Changing the sort type cancels the previous animations and sets new ones
     useEffect(() => {
         restartAnimations(animations, bars);
     }, [sortType])
 
-    const buildAnimations = (bars) => {
-        const barAnimations = animationType.function(sortType.function(bars));
-        pauseAnimations(barAnimations)
-        setAnimations(barAnimations);
-    }
 
+    // Control functionality
     const playAnimations = (animations) => {
         animations.map((animation) => {
-            if (animation.playState !== "finished") {
-                animation.play();
-            }
+            if (animation.playState !== "finished") { animation.play() }
         })
     }
 
     const pauseAnimations = (animations) => {
         animations.map((animation) => {
-            if (animation.playState !== "finished") {
-                animation.pause();
-            }
+            if (animation.playState !== "finished") { animation.pause() }
         })
     }
 
     const restartAnimations = (animations) => {
         cancelAnimations(animations);
-        buildAnimations(bars);
+        const barAnimations = animationType.function(sortType.function(bars));
+        pauseAnimations(barAnimations)
+        setAnimations(barAnimations);
     }
 
-    const resetAnimations = (animations) => {
+    const resetAnimations = () => {
         setSort("default");
     }
 

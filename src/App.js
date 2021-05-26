@@ -3,11 +3,11 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 
-import Navbar from './MainNavbar';
+import Navbar from './Components/MainNavbar';
 
-import MainPage from './MainPage';
-import Sorting from './Sorting';
-import Pathfinding from './Pathfinding'
+import MainPage from './Components/MainPage';
+import Sorting from './Components/Sorting';
+import Pathfinding from './Components/Pathfinding'
 
 const App = () => {
 
@@ -34,19 +34,29 @@ const App = () => {
 
 export default App;
 
-// // All
-// Top bar? What does it say
-// // Sorting
-// Buttons ugly, use bootstrap
-// Reset should be a totally different layout each timers
-// // Maze
-// Mazes should generate when button press
-// Mazes should solve when button press
-// Black board should generate on load
-// Solving again should reset to uncolored maze
-// Can't adjust maze size
-// Draw maze more slowly? Maybe a bar
-// Bars need to be labelled
-// Need a back button
-// Buttons ugly, use bootstrap
-// Center the thing on the page
+// Still left to do:
+// Bugs: 
+//      Play button needs to do something
+//      Sorting bug: why animations tarts early
+//      Get maze building working with no maze
+//      What happens if no solution to maze?
+//      Changing solving algorithm should reset to just maze w/ no solutions
+//      Reset/replay only works on the first go round, then seems to be resetting  to the solved maze
+//      Buttons overlap maze currently
+//      On first load, main page is currently blank
+//      Fix all bugs on all pages
+
+// explanations, for
+//      Games Readme
+//      Games How to play
+//      Sorting Algorithms
+//      Sorting Complexity
+//      Pathfinding algorithms
+//      
+
+// Nice but not necessary:
+//      Sorting slider for bars
+//      Build a dynamic slider for maze cell size
+//      Refactor sorting algorithm state to be a single state value
+//      Sorting animations play automatically?
+//      Go through and comment/possibly refactor algorithms
