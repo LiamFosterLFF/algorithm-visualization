@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
 
-import SortingDropdown  from './SortingDropdown';
+import DropdownMenu from '../DropdownMenu';
 import ControlButtons from '../ControlButtons';
 import sortFunctions from "./utilities";
 
@@ -27,8 +27,12 @@ const Sorting = () => {
     }, [chartType])
     
     useEffect(() => {
-        setSortType({ function: sortFunctions[chartType][`${sort}Sort`]})
-        setAnimationType({ function: sortFunctions[chartType][`${sort}SortAnimation`]})
+        const formatSortFunctionName = (sortText) => {
+            console.log(`${sortText.split(' ')[0].toLowerCase()}Sort`)
+            return `${sortText.split(' ')[0].toLowerCase()}Sort`
+        }
+        setSortType({ function: sortFunctions[chartType][formatSortFunctionName(sort)]})
+        setAnimationType({ function: sortFunctions[chartType][formatSortFunctionName(sort) + 'Animation']})
     }, [sort])
 
     useEffect(() => {
@@ -89,7 +93,12 @@ const Sorting = () => {
                     <PixelMap bars={bars}/>
                 </Tab>
             </Tabs>
-            <SortingDropdown sortType={sort} sortFn={setSort}/>
+            <DropdownMenu
+                type={"Sorting"}
+                select={setSort}
+                title={sort}
+                algorithms={["Bubble Sort", "Insertion Sort", "Selection Sort", "Merge Sort", "Quick Sort", "Radix Sort"]}
+            />
             <ControlButtons 
                 buttons={[
                     {"function": () => playAnimations(animations), text: "Play"} ,

@@ -6,23 +6,13 @@ import { initializeGrid, generateMaze, getFullCanvas, getClearCanvas, calculateC
 import { solveMaze, nodeFinder } from './PathfindingFunctions/mazeSolvingFunctions.js';
 import { animateMazeDrawing, animateMazeSolving, animateMazeSolvingBacktrack } from './PathfindingFunctions/mazeAnimatingFunctions.js';
 
-import Dropdown from './PathfindingDropdown.js';
+import DropdownMenu from '../DropdownMenu.js';
 import ControlButtons from '../ControlButtons.js';
 
 const Pathfinding = () => {
     const [animations, setAnimations] = useState({ mazeAnimations: [], nodeAnimations: [], solvingAnimations: [], backtrackingAnimations: [] })
-    const [solvingAnimations, setSolvingAnimations] = useState([])
-    const [drawSpeed, setDrawSpeed] = useState(0)
     const [mazeGenAlgo, setMazeGenAlgo] = useState("default")
     const [mazeSolveAlgo, setMazeSolveAlgo] = useState("default")
-    const [mazeGenerating, setMazeGenerating] = useState(false)
-    const [mazeGenerated, setMazeGenerated] = useState(false)
-
-
-    // const fillCanvas = () => {
-    //     setGrid(getFullCanvas())
-    // }
-
     const [windowDimensions, setWindowDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
 
     // Calculate size of cells on basis of how many cells wide the maze should be (can be adjusted with slider)
@@ -77,18 +67,6 @@ const Pathfinding = () => {
             }
         }
     }, [cells])
-
-    // // Yet another useEffect hook, do we really need this many?
-    // // useEffect(() => {
-    // //     const [initialGrid, x, y] = initializeGrid(canvas, cellSize, canvasDimensions)
-    // //     setGrid(initialGrid)
-    // //     setMazeGenerated(false)
-    // //     const fillGrid = fillCanvas(canvas, cellSize)
-    // //     setGrid(fillGrid)   
-    // // }, [canvasDimensions, mazeGenAlgo, mazeSolveAlgo])
-
-
-
 
     // Screen clicking functionality
     const getMouseCellLocation = (e, cellSize) => {
@@ -319,12 +297,14 @@ const Pathfinding = () => {
                     onMouseMove={(e) => handleMouseMove(e)}
                 />
 
-                <Dropdown
+                <DropdownMenu
+                    type={"Maze Generation"}
                     select={setMazeGenAlgo}
                     title={mazeGenAlgo}
                     algorithms={["Eller's Algorithm", "Recursive Backtracking"]}
                 />
-                <Dropdown
+                <DropdownMenu
+                    type={"Maze Solving"}
                     select={setMazeSolveAlgo}
                     title={mazeSolveAlgo}
                     algorithms={["Depth-First Search", "Breadth-First Search", "Djikstra's Algorithm", "A* Search Algorithm"]}
@@ -336,7 +316,7 @@ const Pathfinding = () => {
                         { "function": handleGenerateMaze, text: "Generate Maze" },
                         { "function": handleSolveMaze, text: "Solve Maze" },
                     ]}
-                    disabled={true}
+                    disabled={mazeGenAlgo === "default"}
                 />
                 <ControlButtons
                     buttons={[
@@ -345,7 +325,7 @@ const Pathfinding = () => {
                         { "function": resetSolvingAnimations, text: "Reset" },
                         { "function": replayAnimations, text: "Replay" },
                     ]}
-                    disabled={false}
+                    disabled={mazeSolveAlgo === "default"}
                 />
             </div>
 

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 
-const PathfindingDropdown = (props) => {
+const DropdownMenu = (props) => {
 
+    const toggleText = (props.title === "default") ? `Choose ${props.type} Algorithm` : props.title;
     const menuOptions = props.algorithms.map((option, ind) => 
         <Dropdown.Item 
             onClick={() => props.select(option)} 
@@ -16,7 +17,7 @@ const PathfindingDropdown = (props) => {
         <>
             <Dropdown>
                 <Dropdown.Toggle variant="success" id="dropdown-basic">
-                    {props.title}
+                    {toggleText}
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
@@ -25,7 +26,7 @@ const PathfindingDropdown = (props) => {
             </Dropdown>
 
         </>
-    )
+    ) 
 }
 
-export default PathfindingDropdown;
+export default DropdownMenu;
