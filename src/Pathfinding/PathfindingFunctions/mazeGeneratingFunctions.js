@@ -48,13 +48,12 @@ export const getClearCanvas = (canvasDimensions, cellSize) => {
 export const generateMaze = (grid, algorithm) => {
 
     // Number of total columns and total rows
-
     let mazeGrid = JSON.parse(JSON.stringify(grid)); // Deep copy grid so as not to mutate
     const [rows, cols] = [mazeGrid.length, mazeGrid[0].length]
 
     // Animate drawing the entrance and exit
     const [entrance, exit, start] = [[0, 1], [mazeGrid.length - 1, mazeGrid[0].length - 2], [1, 1]]
-    let drawingAnimations = [entrance, exit];
+    let mazeAnimations = [entrance, exit];
 
     // Add entrance and exit to state, and to grid
     mazeGrid[entrance[0]][entrance[1]] = "path";
@@ -62,7 +61,6 @@ export const generateMaze = (grid, algorithm) => {
 
     // Calls with start as current and previous node; this is to allow for previous node to be used in recursive call
     let mazeFinished;
-
     let mazeAlgorithm;
     switch (algorithm) {
         case "Eller's Algorithm":
@@ -72,21 +70,21 @@ export const generateMaze = (grid, algorithm) => {
             mazeAlgorithm = depthFirstMazeAlgorithm
             break;
         case "default" :
-            mazeAlgorithm = undefined;
+            mazeAlgorithm = defaultMazeAlgorithm;
             break;
     }
 
-    [mazeGrid, drawingAnimations, mazeFinished] = mazeAlgorithm(start, start, mazeGrid, drawingAnimations)
+    [mazeGrid, mazeAnimations, mazeFinished] = mazeAlgorithm(start, start, mazeGrid, mazeAnimations)
     
     // Add a set number of loops to the maze
     // const loops = 200;
-    // [mazeGrid, drawingAnimations] = loopMaker(mazeGrid, drawingAnimations, loops);
+    // [mazeGrid, mazeAnimations] = loopMaker(mazeGrid, mazeAnimations, loops);
 
-    const [nodeAnimations, trash] = nodeFinder(mazeGrid, entrance, exit)
+    const [nodeAnimations, ] = nodeFinder(mazeGrid, entrance, exit)
 
-    const mazeAnimations = { drawingAnimations: drawingAnimations, nodeAnimations: nodeAnimations }
+    const animations = { mazeAnimations: mazeAnimations, nodeAnimations: nodeAnimations }
 
-    return [mazeGrid, mazeAnimations, mazeFinished]
+    return [mazeGrid, animations, mazeFinished]
 }
 
 const shuffle = (array) => {
@@ -98,8 +96,11 @@ const shuffle = (array) => {
     return array
 };
 
-const ellersMazeAlgorithm = (startNode, prevNode, origMazeGrid, animations) => {
+const defaultMazeAlgorithm = (startNode, prevNode, origMazeGrid, animations) => {
+    return [origMazeGrid, animations, true]
+}
 
+const ellersMazeAlgorithm = (startNode, prevNode, origMazeGrid, animations) => {
     const mazeGrid = JSON.parse(JSON.stringify(origMazeGrid)) // Deep copy so as not to mutate original array
 
     let setNoCounter = 1; // To keep track of set names, so there's no repeats

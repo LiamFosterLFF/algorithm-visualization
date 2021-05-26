@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-
+import { useInterval } from './useInterval'
 // Import all functions from a single file as a dictionary, order them better as well
 import { initializeGrid, generateMaze, getFullCanvas, getClearCanvas, calculateCanvasSize } from './PathfindingFunctions/mazeGeneratingFunctions.js';
 
@@ -10,7 +10,7 @@ import Dropdown from './PathfindingDropdown.js';
 import ControlButtons from './PathfindingControlButtons.js';
 
 const Pathfinding = () => {
-    const [mazeAnimations, setMazeAnimations] = useState({ drawingAnimations: [], nodeAnimations: [] })
+    const [animations, setAnimations] = useState({ mazeAnimations: [], nodeAnimations: [] })
     const [solvingAnimations, setSolvingAnimations] = useState([])
     const [drawSpeed, setDrawSpeed] = useState(0)
     const [mazeGenAlgo, setMazeGenAlgo] = useState("default")
@@ -65,13 +65,12 @@ const Pathfinding = () => {
         for (let row = 0; row < cells.length; row++) {
             for (let col = 0; col < cells[row].length; col++) {
                 const cell = cells[row][col];
-                if (cell === "wall") {
-                    ctx.fillStyle = '#444';
-                } else {
-                    ctx.fillStyle = '#fff';
+                const colorDict = {
+                    "wall": '#444',
+                    "path": '#fff'
                 }
+                ctx.fillStyle = colorDict[cell];
                 ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
-
             }
         }
     }, [cells])
@@ -143,6 +142,26 @@ const Pathfinding = () => {
         }
     }
 
+    const handleGenerateMaze = () => {
+        const fillGrid = getFullCanvas(canvasDimensions, cellSize)
+        const [ mazeCells, {mazeAnimations, nodeAnimations}, ] = generateMaze(fillGrid, mazeGenAlgo)
+        setAnimations({
+            ...animations,
+            mazeAnimations,
+            nodeAnimations,
+        })
+        playAnimations("mazeAnimations");
+        // setCells(mazeCells)
+    }
+
+    const handleSolveMaze = () => {
+        // const defaults = { enter: [0, 1], exit: [grid.length - 1, grid[0].length - 2], start: [1, 1] };
+        // const animations = solveMaze(grid, defaults, mazeSolveAlgo)
+
+        // setSolvingAnimations(animations.solvingAnimations)
+        // setBacktrackingAnimations(animations.backtrackingAnimations)
+    }
+
     // useEffect(() => {
 
     //     if(mazeGenerating) {
@@ -204,11 +223,72 @@ const Pathfinding = () => {
         setCells(getFullCanvas(canvasDimensions, cellSize));
     }
 
-    // My proposed organization is as thusly:
-    // First - Pull canvas out into its own Component
-    // Second - All resizing and mouse movement functionality into this new Component
-    // Third - All control functionality remains here; pass it down though to new component 
-    // Fourth - Fix/refactor useEffects for resizing and mousedown to make more sense
+    const [ animationType, setAnimationType ] = useState(null)
+    const [ animationInterval, setAnimationInterval ] = useState(4)
+    const [ animationCounter, setAnimationCounter ] = useState(0)
+    const [ playingAnimations, setPlayingAnimations ] = useState(false)
+    useInterval(() => {
+        console.log(animations, animationType, animations[animationType]);
+        if (animations[animationType].length && animationCounter < animations[animationType].length) {
+            const fillDict = {
+                "mazeAnimations": "path",
+                "nodeAnimations": "node",
+            }
+            const fill = fillDict[animationType]
+            
+            const newCells = [...cells];
+            const updates = 10;
+            for (let i = 0; i < updates; i++) {
+                if (animationCounter + i < animations[animationType].length) {
+                    const [row, col] = animations[animationType][animationCounter+i];
+                    newCells[row][col] = fill;
+                }
+            }
+
+            setCells(newCells)
+            setAnimationCounter(() => animationCounter + updates)
+        }
+
+    }, playingAnimations ? animationInterval : null);
+
+    const playAnimations = (animationType) => {
+        setAnimationType(animationType)
+        setPlayingAnimations(true);
+    }
+
+    const pauseAnimations = () => {
+
+    }
+
+    const resetAnimations = () => {
+        
+    }
+
+    const replayAnimations = () => {
+
+    }
+
+    // Still left:
+    // Custom useINterval Hook
+    // Set up all animations to use useinterval hook
+    // Set up animation control functions
+    // Get slider working for speed
+    // Build a dynamic slider for maze cell size
+    // Buttons inactive if no algo chosen and set dropdown name
+    // Get maze building working with no maze
+    // What happens if no solution to maze?
+    // Fix name of tab
+    // Sorting slider for bars
+    // Sorting bug: why animations tarts early
+    // Hover on main page cards
+    // Get rid of all console logs
+    // explanations, for
+    //      Games Readme
+    //      Games How to play
+    //      Sorting Algorithms
+    //      Sorting Complexity
+    //      Pathfinding algorithms
+    //      
 
     return (
         <div>
@@ -244,8 +324,8 @@ const Pathfinding = () => {
                 <ControlButtons
                     clear={handleClearCanvas}
                     fill={handleFillCanvas}
-                    // generate={setMazeGenerating}
-                    // solve={setMazeSolving}
+                    generate={handleGenerateMaze}
+                    solve={handleSolveMaze}
                     // animate={animateMazeDrawing.play}
                 />
             </div>
