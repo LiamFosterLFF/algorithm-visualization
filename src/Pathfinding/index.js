@@ -171,7 +171,6 @@ const Pathfinding = () => {
             solvingAnimations,
             backtrackingAnimations
         })
-        console.log(solvingAnimations);
         setAnimationStack([...animationStack, ...solvingAnimations, ...backtrackingAnimations])
         setPlayingAnimations(true)
 
@@ -232,15 +231,7 @@ const Pathfinding = () => {
     const [ animationSpeed, setAnimationSpeed ] = useState({interval: 4, updates: 100})
     const [ animationStack, setAnimationStack ] = useState([])
     const [ playingAnimations, setPlayingAnimations ] = useState(false)
-    useInterval(() => {
-        // const fillDict = {
-        //     "mazeAnimations": "path",
-        //     "nodeAnimations": "node",
-        //     "solvingAnimations": "searched",
-        //     "backtrackingAnimations": "backtrack",
-        // }
-        // const fill = fillDict[animationType]
-        
+    useInterval(() => {     
         const newCells = [...cells];
         const remainingStack = [...animationStack]
         const noOfUpdates = animationSpeed.updates;
@@ -248,7 +239,6 @@ const Pathfinding = () => {
             if (remainingStack.length) {
                 const animation = remainingStack.shift();
                 const [row, col] = animation.location;
-                console.log(row, col);
                 newCells[row][col] = animation.type;
             } else {
                 setPlayingAnimations(false)
@@ -299,6 +289,7 @@ const Pathfinding = () => {
     // Sorting bug: why animations tarts early
     // Hover on main page cards
     // Get rid of all console logs
+    // Make sure all comments are good
     // explanations, for
     //      Games Readme
     //      Games How to play
@@ -339,14 +330,20 @@ const Pathfinding = () => {
                     algorithms={["Depth-First Search", "Breadth-First Search", "Djikstra's Algorithm", "A* Search Algorithm"]}
                 />
                 <ControlButtons
-                    clear={handleClearCanvas}
-                    fill={handleFillCanvas}
-                    generate={handleGenerateMaze}
-                    solve={handleSolveMaze}
-                    play={playAnimations}
-                    pause={pauseAnimations}
-                    reset={() => resetSolvingAnimations()}
-                    replay={replayAnimations}
+                    buttons={[
+                        { "function": handleClearCanvas, text: "Clear" },
+                        { "function": handleFillCanvas, text: "Fill" },
+                        { "function": handleGenerateMaze, text: "Generate Maze" },
+                        { "function": handleSolveMaze, text: "Solve Maze" },
+                    ]}
+                />
+                <ControlButtons
+                    buttons={[
+                        { "function": playAnimations, text: "Play" },
+                        { "function": pauseAnimations, text: "Pause" },
+                        { "function": resetSolvingAnimations, text: "Reset" },
+                        { "function": replayAnimations, text: "Replay" },
+                    ]}
                 />
             </div>
 

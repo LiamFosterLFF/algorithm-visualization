@@ -133,7 +133,7 @@ export const solveMaze = (grid, defaults, algorithm) => {
             solvingAlgorithm = aStarSolvingAlgorithm
             break;
         default: 
-            solvingAlgorithm = undefined;
+            solvingAlgorithm = defaultSolvingAlgorithm;
             break;
     }
 
@@ -150,6 +150,10 @@ export const solveMaze = (grid, defaults, algorithm) => {
         backtrackingAnimations: mappedBacktrackingAnimations
     }
     return mappedAnimations
+}
+
+const defaultSolvingAlgorithm = (startNode, prevNode, origMazeGrid, animations) => {
+    return false
 }
 
 const depthFirstSearchSolvingAlgorithm = (startNode, prevNode, endNode, newGrid, animations) => {
