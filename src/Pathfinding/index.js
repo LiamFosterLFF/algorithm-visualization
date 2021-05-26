@@ -8,6 +8,7 @@ import { animateMazeDrawing, animateMazeSolving, animateMazeSolvingBacktrack } f
 
 import DropdownMenu from '../DropdownMenu.js';
 import ControlButtons from '../ControlButtons.js';
+import Slider from '../Slider';
 
 const Pathfinding = () => {
     const [animations, setAnimations] = useState({ mazeAnimations: [], nodeAnimations: [], solvingAnimations: [], backtrackingAnimations: [] })
@@ -164,13 +165,15 @@ const Pathfinding = () => {
     }
 
     // Custom hook for animations - can control speed, choose type, control playback
-    const [ animationSpeed, setAnimationSpeed ] = useState({interval: 4, updates: 100})
+    // Speed controlled by slider, set as a side effect
+    const [ animationSpeed, setAnimationSpeed ] = useState(50)
+
     const [ animationStack, setAnimationStack ] = useState([])
     const [ playingAnimations, setPlayingAnimations ] = useState(false)
     useInterval(() => {     
         const newCells = [...cells];
         const remainingStack = [...animationStack]
-        const noOfUpdates = animationSpeed.updates;
+        const noOfUpdates = animationSpeed;
         for (let i = 0; i < noOfUpdates; i++) {
             if (remainingStack.length) {
                 const animation = remainingStack.shift();
@@ -182,7 +185,7 @@ const Pathfinding = () => {
         }
         setAnimationStack(remainingStack)
         setCells(newCells)
-    }, playingAnimations ? animationSpeed.interval : null);
+    }, playingAnimations ? 5 : null);
 
     // Control functionality
     const handleClearCanvas = () => {
@@ -214,7 +217,6 @@ const Pathfinding = () => {
     }
 
     // Still left:
-    // Fix name of tab
     // Get slider working for speed
     // Sorting slider for bars
     // Build a dynamic slider for maze cell size
@@ -228,6 +230,7 @@ const Pathfinding = () => {
     //      What happens if no solution to maze?
     //      Changing solving algorithm should reset to just maze w/ no solutions
     //      Reset/replay only works on the first go round, then seems to be resetting  to the solved maze
+    //      Buttons overlap maze currently
     
     // explanations, for
     //      Games Readme
@@ -240,12 +243,12 @@ const Pathfinding = () => {
     return (
         <div>
 
-            {/* <div className="sliders-bar">
-<input onChange="" type="range" min="1" max="100" value="50" class="slider" id="myRange"></input>
-</div> */}
-            <div >
-                {/* <canvas onClick={handleOnClick} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseOut={handleMouseOut} onMouseMove={handleMouseMove} ref={canvas}></canvas> */}
+            <Slider 
+                value={animationSpeed}
+                setValue={setAnimationSpeed}
+            />
 
+            <div >
                 <canvas 
                     id="canvas"
                     
