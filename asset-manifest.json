@@ -1,25 +1,27 @@
 {
   "files": {
-    "main.css": "/algorithm-visualization/static/css/main.8f33f107.chunk.css",
-    "main.js": "/algorithm-visualization/static/js/main.005ab4cd.chunk.js",
-    "main.js.map": "/algorithm-visualization/static/js/main.005ab4cd.chunk.js.map",
+    "main.css": "/algorithm-visualization/static/css/main.f1224465.chunk.css",
+    "main.js": "/algorithm-visualization/static/js/main.f42ed049.chunk.js",
+    "main.js.map": "/algorithm-visualization/static/js/main.f42ed049.chunk.js.map",
     "runtime-main.js": "/algorithm-visualization/static/js/runtime-main.fa90bb82.js",
     "runtime-main.js.map": "/algorithm-visualization/static/js/runtime-main.fa90bb82.js.map",
     "static/css/2.3cf5d70f.chunk.css": "/algorithm-visualization/static/css/2.3cf5d70f.chunk.css",
-    "static/js/2.dbf8ceb4.chunk.js": "/algorithm-visualization/static/js/2.dbf8ceb4.chunk.js",
-    "static/js/2.dbf8ceb4.chunk.js.map": "/algorithm-visualization/static/js/2.dbf8ceb4.chunk.js.map",
+    "static/js/2.ad1ca391.chunk.js": "/algorithm-visualization/static/js/2.ad1ca391.chunk.js",
+    "static/js/2.ad1ca391.chunk.js.map": "/algorithm-visualization/static/js/2.ad1ca391.chunk.js.map",
     "index.html": "/algorithm-visualization/index.html",
-    "precache-manifest.a90223396caace8de308081b3ba25440.js": "/algorithm-visualization/precache-manifest.a90223396caace8de308081b3ba25440.js",
+    "precache-manifest.0b76ad0d6992ccc2e61a42a232f8f81e.js": "/algorithm-visualization/precache-manifest.0b76ad0d6992ccc2e61a42a232f8f81e.js",
     "service-worker.js": "/algorithm-visualization/service-worker.js",
     "static/css/2.3cf5d70f.chunk.css.map": "/algorithm-visualization/static/css/2.3cf5d70f.chunk.css.map",
-    "static/css/main.8f33f107.chunk.css.map": "/algorithm-visualization/static/css/main.8f33f107.chunk.css.map",
-    "static/js/2.dbf8ceb4.chunk.js.LICENSE.txt": "/algorithm-visualization/static/js/2.dbf8ceb4.chunk.js.LICENSE.txt"
+    "static/css/main.f1224465.chunk.css.map": "/algorithm-visualization/static/css/main.f1224465.chunk.css.map",
+    "static/js/2.ad1ca391.chunk.js.LICENSE.txt": "/algorithm-visualization/static/js/2.ad1ca391.chunk.js.LICENSE.txt",
+    "static/media/maze-card-image.png": "/algorithm-visualization/static/media/maze-card-image.f83e9fd7.png",
+    "static/media/sorting-card-image.png": "/algorithm-visualization/static/media/sorting-card-image.9f5ceac9.png"
   },
   "entrypoints": [
     "static/js/runtime-main.fa90bb82.js",
     "static/css/2.3cf5d70f.chunk.css",
-    "static/js/2.dbf8ceb4.chunk.js",
-    "static/css/main.8f33f107.chunk.css",
-    "static/js/main.005ab4cd.chunk.js"
+    "static/js/2.ad1ca391.chunk.js",
+    "static/css/main.f1224465.chunk.css",
+    "static/js/main.f42ed049.chunk.js"
   ]
 }
