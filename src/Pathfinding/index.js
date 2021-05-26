@@ -217,9 +217,6 @@ const Pathfinding = () => {
     }
 
     // Still left:
-    // Get slider working for speed
-    // Sorting slider for bars
-    // Build a dynamic slider for maze cell size
     // Hover on main page cards
     // Get rid of all console logs
     // Make sure all comments are good
@@ -231,6 +228,7 @@ const Pathfinding = () => {
     //      Changing solving algorithm should reset to just maze w/ no solutions
     //      Reset/replay only works on the first go round, then seems to be resetting  to the solved maze
     //      Buttons overlap maze currently
+    //      On first load, main page is currently blank
     
     // explanations, for
     //      Games Readme
@@ -239,6 +237,10 @@ const Pathfinding = () => {
     //      Sorting Complexity
     //      Pathfinding algorithms
     //      
+
+    // Nice but not necessary:
+    //      Sorting slider for bars
+    //      Build a dynamic slider for maze cell size
 
     return (
         <div>

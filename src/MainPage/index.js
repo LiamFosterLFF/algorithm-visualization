@@ -15,7 +15,7 @@ const MainPage = () => {
       
     return (
         <CardDeck>
-            <Card onClick={() => handleClick("sorting")} >
+            <Card onClick={() => handleClick("sorting")} style={{cursor: "pointer"}}>
                 <Card.Img variant="top" src={sortingCardImage} />
                 <Card.Body>
                 <Card.Title>Sorting Algorithms</Card.Title>
@@ -27,7 +27,7 @@ const MainPage = () => {
                     <Button>Click Here to Open</Button>
                 </Card.Footer>
             </Card>
-            <Card onClick={() => handleClick("pathfinding")}>
+            <Card onClick={() => handleClick("pathfinding")} style={{cursor: "pointer"}}>
                 <Card.Img variant="top" src={mazeCardImage}/>
                 <Card.Body>
                 <Card.Title>Maze Algorithms</Card.Title>
