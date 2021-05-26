@@ -75,14 +75,18 @@ export const generateMaze = (grid, algorithm) => {
     }
 
     [mazeGrid, mazeAnimations, mazeFinished] = mazeAlgorithm(start, start, mazeGrid, mazeAnimations)
-    
+    mazeAnimations = mazeAnimations.map((animation) => {
+        return {location: animation, type: "path"}
+    })
     // Add a set number of loops to the maze
     // const loops = 200;
     // [mazeGrid, mazeAnimations] = loopMaker(mazeGrid, mazeAnimations, loops);
 
-    const [nodeAnimations, ] = nodeFinder(mazeGrid, entrance, exit)
-
-    const animations = { mazeAnimations: mazeAnimations, nodeAnimations: nodeAnimations }
+    let [nodeAnimations, ] = nodeFinder(mazeGrid, entrance, exit)
+    nodeAnimations = nodeAnimations.map((animation) => {
+        return {location: animation, type: "node"}
+    })
+    const animations = { mazeAnimations, nodeAnimations }
 
     return [mazeGrid, animations, mazeFinished]
 }

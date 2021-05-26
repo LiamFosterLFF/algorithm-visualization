@@ -10,7 +10,7 @@ import Dropdown from './PathfindingDropdown.js';
 import ControlButtons from './PathfindingControlButtons.js';
 
 const Pathfinding = () => {
-    const [animations, setAnimations] = useState({ mazeAnimations: [], nodeAnimations: [] })
+    const [animations, setAnimations] = useState({ mazeAnimations: [], nodeAnimations: [], solvingAnimations: [], backtrackingAnimations: [] })
     const [solvingAnimations, setSolvingAnimations] = useState([])
     const [drawSpeed, setDrawSpeed] = useState(0)
     const [mazeGenAlgo, setMazeGenAlgo] = useState("default")
@@ -67,7 +67,10 @@ const Pathfinding = () => {
                 const cell = cells[row][col];
                 const colorDict = {
                     "wall": '#444',
-                    "path": '#fff'
+                    "path": '#fff',
+                    "node": "#0000ff",
+                    "searched": "#ff0000",
+                    "backtrack": "#ffff00"
                 }
                 ctx.fillStyle = colorDict[cell];
                 ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
@@ -142,24 +145,37 @@ const Pathfinding = () => {
         }
     }
 
+    const [ mazeCells, setMazeCells ] = useState([])
+
     const handleGenerateMaze = () => {
         const fillGrid = getFullCanvas(canvasDimensions, cellSize)
-        const [ mazeCells, {mazeAnimations, nodeAnimations}, ] = generateMaze(fillGrid, mazeGenAlgo)
+        setCells(fillGrid)
+        const [ mazeGrid, {mazeAnimations, nodeAnimations}, ] = generateMaze(fillGrid, mazeGenAlgo)
+        setMazeCells(mazeGrid)
         setAnimations({
             ...animations,
             mazeAnimations,
             nodeAnimations,
         })
-        playAnimations("mazeAnimations");
-        // setCells(mazeCells)
+        setAnimationStack([...animationStack, ...mazeAnimations])
+        setPlayingAnimations(true)
+        // runAnimations("mazeAnimations")
     }
 
     const handleSolveMaze = () => {
-        // const defaults = { enter: [0, 1], exit: [grid.length - 1, grid[0].length - 2], start: [1, 1] };
-        // const animations = solveMaze(grid, defaults, mazeSolveAlgo)
+        const defaults = { enter: [0, 1], exit: [cells.length - 1, cells[0].length - 2], start: [1, 1] };
+        const {solvingAnimations, backtrackingAnimations} = solveMaze(cells, defaults, mazeSolveAlgo)
 
-        // setSolvingAnimations(animations.solvingAnimations)
-        // setBacktrackingAnimations(animations.backtrackingAnimations)
+        setAnimations({
+            ...animations,
+            solvingAnimations,
+            backtrackingAnimations
+        })
+        console.log(solvingAnimations);
+        setAnimationStack([...animationStack, ...solvingAnimations, ...backtrackingAnimations])
+        setPlayingAnimations(true)
+
+        // runAnimations("backtrackingAnimations");
     }
 
     // useEffect(() => {
@@ -211,65 +227,66 @@ const Pathfinding = () => {
 
 
 
-    // Control functionality
 
+    // Custom hook for animations - can control speed, choose type, control playback
+    const [ animationSpeed, setAnimationSpeed ] = useState({interval: 4, updates: 100})
+    const [ animationStack, setAnimationStack ] = useState([])
+    const [ playingAnimations, setPlayingAnimations ] = useState(false)
+    useInterval(() => {
+        // const fillDict = {
+        //     "mazeAnimations": "path",
+        //     "nodeAnimations": "node",
+        //     "solvingAnimations": "searched",
+        //     "backtrackingAnimations": "backtrack",
+        // }
+        // const fill = fillDict[animationType]
+        
+        const newCells = [...cells];
+        const remainingStack = [...animationStack]
+        const noOfUpdates = animationSpeed.updates;
+        console.log(animationStack);
+        for (let i = 0; i < noOfUpdates; i++) {
+            if (remainingStack.length) {
+                const animation = remainingStack.shift();
+                const [row, col] = animation.location;
+                newCells[row][col] = animation.type;
+            } else {
+                setPlayingAnimations(false)
+            }
+        }
+        setAnimationStack(remainingStack)
+        setCells(newCells)
+    }, playingAnimations ? animationSpeed.interval : null);
+
+    // Control functionality
     const handleClearCanvas = () => {
-        // setMazeGenerated(false)
         setCells(getClearCanvas(canvasDimensions, cellSize));
     }
 
     const handleFillCanvas = () => {
-        // setMazeGenerated(false)
         setCells(getFullCanvas(canvasDimensions, cellSize));
     }
 
-    const [ animationType, setAnimationType ] = useState(null)
-    const [ animationInterval, setAnimationInterval ] = useState(4)
-    const [ animationCounter, setAnimationCounter ] = useState(0)
-    const [ playingAnimations, setPlayingAnimations ] = useState(false)
-    useInterval(() => {
-        console.log(animations, animationType, animations[animationType]);
-        if (animations[animationType].length && animationCounter < animations[animationType].length) {
-            const fillDict = {
-                "mazeAnimations": "path",
-                "nodeAnimations": "node",
-            }
-            const fill = fillDict[animationType]
-            
-            const newCells = [...cells];
-            const updates = 10;
-            for (let i = 0; i < updates; i++) {
-                if (animationCounter + i < animations[animationType].length) {
-                    const [row, col] = animations[animationType][animationCounter+i];
-                    newCells[row][col] = fill;
-                }
-            }
-
-            setCells(newCells)
-            setAnimationCounter(() => animationCounter + updates)
-        }
-
-    }, playingAnimations ? animationInterval : null);
-
     const playAnimations = (animationType) => {
-        setAnimationType(animationType)
         setPlayingAnimations(true);
     }
 
     const pauseAnimations = () => {
-
+        setPlayingAnimations(false);
     }
 
-    const resetAnimations = () => {
-        
+    const resetSolvingAnimations = () => {
+        handleFillCanvas()
+        setCells(mazeCells);
+        // setAnimationCounter(0)
     }
 
     const replayAnimations = () => {
-
+        resetSolvingAnimations()
+        playAnimations()
     }
 
     // Still left:
-    // Custom useINterval Hook
     // Set up all animations to use useinterval hook
     // Set up animation control functions
     // Get slider working for speed
@@ -326,7 +343,10 @@ const Pathfinding = () => {
                     fill={handleFillCanvas}
                     generate={handleGenerateMaze}
                     solve={handleSolveMaze}
-                    // animate={animateMazeDrawing.play}
+                    play={playAnimations}
+                    pause={pauseAnimations}
+                    reset={() => resetSolvingAnimations()}
+                    replay={replayAnimations}
                 />
             </div>
 

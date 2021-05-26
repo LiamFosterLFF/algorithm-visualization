@@ -138,7 +138,18 @@ export const solveMaze = (grid, defaults, algorithm) => {
     }
 
     solvingAlgorithm(defaults.start, defaults.enter, defaults.exit, newGrid, animations)
-    return animations
+    const mappedSolvingAnimations = animations.solvingAnimations.map((animation) => {
+        return {location: animation, type: "searched"}
+    })
+    const mappedBacktrackingAnimations = animations.backtrackingAnimations.map((animation) => {
+        return {location: animation, type: "backtrack"}
+    })
+    
+    const mappedAnimations = {
+        solvingAnimations: mappedSolvingAnimations,
+        backtrackingAnimations: mappedBacktrackingAnimations
+    }
+    return mappedAnimations
 }
 
 const depthFirstSearchSolvingAlgorithm = (startNode, prevNode, endNode, newGrid, animations) => {

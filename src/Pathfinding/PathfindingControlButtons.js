@@ -8,13 +8,17 @@ const PathfindingControlButtons = (props) => {
             <ButtonGroup>
                 <Button onClick={() => props.clear()}>Clear</Button>
                 <Button onClick={() => props.fill()}>Fill</Button>
+                <Button onClick={() => props.generate(true)}>Generate Maze</Button>
+                <Button onClick={() => props.solve(true)} >Solve Maze</Button>
             </ButtonGroup>
             
             <ButtonGroup>
-                <Button onClick={() => props.generate(true)}>Generate Maze</Button>
-                <Button onClick={() => props.solve(true)} >Solve Maze</Button>
-                <Button onClick ={() => props.animate()}>Play</Button>
+                <Button onClick ={() => props.play()}>Play</Button>
+                <Button onClick ={() => props.pause()}>Pause</Button>
+                <Button onClick ={() => props.reset()}>Reset</Button>
+                <Button onClick ={() => props.replay()}>Replay</Button>
             </ButtonGroup>
+            
         </>
     )
 }
