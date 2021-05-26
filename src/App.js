@@ -37,9 +37,7 @@ export default App;
 //      What happens if no solution to maze?
 //      Changing solving algorithm should reset to just maze w/ no solutions
 //      Reset/replay only works on the first go round, then seems to be resetting  to the solved maze
-//      Buttons overlap maze currently
-//      On first load, main page is currently blank
-//      Fix all bugs on all pages
+//      Fix all console warnings on all pages
 
 // explanations, for
 //      Games Readme
