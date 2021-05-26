@@ -101,13 +101,11 @@ const Sorting = () => {
             />
             <ControlButtons 
                 buttons={[
-                    {"function": () => playAnimations(animations), text: "Play"} ,
-                    {"function": () => pauseAnimations(animations), text: "Pause"} ,
-                    {"function": () => restartAnimations(animations), text: "Restart"} ,
-                    {"function": () => resetAnimations(animations), text: "Reset"}
+                    { "function": () => playAnimations(animations), text: "Play", disabled: (sort === "default") } ,
+                    { "function": () => pauseAnimations(animations), text: "Pause", disabled: (sort === "default") } ,
+                    { "function": () => restartAnimations(animations), text: "Restart", disabled: (sort === "default") } ,
+                    { "function": () => resetAnimations(animations), text: "Reset", disabled: (sort === "default") }
                 ]}
-                disabled={sort === "default"}
-                
             />
         </div>
     )

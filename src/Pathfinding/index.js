@@ -83,6 +83,8 @@ const Pathfinding = () => {
     const [ fillType, setFillType ] = useState(null)
     // Saving previous point allows us to catch all points dragged over (as browser event has fairly slow fire rate)
     const [ previousPoint, setPreviousPoint ] = useState([null, null])
+
+    // Clicking changes the color of that cell, clicking + holding has separate functionality
     const handleMouseDown = (e) => {
         const [row, col] = getMouseCellLocation(e, cellSize);
         setPreviousPoint([row, col])
@@ -95,11 +97,13 @@ const Pathfinding = () => {
         setIsDrawing(true)
     }
 
+    // Unclicking and moving out of frame/canvas releases mouse being held
     const handleMouseOutUp = () => {
         setIsDrawing(false)
         setPreviousPoint([null, null])
     }
 
+    // Moving while mouse being held draws manhattan lines on the canvas
     const handleMouseMove = (e) => {
         const [row, col] = getMouseCellLocation(e, cellSize);
         const isPreviousPoint = (row === previousPoint[0] && col === previousPoint[1])
@@ -123,13 +127,14 @@ const Pathfinding = () => {
         }
     }
 
-    const [ mazeCells, setMazeCells ] = useState([])
+    const [ storedMaze, setStoredMaze ] = useState([])
 
     const handleGenerateMaze = () => {
         const fillGrid = getFullCanvas(canvasDimensions, cellSize)
         setCells(fillGrid)
         const [ mazeGrid, {mazeAnimations, nodeAnimations}, ] = generateMaze(fillGrid, mazeGenAlgo)
-        setMazeCells(mazeGrid)
+        console.log("A");
+        setStoredMaze(mazeGrid)
         setAnimations({
             ...animations,
             mazeAnimations,
@@ -141,9 +146,12 @@ const Pathfinding = () => {
     }
 
     const handleSolveMaze = () => {
+        // Uses a set of default entry, exit, start points; these are adjustable but currently not part of state
         const defaults = { enter: [0, 1], exit: [cells.length - 1, cells[0].length - 2], start: [1, 1] };
-        const {solvingAnimations, backtrackingAnimations} = solveMaze(cells, defaults, mazeSolveAlgo)
 
+        // // Reset cells to those stored in maze cells, in case a solution already in place
+        // setCells(mazeCells)
+        const {solvingAnimations, backtrackingAnimations} = solveMaze(cells, defaults, mazeSolveAlgo)
         setAnimations({
             ...animations,
             solvingAnimations,
@@ -154,56 +162,6 @@ const Pathfinding = () => {
 
         // runAnimations("backtrackingAnimations");
     }
-
-    // useEffect(() => {
-
-    //     if(mazeGenerating) {
-    //         const fillGrid = fillCanvas(canvas, cellSize)
-
-    //         const [mazeGrid, animations, mazeFinished] = generateMaze(fillGrid, mazeGenAlgo)
-
-    //         setMazeAnimations(animations)
-    //         setGrid(mazeGrid)
-    //         if (mazeFinished) {
-    //             setMazeGenerating(false)
-    //             setMazeGenerated(true)
-    //         }
-
-    //     }
-    // }, [mazeGenerating])
-
-    // // Probably could afford/benefit from moving these to the top
-    // const [backtrackingAnimations, setBacktrackingAnimations] = useState([])
-    // const [mazeSolving, setMazeSolving] = useState(false)
-    // useEffect(() => {
-    //     if (mazeSolving) {
-    //         const defaults = { enter: [0, 1], exit: [grid.length - 1, grid[0].length - 2], start: [1, 1] };
-    //         const animations = solveMaze(grid, defaults, mazeSolveAlgo)
-
-    //         setSolvingAnimations(animations.solvingAnimations)
-    //         setBacktrackingAnimations(animations.backtrackingAnimations)
-    //         setMazeSolving(false)
-    //     }
-
-    // }, [mazeSolving, grid])
-
-    // // The animation and solving/backtracking animations; these also possibly don't need a useEffect hook although it ain't currently broke
-    // useEffect(() => {
-    //     const test = animateMazeDrawing(mazeAnimations, canvas, cellSize, drawSpeed);
-    // }, [mazeAnimations]);
-
-    // useEffect(() => {
-    //     animateMazeSolving(solvingAnimations, canvas, cellSize, drawSpeed)
-    // }, [ solvingAnimations]);
-
-    // useEffect(() => {
-    //     const delay = solvingAnimations.length * drawSpeed;
-    //     animateMazeSolvingBacktrack(backtrackingAnimations, canvas, cellSize, drawSpeed, delay)
-    // }, [backtrackingAnimations]);
-
-
-
-
 
     // Custom hook for animations - can control speed, choose type, control playback
     const [ animationSpeed, setAnimationSpeed ] = useState({interval: 4, updates: 100})
@@ -245,7 +203,8 @@ const Pathfinding = () => {
 
     const resetSolvingAnimations = () => {
         handleFillCanvas()
-        setCells(mazeCells);
+        console.log(storedMaze);
+        setCells(storedMaze);
         // setAnimationCounter(0)
     }
 
@@ -255,19 +214,21 @@ const Pathfinding = () => {
     }
 
     // Still left:
-    // Set up all animations to use useinterval hook
-    // Set up animation control functions
-    // Get slider working for speed
-    // Build a dynamic slider for maze cell size
-    // Buttons inactive if no algo chosen and set dropdown name
-    // Get maze building working with no maze
-    // What happens if no solution to maze?
     // Fix name of tab
+    // Get slider working for speed
     // Sorting slider for bars
-    // Sorting bug: why animations tarts early
+    // Build a dynamic slider for maze cell size
     // Hover on main page cards
     // Get rid of all console logs
     // Make sure all comments are good
+    // Bugs: 
+    //      Play button needs to do something
+    //      Sorting bug: why animations tarts early
+    //      Get maze building working with no maze
+    //      What happens if no solution to maze?
+    //      Changing solving algorithm should reset to just maze w/ no solutions
+    //      Reset/replay only works on the first go round, then seems to be resetting  to the solved maze
+    
     // explanations, for
     //      Games Readme
     //      Games How to play
@@ -311,21 +272,19 @@ const Pathfinding = () => {
                 />
                 <ControlButtons
                     buttons={[
-                        { "function": handleClearCanvas, text: "Clear" },
-                        { "function": handleFillCanvas, text: "Fill" },
-                        { "function": handleGenerateMaze, text: "Generate Maze" },
-                        { "function": handleSolveMaze, text: "Solve Maze" },
+                        { "function": handleClearCanvas, text: "Clear", disabled: false },
+                        { "function": handleFillCanvas, text: "Fill", disabled: false },
+                        { "function": handleGenerateMaze, text: "Generate Maze", disabled: (mazeGenAlgo === "default") },
+                        { "function": handleSolveMaze, text: "Solve Maze", disabled: (mazeSolveAlgo === 'default') },
                     ]}
-                    disabled={mazeGenAlgo === "default"}
                 />
                 <ControlButtons
                     buttons={[
-                        { "function": playAnimations, text: "Play" },
-                        { "function": pauseAnimations, text: "Pause" },
-                        { "function": resetSolvingAnimations, text: "Reset" },
-                        { "function": replayAnimations, text: "Replay" },
+                        { "function": playAnimations, text: "Play", disabled: (mazeGenAlgo === "default") },
+                        { "function": pauseAnimations, text: "Pause", disabled: (mazeGenAlgo === "default") },
+                        { "function": resetSolvingAnimations, text: "Reset", disabled: (mazeGenAlgo === "default") },
+                        { "function": replayAnimations, text: "Replay", disabled: (mazeGenAlgo === "default") },
                     ]}
-                    disabled={mazeSolveAlgo === "default"}
                 />
             </div>
 
