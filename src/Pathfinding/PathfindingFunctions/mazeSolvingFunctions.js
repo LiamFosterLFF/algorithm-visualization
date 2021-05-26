@@ -389,9 +389,8 @@ const dijkstrasSolvingAlgorithm = (startNode, enterNode, exitNode, mazeGrid, ani
     let unvisitedNodes = nodeAndWeightFinder(mazeGrid, enterNode)
     
     let currentNode = enterNode;
-    animations.solvingAnimations.push([enterNode])
+    animations.solvingAnimations.push(enterNode)
     while (currentNode !== null && (currentNode[0] !== exitNode[0] && currentNode[1] !== exitNode[1])) { // Exits if out of nodes or at end
-        console.log("loop")
         // Converts back from string to number
         const [row, col] = [Number(currentNode[0]), Number(currentNode[1])];
         animations.solvingAnimations.push([row, col])

@@ -244,11 +244,11 @@ const Pathfinding = () => {
         const newCells = [...cells];
         const remainingStack = [...animationStack]
         const noOfUpdates = animationSpeed.updates;
-        console.log(animationStack);
         for (let i = 0; i < noOfUpdates; i++) {
             if (remainingStack.length) {
                 const animation = remainingStack.shift();
                 const [row, col] = animation.location;
+                console.log(row, col);
                 newCells[row][col] = animation.type;
             } else {
                 setPlayingAnimations(false)
