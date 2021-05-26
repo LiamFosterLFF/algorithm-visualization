@@ -1,18 +1,16 @@
 import React from 'react';
 import { Button, ButtonGroup } from 'react-bootstrap';
 
-const PathfindingControlButtons = ({ buttons }) => {
+const ControlButtons = ({ buttons, disabled }) => {
 
-    console.log(buttons);
     return (
         <div>
             <ButtonGroup>
                 {buttons.map(button => 
-                     <Button onClick={button.function}>{button.text}</Button>
+                     <Button size="lg" onClick={button.function} disabled={disabled}>{button.text}</Button>
                 )}
             </ButtonGroup>
         </div>
     )
 }
-// {/*disabled={!mazeGenerated}*/}
-export default PathfindingControlButtons;
+export default ControlButtons;

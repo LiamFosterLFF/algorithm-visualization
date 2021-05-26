@@ -7,7 +7,7 @@ import { solveMaze, nodeFinder } from './PathfindingFunctions/mazeSolvingFunctio
 import { animateMazeDrawing, animateMazeSolving, animateMazeSolvingBacktrack } from './PathfindingFunctions/mazeAnimatingFunctions.js';
 
 import Dropdown from './PathfindingDropdown.js';
-import ControlButtons from './PathfindingControlButtons.js';
+import ControlButtons from '../ControlButtons.js';
 
 const Pathfinding = () => {
     const [animations, setAnimations] = useState({ mazeAnimations: [], nodeAnimations: [], solvingAnimations: [], backtrackingAnimations: [] })
@@ -336,6 +336,7 @@ const Pathfinding = () => {
                         { "function": handleGenerateMaze, text: "Generate Maze" },
                         { "function": handleSolveMaze, text: "Solve Maze" },
                     ]}
+                    disabled={true}
                 />
                 <ControlButtons
                     buttons={[
@@ -344,6 +345,7 @@ const Pathfinding = () => {
                         { "function": resetSolvingAnimations, text: "Reset" },
                         { "function": replayAnimations, text: "Replay" },
                     ]}
+                    disabled={false}
                 />
             </div>
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
 
 import SortingDropdown  from './SortingDropdown';
-import ControlButtons from './SortingControlButtons';
+import ControlButtons from '../ControlButtons';
 import sortFunctions from "./utilities";
 
 import BarChart from './BarChart';
@@ -91,11 +91,14 @@ const Sorting = () => {
             </Tabs>
             <SortingDropdown sortType={sort} sortFn={setSort}/>
             <ControlButtons 
+                buttons={[
+                    {"function": () => playAnimations(animations), text: "Play"} ,
+                    {"function": () => pauseAnimations(animations), text: "Pause"} ,
+                    {"function": () => restartAnimations(animations), text: "Restart"} ,
+                    {"function": () => resetAnimations(animations), text: "Reset"}
+                ]}
                 disabled={sort === "default"}
-                play={() => playAnimations(animations)} 
-                pause={() => pauseAnimations(animations)}
-                restart={() => restartAnimations(animations)}
-                reset={() => resetAnimations(animations)}
+                
             />
         </div>
     )
