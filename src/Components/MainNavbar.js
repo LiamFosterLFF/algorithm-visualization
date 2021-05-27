@@ -1,6 +1,6 @@
 import React from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
-import { Link, useLocation, useHistory } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const MainNavbar = () => {
 
@@ -10,20 +10,15 @@ const MainNavbar = () => {
         return location.pathname.toLowerCase() === url.toLowerCase();
     }
 
-    let history = useHistory();
-    
-    const handleClick = (route) => {
-        history.push(`/${route}`);
-    }
 
     return (
         <Navbar>
             <Nav variant="pills" activeKey={location.pathname} >
                 <Nav.Item>
-                    <Nav.Link href="/sorting" onClick={() => handleClick("sorting")}>Sorting</Nav.Link>
+                    <Nav.Link><Link to="/sorting">Sorting</Link></Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link href="/pathfinding" onClick={() => handleClick("pathfinding")}>Pathfinding</Nav.Link>
+                    <Nav.Link ><Link to="/pathfinding">Pathfinding</Link></Nav.Link>
                 </Nav.Item>
             </Nav>
             { isCurrentURL("/main") ? 

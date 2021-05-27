@@ -17,10 +17,10 @@ const App = () => {
                 <Navbar/>
 
                 <Switch>
-                    <Redirect exact from= "/" to="/main" />
-                    <Route exact path="/main" component={MainPage} />
-                    <Route exact path="/sorting" component={Sorting} />
-                    <Route exact path="/pathfinding" component={Pathfinding} />
+                    <Redirect exact from= "/algorithm-visualization" to="/main" />
+                    <Route path="/main" component={MainPage} />
+                    <Route path="/sorting" component={Sorting} />
+                    <Route path="/pathfinding" component={Pathfinding} />
                 </Switch>
             </Router>
         </div>
@@ -32,12 +32,13 @@ export default App;
 // Still left to do:
 // Bugs: 
 //      Play button needs to do something
-//      Sorting bug: why animations tarts early
+//      Sorting bug: why animations starts early
 //      Get maze building working with no maze
 //      What happens if no solution to maze?
 //      Changing solving algorithm should reset to just maze w/ no solutions
 //      Reset/replay only works on the first go round, then seems to be resetting  to the solved maze
 //      Fix all console warnings on all pages
+//      Github deploy not working with router
 
 // explanations, for
 //      Games Readme
