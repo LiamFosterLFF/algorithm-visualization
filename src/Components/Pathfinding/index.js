@@ -25,9 +25,10 @@ const Pathfinding = () => {
     // Calculate size of cells on basis of how many cells wide the maze should be (can be adjusted with slider)
     const [noOfCellsAcross, setNoOfCellsAcross] = useState(100)
     const [cellSize, setCellSize] = useState(Math.floor(windowDimensions.width / noOfCellsAcross))
-
-    // Calculate size of canvas on basis of cell size
+    // Calculate size of canvas and cell grid on basis of cell size
     const [canvasDimensions, setCanvasDimensions] = useState(calculateCanvasSize(windowDimensions, cellSize))
+    const [cells, setCells] = useState(getFullCanvas(canvasDimensions, cellSize))
+
 
     // Reset window dimension state every time window resized (w/ cleanup function)
     useEffect(() => {
@@ -38,8 +39,10 @@ const Pathfinding = () => {
             }
             setWindowDimensions(newWindowDimensions)
             // Recalculate canvas dimensions every time window dimensions change
-            setCanvasDimensions(calculateCanvasSize(newWindowDimensions, cellSize))
-
+            const newCanvasDimensions = calculateCanvasSize(newWindowDimensions, cellSize)
+            setCanvasDimensions(newCanvasDimensions)
+            // Reset grid to completely filled in every time canvas resizes
+            setCells(getFullCanvas(newCanvasDimensions, cellSize))
         }
         window.addEventListener('resize', handleResize);
 
@@ -47,12 +50,6 @@ const Pathfinding = () => {
             window.removeEventListener('resize', handleResize)
         }
     })
-
-    const [cells, setCells] = useState(getFullCanvas(canvasDimensions, cellSize))
-    // Reset grid to completely filled in every time canvas resizes
-    useEffect(() => {
-        setCells(getFullCanvas(canvasDimensions, cellSize))
-    }, [canvasDimensions])
 
     // Redraw canvas cells every time array representing them are changed
     useEffect(() => {
