@@ -7,7 +7,7 @@ const ControlButtons = ({ buttons, size }) => {
         <div>
             <ButtonGroup>
                 {buttons.map(button => 
-                     <Button size={size || "lg"} onClick={() => button.function()} disabled={button.disabled}>{button.text}</Button>
+                     <Button title={(button.disabled) ? button.tooltip: null} size={size || "lg"} onClick={() => button.function()} disabled={button.disabled}>{button.text}</Button>
                 )}
             </ButtonGroup>
         </div>

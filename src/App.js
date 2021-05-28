@@ -31,14 +31,13 @@ export default App;
 
 // Still left to do:
 // Bugs: 
-//      Play button needs to do something
-//      Sorting bug: why animations starts early
+//      Below are basicall all just one bug, issues surrounding the way maze algorithms interact with state
 //      Get maze building working with no maze
 //      What happens if no solution to maze?
-//      Changing solving algorithm should reset to just maze w/ no solutions
 //      Reset/replay only works on the first go round, then seems to be resetting  to the solved maze
+//      Changing solving algorithm should reset to just maze w/ no solutions
 //      Fix all console warnings on all pages
-//      Github deploy not working with router
+//      Sorting bug: why animations starts early
 
 // explanations, for
 //      Games Readme

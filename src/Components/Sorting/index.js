@@ -99,10 +99,10 @@ const Sorting = () => {
             />
             <ControlButtons 
                 buttons={[
-                    { "function": () => playAnimations(animations), text: "Play", disabled: (sort === "default") } ,
-                    { "function": () => pauseAnimations(animations), text: "Pause", disabled: (sort === "default") } ,
-                    { "function": () => restartAnimations(animations), text: "Restart", disabled: (sort === "default") } ,
-                    { "function": () => resetAnimations(animations), text: "Reset", disabled: (sort === "default") }
+                    { "function": () => playAnimations(animations), text: "Play", disabled: (sort === "default"), tooltip: "Choose a Sorting Algorithm" } ,
+                    { "function": () => pauseAnimations(animations), text: "Pause", disabled: (sort === "default"), tooltip: "Choose a Sorting Algorithm" } ,
+                    { "function": () => restartAnimations(animations), text: "Restart", disabled: (sort === "default"), tooltip: "Choose a Sorting Algorithm" } ,
+                    { "function": () => resetAnimations(animations), text: "Reset", disabled: (sort === "default"), tooltip: "Choose a Sorting Algorithm" }
                 ]}
             />
         </div>

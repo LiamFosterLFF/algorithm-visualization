@@ -255,17 +255,17 @@ const Pathfinding = () => {
                     buttons={[
                         { "function": handleClearCanvas, text: "Clear", disabled: false },
                         { "function": handleFillCanvas, text: "Fill", disabled: false },
-                        { "function": handleGenerateMaze, text: "Generate Maze", disabled: (mazeGenAlgo === "default") },
-                        { "function": handleSolveMaze, text: "Solve Maze", disabled: (mazeSolveAlgo === 'default') },
+                        { "function": handleGenerateMaze, text: "Generate Maze", disabled: (mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
+                        { "function": handleSolveMaze, text: "Solve Maze", disabled: (mazeSolveAlgo === 'default'), tooltip: "Choose a Maze Solving Algorithm" },
                     ]}
                 />
                 <ControlButtons
                     size = {"sm"}
                     buttons={[
-                        { "function": playAnimations, text: "Play", disabled: (mazeGenAlgo === "default") },
-                        { "function": pauseAnimations, text: "Pause", disabled: (mazeGenAlgo === "default") },
-                        { "function": resetSolvingAnimations, text: "Reset", disabled: (mazeGenAlgo === "default") },
-                        { "function": replayAnimations, text: "Replay", disabled: (mazeGenAlgo === "default") },
+                        { "function": playAnimations, text: "Play", disabled: (mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
+                        { "function": pauseAnimations, text: "Pause", disabled: (mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
+                        { "function": resetSolvingAnimations, text: "Reset", disabled: (mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
+                        { "function": replayAnimations, text: "Replay", disabled: (mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
                     ]}
                 />
             </div>
