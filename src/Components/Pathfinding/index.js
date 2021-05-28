@@ -32,10 +32,14 @@ const Pathfinding = () => {
     // Reset window dimension state every time window resized (w/ cleanup function)
     useEffect(() => {
         function handleResize() {
-            setWindowDimensions({
+            const newWindowDimensions = {
                 height: window.innerHeight,
                 width: window.innerWidth
-            })
+            }
+            setWindowDimensions(newWindowDimensions)
+            // Recalculate canvas dimensions every time window dimensions change
+            setCanvasDimensions(calculateCanvasSize(newWindowDimensions, cellSize))
+
         }
         window.addEventListener('resize', handleResize);
 
@@ -43,11 +47,6 @@ const Pathfinding = () => {
             window.removeEventListener('resize', handleResize)
         }
     })
-
-    // Recalculate canvas dimensions every time window dimensions change
-    useEffect(() => {
-        setCanvasDimensions(calculateCanvasSize(windowDimensions, cellSize))
-    }, [windowDimensions])
 
     const [cells, setCells] = useState(getFullCanvas(canvasDimensions, cellSize))
     // Reset grid to completely filled in every time canvas resizes
