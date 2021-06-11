@@ -33,6 +33,8 @@ export const nodeFinder = (mazeGrid, entrance, exit) => { // Finds nodes, points
                             directions.push(direction)
                         }
                         break;
+                    default:
+                        break;
                 }
             }
             if (directions.length === 1) { // If dead end, corner, or intersection
@@ -94,6 +96,8 @@ const weightFinder = (nodeMazeGrid, nodeList) => { // Finds weights for building
                         i++
                     }
                     nodeDirections.push([direction, i])
+                    break;
+                default:
                     break;
             }
         })
@@ -206,6 +210,8 @@ const depthFirstSearchSolvingAlgorithm = (startNode, prevNode, endNode, newGrid,
                     mazeEndFound = depthFirstSearchSolvingAlgorithm(newNode, node, endNode, newGrid, animations);
                 }
                 break;
+            default:
+                break;
 
         }
         if (mazeEndFound) {
@@ -272,7 +278,8 @@ const breadthFirstSearchSolvingAlgorithm = (startNode, prevNode, endNode, newGri
                         backtrackDictionary[newNode] = node;
                     }
                     break;
-
+                default:
+                    break;
             }
         }
         return (frontierQueue.length > 0)
@@ -332,6 +339,8 @@ const nodeAndWeightFinder = (mazeGrid, baseNode) => { // Finds nodes, points at 
                     }
                     nodeAndWeightList.push([direction, counter])
                 }
+                break;
+            default:
                 break;
         }
     }
