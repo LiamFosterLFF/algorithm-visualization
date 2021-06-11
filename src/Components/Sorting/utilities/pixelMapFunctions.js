@@ -146,7 +146,6 @@ const insertionSort = (origArr) => {
 
     // Move up through the array one at a time, and insert each new element into already sorted numbers to the left in its proper (ascending) position 
     for (let i = 1; i < n; i++) {
-        const key = arr[i]
         let j = i - 1;
         while (j >= 0 && arr[j][0] > arr[j + 1][0]) {
             animations.push([[j, arr[j]], [j + 1, arr[j + 1]]]);
