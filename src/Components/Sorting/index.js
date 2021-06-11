@@ -22,7 +22,7 @@ const Sorting = () => {
     
     // Side effect for changing chart type, resets bars and animations every time chart is changed (currently, could save possibly)
     useEffect(() => {
-        cancelAnimations(animations)
+        cancelAnimations(animations);
         setSort("default")
         // Currently, bars are set by their personal functions but this will need to change if they are to be changeable dynamically
         setBars(sortFunctions[chartType].shuffle())
@@ -36,23 +36,23 @@ const Sorting = () => {
         }
         setSortType({ function: sortFunctions[chartType][formatSortFunctionName(sort)]})
         setAnimationType({ function: sortFunctions[chartType][formatSortFunctionName(sort) + 'Animation']})
-    }, [sort])
+    }, [sort, chartType])
 
     // Changing the sort type cancels the previous animations and sets new ones
     useEffect(() => {
         restartAnimations(animations, bars);
-    }, [sortType])
+    }, [sortType, bars])
 
 
     // Control functionality
     const playAnimations = (animations) => {
-        animations.map((animation) => {
+        animations.forEach((animation) => {
             if (animation.playState !== "finished") { animation.play() }
         })
     }
 
     const pauseAnimations = (animations) => {
-        animations.map((animation) => {
+        animations.forEach((animation) => {
             if (animation.playState !== "finished") { animation.pause() }
         })
     }
@@ -69,7 +69,7 @@ const Sorting = () => {
     }
 
     const cancelAnimations = animations => {
-        animations.map((animation) => {
+        animations.forEach((animation) => {
             animation.cancel();
         })
     }   

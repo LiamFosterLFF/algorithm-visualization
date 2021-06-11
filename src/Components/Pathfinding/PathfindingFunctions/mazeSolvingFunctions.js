@@ -301,12 +301,10 @@ const breadthFirstSearchSolvingAlgorithm = (startNode, prevNode, endNode, newGri
 
 const nodeAndWeightFinder = (mazeGrid, baseNode) => { // Finds nodes, points at which the maze either turns or forks, and their corresponding weights to the base node
     const nodeAndWeightList = []; // List of nodes with the location and directions of nearest nodes 
-    const [row, col] = baseNode;
     
     for (let direction = 0; direction < 4; direction++) {
         
         let counter = 1;
-        let node;
         switch (direction) {
             case 0:
                 if (baseNode[0] - counter >= 0 && mazeGrid[baseNode[0] - counter][baseNode[1]] === "path") {

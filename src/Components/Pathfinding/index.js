@@ -1,33 +1,32 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useInterval } from '../useInterval'
 // Import all functions from a single file as a dictionary, order them better as well
-import { initializeGrid, generateMaze, getFullCanvas, getClearCanvas, calculateCanvasSize } from './PathfindingFunctions/mazeGeneratingFunctions.js';
+import { generateMaze, getFullCanvas, getClearCanvas, calculateCanvasSize } from './PathfindingFunctions/mazeGeneratingFunctions.js';
 
-import { solveMaze, nodeFinder } from './PathfindingFunctions/mazeSolvingFunctions.js';
-import { animateMazeDrawing, animateMazeSolving, animateMazeSolvingBacktrack } from './PathfindingFunctions/mazeAnimatingFunctions.js';
+import { solveMaze } from './PathfindingFunctions/mazeSolvingFunctions.js';
 
 import DropdownMenu from '../DropdownMenu.js';
 import ControlButtons from '../ControlButtons.js';
 import Slider from '../Slider';
 
 const Pathfinding = () => {
-    const [animations, setAnimations] = useState({ mazeAnimations: [], nodeAnimations: [], solvingAnimations: [], backtrackingAnimations: [] })
-    const [mazeGenAlgo, setMazeGenAlgo] = useState("default")
-    const [mazeSolveAlgo, setMazeSolveAlgo] = useState("default")
+    const [ animations, setAnimations ] = useState({ mazeAnimations: [], nodeAnimations: [], solvingAnimations: [], backtrackingAnimations: [] })
+    const [ mazeGenAlgo, setMazeGenAlgo ] = useState("default")
+    const [ mazeSolveAlgo, setMazeSolveAlgo ] = useState("default")
     const [ storedMaze, setStoredMaze ] = useState([])
     // Speed controlled by slider
     const [ animationSpeed, setAnimationSpeed ] = useState(50)
     // Animations controlled using a stack, allows for pausing as well as easy repeats and works better with interval
     const [ animationStack, setAnimationStack ] = useState([])
     const [ playingAnimations, setPlayingAnimations ] = useState(false)
-    const [windowDimensions, setWindowDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
+    const [ windowDimensions, setWindowDimensions ] = useState({ width: window.innerWidth, height: window.innerHeight });
 
     // Calculate size of cells on basis of how many cells wide the maze should be (can be adjusted with slider)
-    const [noOfCellsAcross, setNoOfCellsAcross] = useState(100)
-    const [cellSize, setCellSize] = useState(Math.floor(windowDimensions.width / noOfCellsAcross))
+    const [ noOfCellsAcross, ] = useState(100)
+    const [ cellSize, ] = useState(Math.floor(windowDimensions.width / noOfCellsAcross))
     // Calculate size of canvas and cell grid on basis of cell size
-    const [canvasDimensions, setCanvasDimensions] = useState(calculateCanvasSize(windowDimensions, cellSize))
-    const [cells, setCells] = useState(getFullCanvas(canvasDimensions, cellSize))
+    const [ canvasDimensions, setCanvasDimensions ] = useState(calculateCanvasSize(windowDimensions, cellSize))
+    const [ cells, setCells ] = useState(getFullCanvas(canvasDimensions, cellSize))
 
 
     // Reset window dimension state every time window resized (w/ cleanup function)
@@ -69,7 +68,7 @@ const Pathfinding = () => {
                 ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
             }
         }
-    }, [cells])
+    }, [cells, cellSize])
     
     // Mousedown starts you drawing
     const [ isDrawing, setIsDrawing ] = useState(false)

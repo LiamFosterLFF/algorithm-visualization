@@ -49,7 +49,6 @@ export const generateMaze = (grid, algorithm) => {
 
     // Number of total columns and total rows
     let mazeGrid = JSON.parse(JSON.stringify(grid)); // Deep copy grid so as not to mutate
-    const [rows, cols] = [mazeGrid.length, mazeGrid[0].length]
 
     // Animate drawing the entrance and exit
     const [entrance, exit, start] = [[0, 1], [mazeGrid.length - 1, mazeGrid[0].length - 2], [1, 1]]
@@ -71,6 +70,8 @@ export const generateMaze = (grid, algorithm) => {
             break;
         case "default" :
             mazeAlgorithm = defaultMazeAlgorithm;
+            break;
+        default:
             break;
     }
 
@@ -231,35 +232,37 @@ const depthFirstMazeAlgorithm = (startNode, prevNode, mazeGrid, animations) => {
                     [mazeGrid, newAnimations, deadEnd] = depthFirstMazeAlgorithm(newNode, midNode, mazeGrid, newAnimations)
                 }
                 break;
+            default:
+                break;
         }
     }
     deadEnd = true
     return [mazeGrid, newAnimations, deadEnd]
 }
 
-const loopMaker = (mazeGrid, mazeAnimations, loopsRequired) => {
-    let loopsMade = 0;
-    while (loopsMade < loopsRequired) {
-        // Not selecting the bottom 20 % of the maze makes loops more likely to form
-        // Only selects numbers between 1 and 80% of mazeGrid length
-        const randRow = Math.floor(Math.random() * (mazeGrid.length * .8 - 1)) + 1
-        // Select any column except for first and last
-        const randCol = Math.floor(Math.random() * (mazeGrid[0].length - 2)) + 1
-        if ( // Forms loops better by only choosing walls sandwiched between two other walls, but not 3 ways corners
-            mazeGrid[randRow][randCol] === "wall"
-            && (
-                (mazeGrid[randRow + 1][randCol] === "wall" && mazeGrid[randRow - 1][randCol] === "wall" && mazeGrid[randRow][randCol + 1] !== "wall" && mazeGrid[randRow][randCol - 1] !== "wall") ||
-                (mazeGrid[randRow][randCol + 1] === "wall" && mazeGrid[randRow][randCol - 1] === "wall" && mazeGrid[randRow + 1][randCol] !== "wall" && mazeGrid[randRow - 1][randCol] !== "wall")
-            )
-        ) {
-            mazeGrid[randRow][randCol] = "path"
-            mazeAnimations.push([randRow, randCol])
-            loopsMade++
-        }
-    }
+// const loopMaker = (mazeGrid, mazeAnimations, loopsRequired) => {
+//     let loopsMade = 0;
+//     while (loopsMade < loopsRequired) {
+//         // Not selecting the bottom 20 % of the maze makes loops more likely to form
+//         // Only selects numbers between 1 and 80% of mazeGrid length
+//         const randRow = Math.floor(Math.random() * (mazeGrid.length * .8 - 1)) + 1
+//         // Select any column except for first and last
+//         const randCol = Math.floor(Math.random() * (mazeGrid[0].length - 2)) + 1
+//         if ( // Forms loops better by only choosing walls sandwiched between two other walls, but not 3 ways corners
+//             mazeGrid[randRow][randCol] === "wall"
+//             && (
+//                 (mazeGrid[randRow + 1][randCol] === "wall" && mazeGrid[randRow - 1][randCol] === "wall" && mazeGrid[randRow][randCol + 1] !== "wall" && mazeGrid[randRow][randCol - 1] !== "wall") ||
+//                 (mazeGrid[randRow][randCol + 1] === "wall" && mazeGrid[randRow][randCol - 1] === "wall" && mazeGrid[randRow + 1][randCol] !== "wall" && mazeGrid[randRow - 1][randCol] !== "wall")
+//             )
+//         ) {
+//             mazeGrid[randRow][randCol] = "path"
+//             mazeAnimations.push([randRow, randCol])
+//             loopsMade++
+//         }
+//     }
 
-    return [mazeGrid, mazeAnimations]
-}
+//     return [mazeGrid, mazeAnimations]
+// }
 
 export const nodeFinder = (mazeGrid, entrance, exit) => { // Finds nodes, points at which the maze either turns or forks, for use in building graphs
     const nodeAnimations = [];
@@ -295,6 +298,8 @@ export const nodeFinder = (mazeGrid, entrance, exit) => { // Finds nodes, points
                         if (mazeGrid[row][col] === "path" && mazeGrid[row][col - 1] === "path") { // Left: if potential path column above is path
                             directions.push(direction)
                         }
+                        break;
+                    default:
                         break;
                 }
             }
@@ -357,6 +362,8 @@ const weightFinder = (nodeMazeGrid, nodeList) => {
                         i++
                     }
                     nodeDirections.push([direction, i])
+                    break;
+                default:
                     break;
             }
         })
