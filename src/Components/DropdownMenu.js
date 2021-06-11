@@ -4,10 +4,11 @@ import { Dropdown } from 'react-bootstrap';
 const DropdownMenu = (props) => {
 
     const toggleText = (props.title === "default") ? `Choose ${props.type} Algorithm` : props.title;
-    const menuOptions = props.algorithms.map((option, ind) => 
+    const menuOptions = props.algorithms.map((option, index) => 
         <Dropdown.Item 
+            key={index}
             onClick={() => props.select(option)} 
-            href={`#/action-${ind+1}`}
+            href={`#/action-${index+1}`}
         >
             {option}
         </Dropdown.Item>

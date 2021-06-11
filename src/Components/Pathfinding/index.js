@@ -70,6 +70,13 @@ const Pathfinding = () => {
             }
         }
     }, [cells])
+    
+    // Mousedown starts you drawing
+    const [ isDrawing, setIsDrawing ] = useState(false)
+    // Moving sets all interim points to the opposite of whatever the original cell was
+    const [ fillType, setFillType ] = useState(null)
+    // Saving previous point allows us to catch all points dragged over (as browser event has fairly slow fire rate)
+    const [ previousPoint, setPreviousPoint ] = useState([null, null])
 
     // Screen clicking functionality
     const getMouseCellLocation = (e, cellSize) => {
@@ -79,13 +86,6 @@ const Pathfinding = () => {
         // Returns [row, col]
         return [Math.floor((e.clientY - canvasBoundingBox.y) / cellSize), Math.floor((e.clientX - canvasBoundingBox.x + .5) / cellSize)]
     }
-
-    // Mousedown starts you drawing
-    const [ isDrawing, setIsDrawing ] = useState(false)
-    // Moving sets all interim points to the opposite of whatever the original cell was
-    const [ fillType, setFillType ] = useState(null)
-    // Saving previous point allows us to catch all points dragged over (as browser event has fairly slow fire rate)
-    const [ previousPoint, setPreviousPoint ] = useState([null, null])
 
     // Clicking changes the color of that cell, clicking + holding has separate functionality
     const handleMouseDown = (e) => {
@@ -212,7 +212,6 @@ const Pathfinding = () => {
 
     return (
         <div>
-
             <Slider 
                 value={animationSpeed}
                 setValue={setAnimationSpeed}

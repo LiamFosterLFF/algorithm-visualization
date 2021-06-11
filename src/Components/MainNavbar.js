@@ -15,10 +15,10 @@ const MainNavbar = () => {
         <Navbar>
             <Nav variant="pills" activeKey={location.pathname} >
                 <Nav.Item>
-                    <Nav.Link><Link to="/sorting">Sorting</Link></Nav.Link>
+                    <Link style={{"margin": "10px"}} to="/sorting">Sorting</Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link ><Link to="/pathfinding">Pathfinding</Link></Nav.Link>
+                    <Link to="/pathfinding">Pathfinding</Link>
                 </Nav.Item>
             </Nav>
             { isCurrentURL("/main") ? 
