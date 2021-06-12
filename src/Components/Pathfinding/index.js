@@ -186,7 +186,7 @@ const Pathfinding = () => {
         setCells(newCells)
     }, playingAnimations ? 5 : null);
 
-    // Dropdown Genearting and Solving Algorithm Change Side-effect
+    // Dropdown Genearting and Solving Algorithm Change Side-effects
 
     useEffect(() => {
         handleFillCanvas();
@@ -224,6 +224,8 @@ const Pathfinding = () => {
 
     const replayAnimations = () => {
         resetSolvingAnimations()
+        setAnimationStack([...animationStack, ...animations.solvingAnimations, ...animations.backtrackingAnimations])
+
         playAnimations()
     }
 
@@ -293,4 +295,3 @@ export default Pathfinding;
 //      Get maze building working with no maze
 //      What happens if no solution to maze?
 //      Replay doesn't really do a replay, kind of just resets 
-//      Changing solving algorithm should reset to just maze w/ no solutions
