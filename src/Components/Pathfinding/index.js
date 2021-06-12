@@ -167,6 +167,7 @@ const Pathfinding = () => {
         setPlayingAnimations(true)
     }
 
+
     // Custom hook for animations - can control speed, choose type, control playback
     useInterval(() => {     
         const newCells = [...cells];
@@ -184,6 +185,16 @@ const Pathfinding = () => {
         setAnimationStack(remainingStack)
         setCells(newCells)
     }, playingAnimations ? 5 : null);
+
+    // Dropdown Genearting and Solving Algorithm Change Side-effect
+
+    useEffect(() => {
+        handleFillCanvas();
+    }, [mazeGenAlgo])
+
+    useEffect(() => {
+        resetSolvingAnimations();
+    }, [mazeSolveAlgo])
 
     // Control functionality
     const handleClearCanvas = () => {
