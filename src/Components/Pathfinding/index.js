@@ -29,7 +29,6 @@ const Pathfinding = () => {
     const [ canvasDimensions, setCanvasDimensions ] = useState(calculateCanvasSize(windowDimensions, cellSize))
     const [ cells, setCells ] = useState(getFullCanvas(canvasDimensions, cellSize))
 
-
     // Reset window dimension state every time window resized (w/ cleanup function)
     useEffect(() => {
         function handleResize() {
@@ -152,9 +151,9 @@ const Pathfinding = () => {
         const defaults = { enter: [0, 1], exit: [cells.length - 1, cells[0].length - 2], start: [1, 1] };
 
         // // Reset cells to those stored in maze cells, in case a solution already in place
-        setCells(cloneDeep(storedMaze))
-        console.log(storedMaze);
-        const {solvingAnimations, backtrackingAnimations} = solveMaze(cells, defaults, mazeSolveAlgo)
+        const storedMazeClone = cloneDeep(storedMaze)
+        setCells(storedMazeClone)
+        const {solvingAnimations, backtrackingAnimations} = solveMaze(storedMazeClone, defaults, mazeSolveAlgo)
         setAnimations({
             ...animations,
             solvingAnimations,
@@ -276,5 +275,6 @@ export default Pathfinding;
 //      Below are basicall all just one bug, issues surrounding the way maze algorithms interact with state
 //      Get maze building working with no maze
 //      What happens if no solution to maze?
-//      Reset/replay only works on the first go round, then seems to be resetting  to the solved maze
+//      Replay doesn't really do a replay, kind of just resets 
+//      If animations are in progress, cells only animate up to a certain point (need to separate display and function cells)
 //      Changing solving algorithm should reset to just maze w/ no solutions
