@@ -209,7 +209,7 @@ const Pathfinding = () => {
         setStoredMaze(fullCanvas);
     }
 
-    const playAnimations = (animationType) => {
+    const playAnimations = () => {
         setPlayingAnimations(true);
     }
 
@@ -218,8 +218,7 @@ const Pathfinding = () => {
     }
 
     const resetSolvingAnimations = () => {
-        // handleFillCanvas()
-        setCells(storedMaze);
+        setCells(cloneDeep(storedMaze));
     }
 
     const replayAnimations = () => {
