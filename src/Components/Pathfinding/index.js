@@ -8,6 +8,7 @@ import { solveMaze } from './PathfindingFunctions/mazeSolvingFunctions.js';
 import DropdownMenu from '../DropdownMenu.js';
 import ControlButtons from '../ControlButtons.js';
 import Slider from '../Slider';
+import { cloneDeep } from 'lodash';
 
 const Pathfinding = () => {
     const [ animations, setAnimations ] = useState({ mazeAnimations: [], nodeAnimations: [], solvingAnimations: [], backtrackingAnimations: [] })
@@ -135,7 +136,7 @@ const Pathfinding = () => {
         setCells(fillGrid)
         const [ mazeGrid, {mazeAnimations, nodeAnimations}, ] = generateMaze(fillGrid, mazeGenAlgo)
         // Store maze for use in reset
-        setStoredMaze(mazeGrid)
+        setStoredMaze(cloneDeep(mazeGrid))
         setAnimations({
             ...animations,
             mazeAnimations,
@@ -151,7 +152,8 @@ const Pathfinding = () => {
         const defaults = { enter: [0, 1], exit: [cells.length - 1, cells[0].length - 2], start: [1, 1] };
 
         // // Reset cells to those stored in maze cells, in case a solution already in place
-        setCells(storedMaze)
+        setCells(cloneDeep(storedMaze))
+        console.log(storedMaze);
         const {solvingAnimations, backtrackingAnimations} = solveMaze(cells, defaults, mazeSolveAlgo)
         setAnimations({
             ...animations,
@@ -162,7 +164,6 @@ const Pathfinding = () => {
         setAnimationStack([...animationStack, ...solvingAnimations, ...backtrackingAnimations])
         setPlayingAnimations(true)
     }
-
 
     // Custom hook for animations - can control speed, choose type, control playback
     useInterval(() => {     
@@ -201,6 +202,7 @@ const Pathfinding = () => {
 
     const resetSolvingAnimations = () => {
         handleFillCanvas()
+        console.log(storedMaze);
         setCells(storedMaze);
     }
 
@@ -269,3 +271,10 @@ const Pathfinding = () => {
 
 export default Pathfinding;
 
+// Still left to do:
+// Bugs: 
+//      Below are basicall all just one bug, issues surrounding the way maze algorithms interact with state
+//      Get maze building working with no maze
+//      What happens if no solution to maze?
+//      Reset/replay only works on the first go round, then seems to be resetting  to the solved maze
+//      Changing solving algorithm should reset to just maze w/ no solutions
