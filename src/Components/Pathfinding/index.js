@@ -14,7 +14,6 @@ const Pathfinding = () => {
     const [ animations, setAnimations ] = useState({ mazeAnimations: [], nodeAnimations: [], solvingAnimations: [], backtrackingAnimations: [] })
     const [ mazeGenAlgo, setMazeGenAlgo ] = useState("default")
     const [ mazeSolveAlgo, setMazeSolveAlgo ] = useState("default")
-    const [ storedMaze, setStoredMaze ] = useState([])
     // Speed controlled by slider
     const [ animationSpeed, setAnimationSpeed ] = useState(50)
     // Animations controlled using a stack, allows for pausing as well as easy repeats and works better with interval
@@ -28,6 +27,7 @@ const Pathfinding = () => {
     // Calculate size of canvas and cell grid on basis of cell size
     const [ canvasDimensions, setCanvasDimensions ] = useState(calculateCanvasSize(windowDimensions, cellSize))
     const [ cells, setCells ] = useState(getFullCanvas(canvasDimensions, cellSize))
+    const [ storedMaze, setStoredMaze ] = useState(getFullCanvas(canvasDimensions, cellSize))
 
     // Reset window dimension state every time window resized (w/ cleanup function)
     useEffect(() => {
@@ -40,8 +40,9 @@ const Pathfinding = () => {
             // Recalculate canvas dimensions every time window dimensions change
             const newCanvasDimensions = calculateCanvasSize(newWindowDimensions, cellSize)
             setCanvasDimensions(newCanvasDimensions)
-            // Reset grid to completely filled in every time canvas resizes
+            // Reset grid and stored maze to completely filled in every time canvas resizes
             setCells(getFullCanvas(newCanvasDimensions, cellSize))
+            setStoredMaze(getFullCanvas(newCanvasDimensions, cellSize))
         }
         window.addEventListener('resize', handleResize);
 
@@ -96,6 +97,7 @@ const Pathfinding = () => {
         setFillType(flippedCellContent)
         newCells[row][col] = flippedCellContent;
         setCells(newCells)
+        setStoredMaze(newCells)
         setIsDrawing(true)
     }
 
@@ -125,6 +127,7 @@ const Pathfinding = () => {
 
             }
             setCells(newCells)
+            setStoredMaze(newCells)
             setPreviousPoint([row, col])
         }
     }
@@ -184,11 +187,15 @@ const Pathfinding = () => {
 
     // Control functionality
     const handleClearCanvas = () => {
-        setCells(getClearCanvas(canvasDimensions, cellSize));
+        const clearCanvas = getClearCanvas(canvasDimensions, cellSize)
+        setCells(clearCanvas);
+        setStoredMaze(clearCanvas);
     }
 
     const handleFillCanvas = () => {
-        setCells(getFullCanvas(canvasDimensions, cellSize));
+        const fullCanvas = getFullCanvas(canvasDimensions, cellSize)
+        setCells(fullCanvas);
+        setStoredMaze(fullCanvas);
     }
 
     const playAnimations = (animationType) => {
@@ -200,8 +207,7 @@ const Pathfinding = () => {
     }
 
     const resetSolvingAnimations = () => {
-        handleFillCanvas()
-        console.log(storedMaze);
+        // handleFillCanvas()
         setCells(storedMaze);
     }
 
@@ -276,5 +282,4 @@ export default Pathfinding;
 //      Get maze building working with no maze
 //      What happens if no solution to maze?
 //      Replay doesn't really do a replay, kind of just resets 
-//      If animations are in progress, cells only animate up to a certain point (need to separate display and function cells)
 //      Changing solving algorithm should reset to just maze w/ no solutions
