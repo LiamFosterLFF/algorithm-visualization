@@ -237,51 +237,53 @@ const breadthFirstSearchSolvingAlgorithm = (startNode, prevNode, endNode, newGri
 
         if (node[0] === endNode[0] && node[1] === endNode[1]) return false
 
-        animations.solvingAnimations.push(node);
-
         const [row, col] = [node[0], node[1]];
-        newGrid[row][col] = "checked";
+        if (newGrid[row][col] !== "checked") {
+            animations.solvingAnimations.push(node);
+            newGrid[row][col] = "checked";
 
-        for (let i = 0; i < 4; i++) {
-            const direction = i;
+            for (let i = 0; i < 4; i++) {
+                const direction = i;
 
-            switch (direction) {
+                switch (direction) {
 
-                case 0: // Up: checks if 2 squares up is not over edge and there is a path toward that direction
-                    if ((row - 1 >= 0) && (newGrid[row - 1][col] === "path")) {
-                        const newNode = [row - 1, col];
-                        frontierQueue.push(newNode);
-                        backtrackDictionary[newNode] = node;
-                    }
-                    break;
+                    case 0: // Up: checks if 2 squares up is not over edge and there is a path toward that direction
+                        if ((row - 1 >= 0) && (newGrid[row - 1][col] === "path")) {
+                            const newNode = [row - 1, col];
+                            frontierQueue.push(newNode);
+                            backtrackDictionary[newNode] = node;
+                        }
+                        break;
 
-                case 1: // Right: checks if 2 squares right is not over edge and there is a path toward that direction
-                    if ((col + 1 < newGrid[row].length) && (newGrid[row][col + 1] === "path")) {
-                        const newNode = [row, col + 1];
-                        frontierQueue.push(newNode);
-                        backtrackDictionary[newNode] = node;
-                    }
-                    break;
+                    case 1: // Right: checks if 2 squares right is not over edge and there is a path toward that direction
+                        if ((col + 1 < newGrid[row].length) && (newGrid[row][col + 1] === "path")) {
+                            const newNode = [row, col + 1];
+                            frontierQueue.push(newNode);
+                            backtrackDictionary[newNode] = node;
+                        }
+                        break;
 
-                case 2: // Down: checks if 2 squares down is not over edge and there is a path toward that direction
-                    if ((row + 1 < newGrid.length) && (newGrid[row + 1][col] === "path")) {
-                        const newNode = [row + 1, col];
-                        frontierQueue.push(newNode);
-                        backtrackDictionary[newNode] = node;
-                    }
-                    break;
+                    case 2: // Down: checks if 2 squares down is not over edge and there is a path toward that direction
+                        if ((row + 1 < newGrid.length) && (newGrid[row + 1][col] === "path")) {
+                            const newNode = [row + 1, col];
+                            frontierQueue.push(newNode);
+                            backtrackDictionary[newNode] = node;
+                        }
+                        break;
 
-                case 3: // Left: checks if 2 squares left is not over edge and there is a path toward that direction
-                    if ((col - 1 >= 0) && (newGrid[row][col - 1] === "path")) {
-                        const newNode = [row, col - 1];
-                        frontierQueue.push(newNode);
-                        backtrackDictionary[newNode] = node;
-                    }
-                    break;
-                default:
-                    break;
+                    case 3: // Left: checks if 2 squares left is not over edge and there is a path toward that direction
+                        if ((col - 1 >= 0) && (newGrid[row][col - 1] === "path")) {
+                            const newNode = [row, col - 1];
+                            frontierQueue.push(newNode);
+                            backtrackDictionary[newNode] = node;
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
+        
         return (frontierQueue.length > 0)
     }
 
