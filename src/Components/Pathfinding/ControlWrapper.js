@@ -8,24 +8,6 @@ const ControlWrapper = (props) => {
 
     const pause = () => props.updateAnimationState({type: "pause-animations"});
 
-    const reset = () => {
-        props.updateAnimationState({
-            type: "reset-animations", 
-            payload: { 
-                resetFunction: () => props.updateCanvas({type: "load-stored-maze"})
-            }
-        })
-    };
-
-    const replay = () => {
-        props.updateAnimationState({
-            type: "replay-animations", 
-            payload: { 
-                resetFunction: () => props.updateCanvas({type: "load-stored-maze"})
-            }
-        })
-    };
-
     const clear = () => props.updateCanvas({type: "clear-cell-grid"});
     const fill = () => props.updateCanvas({type: "fill-cell-grid"});
 
@@ -50,7 +32,6 @@ const ControlWrapper = (props) => {
             }
         })
     }
-
 
     return (
         <>
@@ -97,9 +78,7 @@ const ControlWrapper = (props) => {
                     size = {"sm"}
                     buttons={[
                         { "function": play, text: "Play", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
-                        { "function": pause, text: "Pause", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
-                        // { "function": reset, text: "Reset", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
-                        // { "function": replay, text: "Replay", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
+                        { "function": pause, text: "Pause", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" }
                     ]}
                 />
             </div>

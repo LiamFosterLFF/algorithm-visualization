@@ -2,17 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useInterval } from '../useInterval'
 import { useCanvas } from '../useCanvas'
 import { useAnimationState } from '../useAnimationState'
-
-import { solveMaze } from './PathfindingFunctions/mazeSolvingFunctions.js';
-
-import { cloneDeep } from 'lodash';
 import ControlWrapper from './ControlWrapper';
 
 const Pathfinding = () => {
 
     const [ canvas, updateCanvas ] = useCanvas({cellGridWidth: 101, windowInnerWidth: window.innerWidth})
     const [ animationState, updateAnimationState ] = useAnimationState({ animationSpeed: 50 })
-
     const [ mazeGenAlgo, setMazeGenAlgo ] = useState("default")
     const [ mazeSolveAlgo, setMazeSolveAlgo ] = useState("default")
 
@@ -41,7 +36,7 @@ const Pathfinding = () => {
                     "backtrack": "#ffff00"
                 }
                 ctx.fillStyle = colorDict[cell];
-                ctx.fillRect(col * canvas.cellSize, row * canvas.cellSize, canvas.cellSize, canvas.cellSize);
+                ctx.fillRect(col * canvas.cellSize - 1, row * canvas.cellSize -1 , canvas.cellSize + 1, canvas.cellSize + 1);
             }
         }
     }, [canvas.cellGrid, canvas.cellSize])
@@ -60,12 +55,6 @@ const Pathfinding = () => {
         })
 
     }, animationState.playingAnimations ? 5 : null);
-
-    // Dropdown Generating and Solving Algorithm Change Side-effects
-
-    // useEffect(() => {
-    //     updateAnimationState({type: "reset-animations", payload: { resetFunction: () => updateCanvas({type: "load-stored-maze"})}})
-    // }, [mazeSolveAlgo])
 
     return (
         <ControlWrapper

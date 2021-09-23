@@ -214,24 +214,6 @@ const canvasReducer = (canvas, action) => {
                 cellGrid: newCellGrid
             }
         }
-        // case "draw-cells": {
-        //     const colorDict = {
-        //         "wall": '#444',
-        //         "path": '#fff',
-        //         "node": "#0000ff",
-        //         "searched": "#ff0000",
-        //         "backtrack": "#ffff00"
-        //     }
-        //     const ctx = action.payload.cnv.getContext('2d');
-        //     for (let row = 0; row < canvas.cellGrid.length; row++) {
-        //         for (let col = 0; col < canvas.cellGrid[row].length; col++) {
-        //             const cell = canvas.cellGrid[row][col];
-                    
-        //             ctx.fillStyle = colorDict[cell];
-        //             ctx.fillRect(col * canvas.cellSize, row * canvas.cellSize, canvas.cellSize, canvas.cellSize);
-        //         }
-        //     }
-        // }
         default:
             throw new Error()
     }

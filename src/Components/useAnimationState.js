@@ -106,25 +106,6 @@ const animationStateReducer = (animationState, action) => {
             }
         }
 
-        case "reset-animations": {
-            action.payload.resetFunction()
-            return {
-                ...animationState,
-                animationStack: [],
-                playingAnimations: false
-            }
-        }
-
-        case "replay-animations": {
-            action.payload.resetFunction()
-            return {
-                ...animationState,
-                animationStackRange: [0, animationState.animationSpeed],
-                currentAnimations: animationState.animationStack.slice(0, animationState.animationSpeed),
-                playingAnimations: true
-            }
-        }
-
         case "set-animation-speed": {
             return {
                 ...animationState,
