@@ -45,39 +45,6 @@ const Pathfinding = () => {
             }
         }
     }, [canvas.cellGrid, canvas.cellSize])
-    
-    const handleGenerateMaze = () => {
-        console.log("A");
-        // Fill in cells for use by algorithm, default is walls
-        updateCanvas({type: "fill-cell-grid"})
-        console.log(canvas.cellGrid[0]);
-        updateAnimationState({
-            type: "generate-maze-animations",
-            payload: {
-                cellGrid: canvas.cellGrid,
-                mazeGenAlgo
-            }
-        })
-    }
-
-    const handleSolveMaze = () => {
-        // Uses a set of default entry, exit, start points; these are adjustable but currently not part of state
-        const defaults = { enter: [0, 1], exit: [canvas.cellGrid.length - 1, canvas.cellGrid[0].length - 2], start: [1, 1] };
-
-        // // Reset cells to those stored in maze cells, in case a solution already in place
-        // updateCanvas({type: "load-stored-maze"})
-        const {solvingAnimations, backtrackingAnimations} = solveMaze(cloneDeep(canvas.cellGrid), defaults, mazeSolveAlgo)
-        updateAnimationState({
-            type: "load-and-play-animations", 
-            payload: { 
-                animations: {
-                    solvingAnimations,
-                    backtrackingAnimations
-                },
-                animationStack: [...solvingAnimations, ...backtrackingAnimations]
-            }
-        })
-    }
 
     // Custom hook for animations - can control speed, choose type, control playback
     useInterval(() => {   
@@ -96,13 +63,9 @@ const Pathfinding = () => {
 
     // Dropdown Generating and Solving Algorithm Change Side-effects
 
-    useEffect(() => {
-        updateCanvas({type: "fill-cell-grid"})
-    }, [mazeGenAlgo])
-
-    useEffect(() => {
-        updateAnimationState({type: "reset-animations", payload: { resetFunction: () => updateCanvas({type: "load-stored-maze"})}})
-    }, [mazeSolveAlgo])
+    // useEffect(() => {
+    //     updateAnimationState({type: "reset-animations", payload: { resetFunction: () => updateCanvas({type: "load-stored-maze"})}})
+    // }, [mazeSolveAlgo])
 
     return (
         <ControlWrapper
@@ -110,7 +73,6 @@ const Pathfinding = () => {
             animationState={animationState} updateAnimationState={updateAnimationState}
             mazeGenAlgo={mazeGenAlgo} setMazeGenAlgo={setMazeGenAlgo}
             mazeSolveAlgo={mazeSolveAlgo} setMazeSolveAlgo={setMazeSolveAlgo}
-            handleGenerateMaze={handleGenerateMaze} handleSolveMaze={handleSolveMaze}
         >
             <div style={{ width: canvas.canvasDimensions.width, height: canvas.canvasDimensions.height }}>
                 <canvas 

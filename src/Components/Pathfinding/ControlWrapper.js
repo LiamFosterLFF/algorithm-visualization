@@ -31,11 +31,22 @@ const ControlWrapper = (props) => {
 
     const generateMaze = () => {
         props.updateAnimationState({
-            type: "generate-maze-animations",
+            type: "generate-maze-creation-animations",
             payload: {
                 cellGrid: props.canvas.filledCanvas,
                 mazeGenAlgo: props.mazeGenAlgo,
-                fillCanvas: () => props.updateCanvas({type: "fill-cell-grid"})
+                updateCanvas: props.updateCanvas,
+            }
+        })
+    }
+
+    const solveMaze = () => {
+        props.updateAnimationState({
+            type: "generate-maze-solving-animations",
+            payload: {
+                cellGrid: props.canvas.storedMaze,
+                mazeSolveAlgo: props.mazeSolveAlgo,
+                loadStoredMaze: () => props.updateCanvas({type: "load-stored-maze"})
             }
         })
     }
@@ -79,7 +90,7 @@ const ControlWrapper = (props) => {
                         { "function": clear, text: "Clear", disabled: false },
                         { "function": fill, text: "Fill", disabled: false },
                         { "function": generateMaze, text: "Generate Maze", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
-                        { "function": props.handleSolveMaze, text: "Solve Maze", disabled: (props.mazeSolveAlgo === 'default'), tooltip: "Choose a Maze Solving Algorithm" },
+                        { "function": solveMaze, text: "Solve Maze", disabled: (props.mazeSolveAlgo === 'default'), tooltip: "Choose a Maze Solving Algorithm" },
                     ]}
                 />
                 <ControlButtons
@@ -87,8 +98,8 @@ const ControlWrapper = (props) => {
                     buttons={[
                         { "function": play, text: "Play", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
                         { "function": pause, text: "Pause", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
-                        { "function": reset, text: "Reset", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
-                        { "function": replay, text: "Replay", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
+                        // { "function": reset, text: "Reset", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
+                        // { "function": replay, text: "Replay", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
                     ]}
                 />
             </div>

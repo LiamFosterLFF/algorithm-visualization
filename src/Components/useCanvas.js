@@ -176,7 +176,6 @@ const canvasReducer = (canvas, action) => {
             return {...canvas}
         }
         case "fill-cell-grid": {
-            console.log("Filling", getFilledCanvas(canvas.cellGridDimensions)[0]);
             return {
                 ...canvas,
                 cellGrid: getFilledCanvas(canvas.cellGridDimensions),
