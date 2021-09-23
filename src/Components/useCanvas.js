@@ -82,6 +82,8 @@ const initializeCanvas = (initialState) => {
         filledCanvas: getFilledCanvas(cellGridDimensions),
         // Stored maze, for use in resetting
         storedMaze: getFilledCanvas(cellGridDimensions),
+        // Boolean for if a maze has been generated, for checking if solving possible
+        mazeGenerated: false,
         // Boolean for use in drawing functionality
         isDrawing: false,
         // Value for flipping cells when drawing
@@ -105,7 +107,8 @@ const canvasReducer = (canvas, action) => {
                 canvasDimensions: newCanvasDimensions,
                 cellGrid: getFilledCanvas(canvas.cellGridDimensions),
                 filledCanvas: getFilledCanvas(canvas.cellGridDimensions),
-                storedMaze: getFilledCanvas(canvas.cellGridDimensions)
+                storedMaze: getFilledCanvas(canvas.cellGridDimensions),
+                mazeGenerated: false
             }
         }
         case "resize-cell": {
@@ -120,7 +123,8 @@ const canvasReducer = (canvas, action) => {
                 canvasDimensions: newCanvasDimensions,
                 cellGrid: getFilledCanvas(newCellGridDimensions),
                 filledCanvas: getFilledCanvas(newCellGridDimensions),
-                storedMaze: getFilledCanvas(newCellGridDimensions)
+                storedMaze: getFilledCanvas(newCellGridDimensions),
+                mazeGenerated: false
             }
         }
         case "handle-mouse-down": {
@@ -179,20 +183,23 @@ const canvasReducer = (canvas, action) => {
             return {
                 ...canvas,
                 cellGrid: getFilledCanvas(canvas.cellGridDimensions),
-                storedMaze: getFilledCanvas(canvas.cellGridDimensions)
+                storedMaze: getFilledCanvas(canvas.cellGridDimensions),
+                mazeGenerated: false
             }
         }
         case "clear-cell-grid": {
             return {
                 ...canvas,
                 cellGrid: getClearedCanvas(canvas.cellGridDimensions),
-                storedMaze: getClearedCanvas(canvas.cellGridDimensions)
+                storedMaze: getClearedCanvas(canvas.cellGridDimensions),
+                mazeGenerated: false
             }
         }
         case "save-stored-maze": {
             return {
                 ...canvas,
-                storedMaze: action.payload.storedMaze
+                storedMaze: action.payload.storedMaze,
+                mazeGenerated: true
             }
         }
         case "load-stored-maze": {

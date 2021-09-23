@@ -55,6 +55,7 @@ const animationStateReducer = (animationState, action) => {
             // Generate solving animations
             const {solvingAnimations, backtrackingAnimations} = solveMaze(cloneDeep(action.payload.cellGrid), defaults, action.payload.mazeSolveAlgo)
             const newAnimationStack = [...solvingAnimations, ...backtrackingAnimations]
+            console.log(newAnimationStack);
             return {
                 ...animationState,
                 animations: {...animationState.animations, solvingAnimations, backtrackingAnimations},

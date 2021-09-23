@@ -4,20 +4,16 @@ import ControlButtons from '../ControlButtons.js';
 import Slider from '../Slider';
 
 const ControlWrapper = (props) => {
-    const [ mazeGenerated, setMazeGenerated ] = useState(false)
-
     const play = () => props.updateAnimationState({type: "play-animations"});
 
     const pause = () => props.updateAnimationState({type: "pause-animations"});
 
     const clear = () => {
         props.updateCanvas({type: "clear-cell-grid"});
-        setMazeGenerated(false);
     }
 
     const fill = () => {
         props.updateCanvas({type: "fill-cell-grid"});
-        setMazeGenerated(false);
     }
 
     const generateMaze = () => {
@@ -29,7 +25,6 @@ const ControlWrapper = (props) => {
                 updateCanvas: props.updateCanvas,
             }
         })
-        setMazeGenerated(true)
     }
 
     const solveMaze = () => {
@@ -81,7 +76,7 @@ const ControlWrapper = (props) => {
                         { "function": clear, text: "Clear", disabled: false },
                         { "function": fill, text: "Fill", disabled: false },
                         { "function": generateMaze, text: "Generate Maze", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
-                        { "function": solveMaze, text: "Solve Maze", disabled: (props.mazeSolveAlgo === 'default'  || !mazeGenerated), tooltip: "Choose a Maze Solving Algorithm" },
+                        { "function": solveMaze, text: "Solve Maze", disabled: (props.mazeSolveAlgo === 'default'  || !props.canvas.mazeGenerated), tooltip: "Choose a Maze Solving Algorithm" },
                     ]}
                 />
                 <ControlButtons
