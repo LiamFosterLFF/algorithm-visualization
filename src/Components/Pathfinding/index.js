@@ -85,27 +85,19 @@ const Pathfinding = () => {
     }
 
     // Custom hook for animations - can control speed, choose type, control playback
-    // Basically works by just burning through the animation stack until it's gone
-    useInterval(() => {     
-        const newCellGrid = [...canvas.cellGrid];
-        const remainingStack = [...animationState.animationStack]
-        const noOfUpdates = animationState.animationSpeed;
-        for (let i = 0; i < noOfUpdates; i++) {
-            if (remainingStack.length) {
-                const animation = remainingStack.shift();
-                const [row, col] = animation.location;
-                newCellGrid[row][col] = animation.type;
-            } else {
-                updateAnimationState({type: "pause-animations"})
-            }
-        }
+    useInterval(() => {   
+        console.log("GO");  
         updateAnimationState({
             type: "update-animation-stack", 
-            payload: { 
-                animationStack: remainingStack,
-                canvasUpdateFunction: () => updateCanvas({type: "animate-maze", payload: { newCellGrid }})
+        })
+
+        updateCanvas({
+            type: "animate-maze", 
+            payload: {
+                animations: animationState.currentAnimations
             }
         })
+
     }, animationState.playingAnimations ? 5 : null);
 
     // Dropdown Generating and Solving Algorithm Change Side-effects

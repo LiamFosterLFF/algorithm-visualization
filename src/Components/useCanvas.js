@@ -120,7 +120,6 @@ const canvasReducer = (canvas, action) => {
             }
         }
         case "handle-mouse-down": {
-            console.log("mouse-down");
             const newCellGrid = cloneDeep(canvas.cellGrid);
             // Clicking changes the color of that cell, clicking + holding has separate (line-drawing) functionality
             const [row, col] = getMouseCellLocation(action.payload.mousePosition, canvas.cellSize);
@@ -137,8 +136,6 @@ const canvasReducer = (canvas, action) => {
             }
         }
         case "handle-mouse-out-up": {
-            console.log("mouse-");
-
             // Unclicking and moving out of frame/canvas turns drawing off
             return {
                 ...canvas,
@@ -147,7 +144,6 @@ const canvasReducer = (canvas, action) => {
             }
         }
         case "handle-mouse-move": {
-            console.log("B");
             // Moving while mouse being held draws manhattan lines on the canvas (if drawing)
             const [row, col] = getMouseCellLocation(action.payload.mousePosition, canvas.cellSize);
             const isPreviousPoint = (row === canvas.previousPoint[0] && col === canvas.previousPoint[1])
@@ -190,23 +186,28 @@ const canvasReducer = (canvas, action) => {
             }
         }
         case "save-stored-maze": {
-            console.log(action.payload.storedMaze);
             return {
                 ...canvas,
                 storedMaze: action.payload.storedMaze
             }
         }
         case "load-stored-maze": {
-            console.log(canvas.storedMaze);
             return {
                 ...canvas,
                 cellGrid: cloneDeep(canvas.storedMaze)
             }
         }
+
         case "animate-maze": {
+            const newCellGrid = cloneDeep(canvas.cellGrid);
+            for (let i = 0; i < action.payload.animations.length; i++) {
+                const animation = action.payload.animations[i]
+                const [row, col] = animation.location;
+                newCellGrid[row][col] = animation.type;
+            }
             return {
                 ...canvas,
-                cellGrid: action.payload.newCellGrid
+                cellGrid: newCellGrid
             }
         }
         // case "draw-cells": {

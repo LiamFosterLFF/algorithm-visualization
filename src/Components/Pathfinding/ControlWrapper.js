@@ -4,9 +4,9 @@ import ControlButtons from '../ControlButtons.js';
 import Slider from '../Slider';
 
 const ControlWrapper = (props) => {
-    const play = () => props.updateAnimationState({type: "play-animations"})
+    const play = () => props.updateAnimationState({type: "play-animations"});
 
-    const pause = () => props.updateAnimationState({type: "pause-animations"})
+    const pause = () => props.updateAnimationState({type: "pause-animations"});
 
     const reset = () => {
         props.updateAnimationState({
@@ -15,7 +15,7 @@ const ControlWrapper = (props) => {
                 resetFunction: () => props.updateCanvas({type: "load-stored-maze"})
             }
         })
-    }
+    };
 
     const replay = () => {
         props.updateAnimationState({
@@ -24,7 +24,10 @@ const ControlWrapper = (props) => {
                 resetFunction: () => props.updateCanvas({type: "load-stored-maze"})
             }
         })
-    }
+    };
+
+    const clear = () => props.updateCanvas({type: "clear-cell-grid"});
+    const fill = () => props.updateCanvas({type: "fill-cell-grid"});
 
 
     return (
@@ -62,8 +65,8 @@ const ControlWrapper = (props) => {
                 <ControlButtons
                     size = {"sm"}
                     buttons={[
-                        { "function": () => props.updateCanvas({type: "clear-cell-grid"}), text: "Clear", disabled: false },
-                        { "function": () => props.updateCanvas({type: "fill-cell-grid"}), text: "Fill", disabled: false },
+                        { "function": clear, text: "Clear", disabled: false },
+                        { "function": fill, text: "Fill", disabled: false },
                         { "function": props.handleGenerateMaze, text: "Generate Maze", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
                         { "function": props.handleSolveMaze, text: "Solve Maze", disabled: (props.mazeSolveAlgo === 'default'), tooltip: "Choose a Maze Solving Algorithm" },
                     ]}
