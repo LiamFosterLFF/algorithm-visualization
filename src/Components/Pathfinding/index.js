@@ -13,7 +13,10 @@ const Pathfinding = () => {
 
     // Reset window dimension state every time window resized (w/ cleanup function)
     useEffect(() => {
-        const handleWindowResize = () => updateCanvas({type: "resize-canvas", payload: {windowInnerWidth: window.innerWidth}})
+        const handleWindowResize = () => {
+            updateCanvas({type: "resize-canvas", payload: {windowInnerWidth: window.innerWidth}});
+            updateAnimationState({ type: "clear-animations" });
+        }
         window.addEventListener('resize', handleWindowResize);
 
         return _ => {

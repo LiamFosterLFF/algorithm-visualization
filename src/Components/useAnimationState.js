@@ -10,7 +10,7 @@ const initializeAnimationState = (initialState) => {
         animationStackRange: [0, initialState.animationSpeed],
         currentAnimations: [],
         animationSpeed: initialState.animationSpeed,
-        playingAnimations: true,
+        playingAnimations: false,
     }
 }
 
@@ -117,6 +117,17 @@ const animationStateReducer = (animationState, action) => {
                 }
             }
             return {...animationState}
+        }
+
+        case "clear-animations": {
+            return {
+                animations: { mazeAnimations: [], nodeAnimations: [], solvingAnimations: [], backtrackingAnimations: [] },
+                animationStack: [],
+                animationStackRange: [0, animationState.animationSpeed],
+                currentAnimations: [],
+                animationSpeed: animationState.animationSpeed,
+                playingAnimations: false
+            }
         }
 
         default:

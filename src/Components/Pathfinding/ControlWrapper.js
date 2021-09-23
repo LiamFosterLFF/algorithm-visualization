@@ -10,10 +10,12 @@ const ControlWrapper = (props) => {
 
     const clear = () => {
         props.updateCanvas({type: "clear-cell-grid"});
+        props.updateAnimationState({ type: "clear-animations" });
     }
 
     const fill = () => {
         props.updateCanvas({type: "fill-cell-grid"});
+        props.updateAnimationState({ type: "clear-animations" });
     }
 
     const generateMaze = () => {
@@ -38,6 +40,11 @@ const ControlWrapper = (props) => {
         })
     }
 
+    const handleCellResize = (newCellGridWidth) => {
+        props.updateCanvas({type: "resize-cell", payload: { newCellGridWidth }});
+        props.updateAnimationState({ type: "clear-animations" });
+    }
+
     return (
         <>
             <Slider 
@@ -49,7 +56,7 @@ const ControlWrapper = (props) => {
             />
             <Slider 
                 value={props.canvas.cellGridDimensions.cols}
-                setValue={(newCellGridWidth) => props.updateCanvas({type: "resize-cell", payload: { newCellGridWidth }})}
+                setValue={(newCellGridWidth) => handleCellResize(newCellGridWidth)}
                 name={"noOfCellsAcrossSlider"}
                 label={"Cell Size"}
                 range={{ "min": 11, "max": 201, "step": 2 }}
