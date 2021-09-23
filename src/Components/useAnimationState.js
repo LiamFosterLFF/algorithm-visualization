@@ -10,7 +10,7 @@ const initializeAnimationState = (initialState) => {
         animationStackRange: [0, initialState.animationSpeed],
         currentAnimations: [],
         animationSpeed: initialState.animationSpeed,
-        playingAnimations: true
+        playingAnimations: true,
     }
 }
 
@@ -41,7 +41,7 @@ const animationStateReducer = (animationState, action) => {
                 animationStack: [...mazeAnimations],
                 animationStackRange: [0, animationState.animationSpeed],
                 currentAnimations: [...mazeAnimations].slice(0, animationState.animationSpeed),
-                playingAnimations: true
+                playingAnimations: true,
             }
         }
 
