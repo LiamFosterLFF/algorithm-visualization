@@ -1,63 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { useInterval } from '../useInterval'
-// Import all functions from a single file as a dictionary, order them better as well
-import { generateMaze, getFullCanvas, getClearCanvas, calculateCanvasSize } from './PathfindingFunctions/mazeGeneratingFunctions.js';
+import { useCanvas } from '../useCanvas'
+import { useAnimationState } from '../useAnimationState'
+import { generateMaze } from './PathfindingFunctions/mazeGeneratingFunctions.js';
 
 import { solveMaze } from './PathfindingFunctions/mazeSolvingFunctions.js';
 
-import DropdownMenu from '../DropdownMenu.js';
-import ControlButtons from '../ControlButtons.js';
-import Slider from '../Slider';
 import { cloneDeep } from 'lodash';
+import ControlWrapper from './ControlWrapper';
 
 const Pathfinding = () => {
-    const [ animations, setAnimations ] = useState({ mazeAnimations: [], nodeAnimations: [], solvingAnimations: [], backtrackingAnimations: [] })
+
+    const [ canvas, updateCanvas ] = useCanvas({cellGridWidth: 101, windowInnerWidth: window.innerWidth})
+    const [ animationState, updateAnimationState ] = useAnimationState({ animationSpeed: 50 })
+
     const [ mazeGenAlgo, setMazeGenAlgo ] = useState("default")
     const [ mazeSolveAlgo, setMazeSolveAlgo ] = useState("default")
-    // Speed controlled by slider
-    const [ animationSpeed, setAnimationSpeed ] = useState(50)
-    // Animations controlled using a stack, allows for pausing as well as easy repeats and works better with interval
-    const [ animationStack, setAnimationStack ] = useState([])
-    const [ playingAnimations, setPlayingAnimations ] = useState(false)
-    const [ windowDimensions, setWindowDimensions ] = useState({ width: window.innerWidth, height: window.innerHeight });
-
-    // Calculate size of cells on basis of how many cells wide the maze should be (can be adjusted with slider)
-    const [ noOfCellsAcross, ] = useState(100)
-    const [ cellSize, ] = useState(Math.floor(windowDimensions.width / noOfCellsAcross))
-    // Calculate size of canvas and cell grid on basis of cell size
-    const [ canvasDimensions, setCanvasDimensions ] = useState(calculateCanvasSize(windowDimensions, cellSize))
-    const [ cells, setCells ] = useState(getFullCanvas(canvasDimensions, cellSize))
-    const [ storedMaze, setStoredMaze ] = useState(getFullCanvas(canvasDimensions, cellSize))
 
     // Reset window dimension state every time window resized (w/ cleanup function)
     useEffect(() => {
-        function handleResize() {
-            const newWindowDimensions = {
-                height: window.innerHeight,
-                width: window.innerWidth
-            }
-            setWindowDimensions(newWindowDimensions)
-            // Recalculate canvas dimensions every time window dimensions change
-            const newCanvasDimensions = calculateCanvasSize(newWindowDimensions, cellSize)
-            setCanvasDimensions(newCanvasDimensions)
-            // Reset grid and stored maze to completely filled in every time canvas resizes
-            setCells(getFullCanvas(newCanvasDimensions, cellSize))
-            setStoredMaze(getFullCanvas(newCanvasDimensions, cellSize))
-        }
-        window.addEventListener('resize', handleResize);
+        const handleWindowResize = () => updateCanvas({type: "resize-canvas", payload: {windowInnerWidth: window.innerWidth}})
+        window.addEventListener('resize', handleWindowResize);
 
         return _ => {
-            window.removeEventListener('resize', handleResize)
+            window.removeEventListener('resize', handleWindowResize)
         }
     })
 
     // Redraw canvas cells every time array representing them are changed
     useEffect(() => {
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        for (let row = 0; row < cells.length; row++) {
-            for (let col = 0; col < cells[row].length; col++) {
-                const cell = cells[row][col];
+        const cnv = document.getElementById('canvas');
+        const ctx = cnv.getContext('2d');
+        for (let row = 0; row < canvas.cellGrid.length; row++) {
+            for (let col = 0; col < canvas.cellGrid[row].length; col++) {
+                const cell = canvas.cellGrid[row][col];
                 const colorDict = {
                     "wall": '#444',
                     "path": '#fff',
@@ -66,223 +42,104 @@ const Pathfinding = () => {
                     "backtrack": "#ffff00"
                 }
                 ctx.fillStyle = colorDict[cell];
-                ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                ctx.fillRect(col * canvas.cellSize, row * canvas.cellSize, canvas.cellSize, canvas.cellSize);
             }
         }
-    }, [cells, cellSize])
+    }, [canvas.cellGrid, canvas.cellSize])
     
-    // Mousedown starts you drawing
-    const [ isDrawing, setIsDrawing ] = useState(false)
-    // Moving sets all interim points to the opposite of whatever the original cell was
-    const [ fillType, setFillType ] = useState(null)
-    // Saving previous point allows us to catch all points dragged over (as browser event has fairly slow fire rate)
-    const [ previousPoint, setPreviousPoint ] = useState([null, null])
-
-    // Screen clicking functionality
-    const getMouseCellLocation = (e, cellSize) => {
-        // Needs canvas to subtract size of bounding box
-        const canvas = document.getElementById('canvas');
-        const canvasBoundingBox = canvas.getBoundingClientRect();
-        // Returns [row, col]
-        return [Math.floor((e.clientY - canvasBoundingBox.y) / cellSize), Math.floor((e.clientX - canvasBoundingBox.x + .5) / cellSize)]
-    }
-
-    // Clicking changes the color of that cell, clicking + holding has separate functionality
-    const handleMouseDown = (e) => {
-        const [row, col] = getMouseCellLocation(e, cellSize);
-        setPreviousPoint([row, col])
-        const newCells = [...cells];
-        // Fill type remains constant as the opposite of cell content before the click, so you can draw lines after click
-        const flippedCellContent = (newCells[row][col] === "wall") ? "path" : "wall"
-        setFillType(flippedCellContent)
-        newCells[row][col] = flippedCellContent;
-        setCells(newCells)
-        setStoredMaze(newCells)
-        setIsDrawing(true)
-    }
-
-    // Unclicking and moving out of frame/canvas releases mouse being held
-    const handleMouseOutUp = () => {
-        setIsDrawing(false)
-        setPreviousPoint([null, null])
-    }
-
-    // Moving while mouse being held draws manhattan lines on the canvas
-    const handleMouseMove = (e) => {
-        const [row, col] = getMouseCellLocation(e, cellSize);
-        const isPreviousPoint = (row === previousPoint[0] && col === previousPoint[1])
-        if (isDrawing && !isPreviousPoint) {
-            const newCells = [...cells];
-            // Find all cells in between two points by:
-            // Finding Manhattan distance values between the two points
-            const [rowDiff, colDiff] = [row - previousPoint[0], col - previousPoint[1]];
-            // Choosing which one is larger (in absolute terms)
-            const maxDiff = Math.max(Math.abs(rowDiff), Math.abs(colDiff));
-            // Cycling through all cells in between previousPoint and current one
-            // Add the smallest jump along the line between cells that will change value of one of the cells
-            for (let i = 0; i < maxDiff; i++) {
-                const [rowJump, colJump] = [rowDiff * ((i+1) / maxDiff), colDiff * ((i+1) / maxDiff)];
-                const [mRow, mCol] = [Math.floor(previousPoint[0] + rowJump), Math.floor(previousPoint[1] + colJump)];
-                newCells[mRow][mCol] = fillType;
-
-            }
-            setCells(newCells)
-            setStoredMaze(newCells)
-            setPreviousPoint([row, col])
-        }
-    }
-
     const handleGenerateMaze = () => {
         // Fill in cells for use by algorithm, default is walls
-        const fillGrid = getFullCanvas(canvasDimensions, cellSize)
-        setCells(fillGrid)
-        const [ mazeGrid, {mazeAnimations, nodeAnimations}, ] = generateMaze(fillGrid, mazeGenAlgo)
-        // Store maze for use in reset
-        setStoredMaze(cloneDeep(mazeGrid))
-        setAnimations({
-            ...animations,
-            mazeAnimations,
-            nodeAnimations,
+        updateCanvas({type: "fill-cell-grid"})
+        const [ mazeGrid, {mazeAnimations, nodeAnimations}, ] = generateMaze(cloneDeep(canvas.cellGrid), mazeGenAlgo)
+        // Store maze for use in 
+        // updateCanvas({type: "save-stored-maze", payload: { storedMaze: cloneDeep(mazeGrid) }})
+        updateAnimationState({
+            type: "load-and-play-animations", 
+            payload: { 
+                animations: {
+                    mazeAnimations,
+                    nodeAnimations
+                },
+                animationStack: [...mazeAnimations]
+            }
         })
-        // Add to stack and play animations
-        setAnimationStack([...animationStack, ...mazeAnimations])
-        setPlayingAnimations(true)
     }
 
     const handleSolveMaze = () => {
         // Uses a set of default entry, exit, start points; these are adjustable but currently not part of state
-        const defaults = { enter: [0, 1], exit: [cells.length - 1, cells[0].length - 2], start: [1, 1] };
+        const defaults = { enter: [0, 1], exit: [canvas.cellGrid.length - 1, canvas.cellGrid[0].length - 2], start: [1, 1] };
 
         // // Reset cells to those stored in maze cells, in case a solution already in place
-        const storedMazeClone = cloneDeep(storedMaze)
-        setCells(storedMazeClone)
-        const {solvingAnimations, backtrackingAnimations} = solveMaze(storedMazeClone, defaults, mazeSolveAlgo)
-        setAnimations({
-            ...animations,
-            solvingAnimations,
-            backtrackingAnimations
+        // updateCanvas({type: "load-stored-maze"})
+        const {solvingAnimations, backtrackingAnimations} = solveMaze(cloneDeep(canvas.cellGrid), defaults, mazeSolveAlgo)
+        updateAnimationState({
+            type: "load-and-play-animations", 
+            payload: { 
+                animations: {
+                    solvingAnimations,
+                    backtrackingAnimations
+                },
+                animationStack: [...solvingAnimations, ...backtrackingAnimations]
+            }
         })
-        // Add to stack and play animations
-        setAnimationStack([...animationStack, ...solvingAnimations, ...backtrackingAnimations])
-        setPlayingAnimations(true)
     }
 
-
     // Custom hook for animations - can control speed, choose type, control playback
+    // Basically works by just burning through the animation stack until it's gone
     useInterval(() => {     
-        const newCells = [...cells];
-        const remainingStack = [...animationStack]
-        const noOfUpdates = animationSpeed;
+        const newCellGrid = [...canvas.cellGrid];
+        const remainingStack = [...animationState.animationStack]
+        const noOfUpdates = animationState.animationSpeed;
         for (let i = 0; i < noOfUpdates; i++) {
             if (remainingStack.length) {
                 const animation = remainingStack.shift();
                 const [row, col] = animation.location;
-                newCells[row][col] = animation.type;
+                newCellGrid[row][col] = animation.type;
             } else {
-                setPlayingAnimations(false)
+                updateAnimationState({type: "pause-animations"})
             }
         }
-        setAnimationStack(remainingStack)
-        setCells(newCells)
-    }, playingAnimations ? 5 : null);
+        updateAnimationState({
+            type: "update-animation-stack", 
+            payload: { 
+                animationStack: remainingStack,
+                canvasUpdateFunction: () => updateCanvas({type: "animate-maze", payload: { newCellGrid }})
+            }
+        })
+    }, animationState.playingAnimations ? 5 : null);
 
-    // Dropdown Genearting and Solving Algorithm Change Side-effects
+    // Dropdown Generating and Solving Algorithm Change Side-effects
 
     useEffect(() => {
-        handleFillCanvas();
+        updateCanvas({type: "fill-cell-grid"})
     }, [mazeGenAlgo])
 
     useEffect(() => {
-        resetSolvingAnimations();
+        updateAnimationState({type: "reset-animations", payload: { resetFunction: () => updateCanvas({type: "load-stored-maze"})}})
     }, [mazeSolveAlgo])
 
-    // Control functionality
-    const handleClearCanvas = () => {
-        const clearCanvas = getClearCanvas(canvasDimensions, cellSize)
-        setCells(clearCanvas);
-        setStoredMaze(clearCanvas);
-    }
-
-    const handleFillCanvas = () => {
-        const fullCanvas = getFullCanvas(canvasDimensions, cellSize)
-        setCells(fullCanvas);
-        setStoredMaze(fullCanvas);
-    }
-
-    const playAnimations = () => {
-        setPlayingAnimations(true);
-    }
-
-    const pauseAnimations = () => {
-        setPlayingAnimations(false);
-    }
-
-    const resetSolvingAnimations = () => {
-        setCells(cloneDeep(storedMaze));
-    }
-
-    const replayAnimations = () => {
-        resetSolvingAnimations()
-        setAnimationStack([...animationStack, ...animations.solvingAnimations, ...animations.backtrackingAnimations])
-
-        playAnimations()
-    }
-
     return (
-        <div>
-            <Slider 
-                value={animationSpeed}
-                setValue={setAnimationSpeed}
-            />
-
-            <div style={{ width: canvasDimensions.width, height: canvasDimensions.height }}>
+        <ControlWrapper
+            canvas={canvas} updateCanvas={updateCanvas}
+            animationState={animationState} updateAnimationState={updateAnimationState}
+            mazeGenAlgo={mazeGenAlgo} setMazeGenAlgo={setMazeGenAlgo}
+            mazeSolveAlgo={mazeSolveAlgo} setMazeSolveAlgo={setMazeSolveAlgo}
+            handleGenerateMaze={handleGenerateMaze} handleSolveMaze={handleSolveMaze}
+        >
+            <div style={{ width: canvas.canvasDimensions.width, height: canvas.canvasDimensions.height }}>
                 <canvas 
                     id="canvas"
                     
-                    width={canvasDimensions.width}
-                    height={canvasDimensions.height}
+                    width={canvas.canvasDimensions.width}
+                    height={canvas.canvasDimensions.height}
                     
-                    onMouseDown={(e) => handleMouseDown(e)} 
-                    onMouseUp={() => handleMouseOutUp()} 
-                    onMouseOut={() => handleMouseOutUp()} 
-                    onMouseMove={(e) => handleMouseMove(e)}
+                    onMouseDown={(e) => updateCanvas({type: "handle-mouse-down", payload: { mousePosition : {x: e.clientX, y:e.clientY} }})} 
+                    onMouseUp={() => updateCanvas({type: "handle-mouse-out-up"})} 
+                    onMouseOut={() => updateCanvas({type: "handle-mouse-out-up"})} 
+                    onMouseMove={(e) => updateCanvas({type: "handle-mouse-move", payload: { mousePosition : {x: e.clientX, y:e.clientY} }})}
                 />
             </div>
-            <div>
-                <div className="input-group justify-content-center" >
-                    <DropdownMenu
-                        type={"Maze Generation"}
-                        select={setMazeGenAlgo}
-                        title={mazeGenAlgo}
-                        algorithms={["Eller's Algorithm", "Recursive Backtracking"]}
-                    />
-                    <DropdownMenu
-                        type={"Maze Solving"}
-                        select={setMazeSolveAlgo}
-                        title={mazeSolveAlgo}
-                        algorithms={["Depth-First Search", "Breadth-First Search", "Djikstra's Algorithm", "A* Search Algorithm"]}
-                    />
-                </div>
-                <ControlButtons
-                    size = {"sm"}
-                    buttons={[
-                        { "function": handleClearCanvas, text: "Clear", disabled: false },
-                        { "function": handleFillCanvas, text: "Fill", disabled: false },
-                        { "function": handleGenerateMaze, text: "Generate Maze", disabled: (mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
-                        { "function": handleSolveMaze, text: "Solve Maze", disabled: (mazeSolveAlgo === 'default'), tooltip: "Choose a Maze Solving Algorithm" },
-                    ]}
-                />
-                <ControlButtons
-                    size = {"sm"}
-                    buttons={[
-                        { "function": playAnimations, text: "Play", disabled: (mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
-                        { "function": pauseAnimations, text: "Pause", disabled: (mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
-                        { "function": resetSolvingAnimations, text: "Reset", disabled: (mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
-                        { "function": replayAnimations, text: "Replay", disabled: (mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
-                    ]}
-                />
-            </div>
-        </div>
+        </ControlWrapper>
     )
 }
 
@@ -293,4 +150,3 @@ export default Pathfinding;
 //      Below are basicall all just one bug, issues surrounding the way maze algorithms interact with state
 //      Get maze building working with no maze
 //      What happens if no solution to maze?
-//      Replay doesn't really do a replay, kind of just resets 

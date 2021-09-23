@@ -1,24 +1,29 @@
-export const calculateCanvasSize = (windowDims, cellSize) => {
-    const normalizeDimension = (dimension, cellSize) => {
-        const noOfCells = Math.floor(dimension / cellSize);
-        // Cells have to be odd, as maze has a path every other cell
-        const oddNoOfCells = (noOfCells %2 === 0) ? noOfCells + 1 : noOfCells;
-        const normalizedDim = oddNoOfCells * cellSize;
-        return normalizedDim;
-    }
-
-    // Canvas dims are .8vw, .7vh
-    const canvasViewportDims = {width: .8, height: .7}
-    const canvasDims = {
-        width: normalizeDimension(windowDims.width * canvasViewportDims.width, cellSize), 
-        height: normalizeDimension(windowDims.height * canvasViewportDims.height, cellSize)
+export const calculateCanvasSize = (noOfCellsAcross, cellSize) => {
+    // Canvas dims are .8vw, .4vh (height is 1/2 cells across)
+    const canvasViewportDims = {width: .8, height: .8}
+    const canvasDims = { 
+        width: canvasViewportDims.width * noOfCellsAcross * cellSize, 
+        // # of Cells across will always be odd, so rounding up 1/2 is also odd
+        height: canvasViewportDims.height * Math.ceil(noOfCellsAcross / 2) * cellSize
     }
     return canvasDims;
 }
 
+export const recalculateCanvasSize = (noOfCells, windowDims, cellSize) => {
+
+    // // Canvas dims are .8vw, .7vh
+    // const canvasViewportDims = {width: .8, height: .7}
+    // const canvasDims = {
+    //     width: Math.floor(canvasViewportDims.width * windowDims.width * noOfCells, 
+    //     height: Math.floor(windowDims.width * canvasViewportDims.width/cellSize) * noOfCells * .5
+    // }
+    // return canvasDims;
+}
+
 export const getFullCanvas = (canvasDimensions, cellSize) => {
     // Construct Grid of Cells
-    const [cols, rows] = [canvasDimensions.width / cellSize, canvasDimensions.height / cellSize]
+    const [cols, rows] = [Math.floor(canvasDimensions.width / cellSize), Math.floor(canvasDimensions.height / cellSize)]
+    console.log(cols, rows);
     const fillGrid = [];
     // Builds a rows*cols nested array full of walls
     for (let row = 0; row < rows; row++) {

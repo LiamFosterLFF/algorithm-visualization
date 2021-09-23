@@ -34,8 +34,6 @@ export default App;
 //      Below are basicall all just one bug, issues surrounding the way maze algorithms interact with state
 //      Get maze building working with no maze
 //      What happens if no solution to maze?
-//      Reset/replay only works on the first go round, then seems to be resetting  to the solved maze
-//      Changing solving algorithm should reset to just maze w/ no solutions
 //      Fix all console warnings on all pages
 //      Sorting bug: why animations starts early
 
@@ -48,6 +46,7 @@ export default App;
 //      Games Title
 
 // Nice but not necessary:
+//      Pathfinding refactor : turn animations and cells/canvas into two separate usereducers, pull out into custom hooks, pull control functionality out into a wrapper
 //      Sorting slider for bars
 //      Build a dynamic slider for maze cell size
 //      Refactor sorting algorithm state to be a single state value
