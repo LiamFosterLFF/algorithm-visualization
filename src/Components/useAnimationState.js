@@ -1,4 +1,6 @@
 import { useReducer } from 'react';
+import { generateMaze } from './Pathfinding/PathfindingFunctions/mazeGeneratingFunctions.js';
+import { cloneDeep } from 'lodash';
 
 const initializeAnimationState = (initialState) => {
     return {
@@ -19,6 +21,19 @@ const animationStateReducer = (animationState, action) => {
                 animations: {...animationState.animations, ...action.payload.animations},
                 animationStack: [...action.payload.animationStack],
                 currentAnimations: action.payload.animationStack.slice(animationState.animationStackRange[0], animationState.animationStackRange[1]),
+                playingAnimations: true
+            }
+        }
+
+        case "generate-maze-animations": {
+            action.payload.fillCanvas()
+            const [ mazeGrid, {mazeAnimations, nodeAnimations}, ] = generateMaze(cloneDeep(action.payload.cellGrid), action.payload.mazeGenAlgo)
+            return {
+                ...animationState,
+                animations: {...animationState.animations, mazeAnimations, nodeAnimations},
+                animationStack: [...mazeAnimations],
+                animationStackRange: [0, animationState.animationSpeed],
+                currentAnimations: [...mazeAnimations].slice(0, animationState.animationSpeed),
                 playingAnimations: true
             }
         }

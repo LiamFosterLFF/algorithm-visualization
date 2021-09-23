@@ -29,6 +29,17 @@ const ControlWrapper = (props) => {
     const clear = () => props.updateCanvas({type: "clear-cell-grid"});
     const fill = () => props.updateCanvas({type: "fill-cell-grid"});
 
+    const generateMaze = () => {
+        props.updateAnimationState({
+            type: "generate-maze-animations",
+            payload: {
+                cellGrid: props.canvas.filledCanvas,
+                mazeGenAlgo: props.mazeGenAlgo,
+                fillCanvas: () => props.updateCanvas({type: "fill-cell-grid"})
+            }
+        })
+    }
+
 
     return (
         <>
@@ -67,7 +78,7 @@ const ControlWrapper = (props) => {
                     buttons={[
                         { "function": clear, text: "Clear", disabled: false },
                         { "function": fill, text: "Fill", disabled: false },
-                        { "function": props.handleGenerateMaze, text: "Generate Maze", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
+                        { "function": generateMaze, text: "Generate Maze", disabled: (props.mazeGenAlgo === "default"), tooltip: "Choose a Maze Generation Algorithm" },
                         { "function": props.handleSolveMaze, text: "Solve Maze", disabled: (props.mazeSolveAlgo === 'default'), tooltip: "Choose a Maze Solving Algorithm" },
                     ]}
                 />

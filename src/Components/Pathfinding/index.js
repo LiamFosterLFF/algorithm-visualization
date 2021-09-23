@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useInterval } from '../useInterval'
 import { useCanvas } from '../useCanvas'
 import { useAnimationState } from '../useAnimationState'
-import { generateMaze } from './PathfindingFunctions/mazeGeneratingFunctions.js';
 
 import { solveMaze } from './PathfindingFunctions/mazeSolvingFunctions.js';
 
@@ -48,19 +47,15 @@ const Pathfinding = () => {
     }, [canvas.cellGrid, canvas.cellSize])
     
     const handleGenerateMaze = () => {
+        console.log("A");
         // Fill in cells for use by algorithm, default is walls
         updateCanvas({type: "fill-cell-grid"})
-        const [ mazeGrid, {mazeAnimations, nodeAnimations}, ] = generateMaze(cloneDeep(canvas.cellGrid), mazeGenAlgo)
-        // Store maze for use in 
-        // updateCanvas({type: "save-stored-maze", payload: { storedMaze: cloneDeep(mazeGrid) }})
+        console.log(canvas.cellGrid[0]);
         updateAnimationState({
-            type: "load-and-play-animations", 
-            payload: { 
-                animations: {
-                    mazeAnimations,
-                    nodeAnimations
-                },
-                animationStack: [...mazeAnimations]
+            type: "generate-maze-animations",
+            payload: {
+                cellGrid: canvas.cellGrid,
+                mazeGenAlgo
             }
         })
     }
@@ -86,7 +81,6 @@ const Pathfinding = () => {
 
     // Custom hook for animations - can control speed, choose type, control playback
     useInterval(() => {   
-        console.log("GO");  
         updateAnimationState({
             type: "update-animation-stack", 
         })

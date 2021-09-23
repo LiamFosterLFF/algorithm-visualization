@@ -78,6 +78,8 @@ const initializeCanvas = (initialState) => {
         cellSize,
         canvasDimensions,
         cellGrid: getFilledCanvas(cellGridDimensions),
+        // Filled canvas, for use in maze re/generation
+        filledCanvas: getFilledCanvas(cellGridDimensions),
         // Stored maze, for use in resetting
         storedMaze: getFilledCanvas(cellGridDimensions),
         // Boolean for use in drawing functionality
@@ -102,6 +104,7 @@ const canvasReducer = (canvas, action) => {
                 cellSize: newCellSize,
                 canvasDimensions: newCanvasDimensions,
                 cellGrid: getFilledCanvas(canvas.cellGridDimensions),
+                filledCanvas: getFilledCanvas(canvas.cellGridDimensions),
                 storedMaze: getFilledCanvas(canvas.cellGridDimensions)
             }
         }
@@ -116,6 +119,7 @@ const canvasReducer = (canvas, action) => {
                 cellSize: newCellSize,
                 canvasDimensions: newCanvasDimensions,
                 cellGrid: getFilledCanvas(newCellGridDimensions),
+                filledCanvas: getFilledCanvas(newCellGridDimensions),
                 storedMaze: getFilledCanvas(newCellGridDimensions)
             }
         }
@@ -172,6 +176,7 @@ const canvasReducer = (canvas, action) => {
             return {...canvas}
         }
         case "fill-cell-grid": {
+            console.log("Filling", getFilledCanvas(canvas.cellGridDimensions)[0]);
             return {
                 ...canvas,
                 cellGrid: getFilledCanvas(canvas.cellGridDimensions),
