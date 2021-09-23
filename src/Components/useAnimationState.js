@@ -67,6 +67,7 @@ const animationStateReducer = (animationState, action) => {
 
         case "update-animation-stack": {
             const reachedEndOfAnimations = animationState.animationStackRange[0] + animationState.animationSpeed > animationState.animationStack.length;
+
             if (!reachedEndOfAnimations) {
                 const newRange = [
                     animationState.animationStackRange[1], 
@@ -107,10 +108,14 @@ const animationStateReducer = (animationState, action) => {
         }
 
         case "set-animation-speed": {
-            return {
-                ...animationState,
-                animationSpeed: action.payload.animationSpeed,
+            const newSpeed = Number(action.payload.animationSpeed);
+            if (newSpeed !== NaN) {
+                return {
+                    ...animationState,
+                    animationSpeed: newSpeed
+                }
             }
+            return {...animationState}
         }
 
         default:
